@@ -1,5 +1,8 @@
 package UI;
 
+import entity.Check;
+import entity.Drag;
+import entity.Patient;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -12,12 +15,19 @@ import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.util.Callback;
+import service.*;
 
 import java.util.function.UnaryOperator;
 
 public class Pane5 {
 
     private AnchorPane anchorPane5;
+
+    public PatientService patientService = new PatientService();
+    public DoctorService doctorService = new DoctorService();
+    public RoomService roomService = new RoomService();
+    public DragService dragService = new DragService();
+    public CheckService checkService = new CheckService();
 
     public Pane5() {
         anchorPane5 = new AnchorPane();
@@ -136,11 +146,11 @@ public class Pane5 {
         t3.setPrefWidth(200);
         t4.setPrefWidth(220);
         t5.setPrefWidth(220);
-        t1.setCellValueFactory(new PropertyValueFactory<>("department"));
-        t2.setCellValueFactory(new PropertyValueFactory<>("ward"));
-        t3.setCellValueFactory(new PropertyValueFactory<>("bed"));
-        t4.setCellValueFactory(new PropertyValueFactory<>("inTime"));
-        t5.setCellValueFactory(new PropertyValueFactory<>("outTime"));
+        t1.setCellValueFactory(new PropertyValueFactory<>("dept_name"));
+        t2.setCellValueFactory(new PropertyValueFactory<>("ward_id"));
+        t3.setCellValueFactory(new PropertyValueFactory<>("bed_id"));
+        t4.setCellValueFactory(new PropertyValueFactory<>("in_time"));
+        t5.setCellValueFactory(new PropertyValueFactory<>("out_time"));
         table.getColumns().addAll(t1, t2, t3, t4, t5);
         table.setColumnResizePolicy(new Callback<TableView.ResizeFeatures, Boolean>() {
             @Override
@@ -184,9 +194,9 @@ public class Pane5 {
         tc3.setPrefWidth(150);
         tc4.setPrefWidth(150);
         tc5.setPrefWidth(248);
-        tc1.setCellValueFactory(new PropertyValueFactory<>("indexes"));
+        tc1.setCellValueFactory(new PropertyValueFactory<>("id"));
         tc2.setCellValueFactory(new PropertyValueFactory<>("name"));
-        tc3.setCellValueFactory(new PropertyValueFactory<>("num"));
+        tc3.setCellValueFactory(new PropertyValueFactory<>("count"));
         tc4.setCellValueFactory(new PropertyValueFactory<>("price"));
         tc5.setCellValueFactory(new PropertyValueFactory<>("total_price"));
         table_medicine.getColumns().addAll(tc1, tc2, tc3, tc4, tc5);
@@ -226,9 +236,9 @@ public class Pane5 {
         check3.setPrefWidth(150);
         check4.setPrefWidth(150);
         check5.setPrefWidth(248);
-        check1.setCellValueFactory(new PropertyValueFactory<>("indexes"));
+        check1.setCellValueFactory(new PropertyValueFactory<>("id"));
         check2.setCellValueFactory(new PropertyValueFactory<>("name"));
-        check3.setCellValueFactory(new PropertyValueFactory<>("num"));
+        check3.setCellValueFactory(new PropertyValueFactory<>("count"));
         check4.setCellValueFactory(new PropertyValueFactory<>("price"));
         check5.setCellValueFactory(new PropertyValueFactory<>("total_price"));
         table_check.getColumns().addAll(check1, check2, check3, check4, check5);
@@ -271,30 +281,38 @@ public class Pane5 {
                 //可能还要有药品和检查项目的表（里面记录药品的检查项目的
                 if (!textField.getText().equals("")) {
                     //调用胡的方法，返回字符串数组
-                    if (true) {     //假如能找到该记录
-                        String[] strings = new String[15];
-                        for (int i = 0; i < 15; i++) {
-                            strings[i] = Integer.toString(i);
-                        }
-                        name.setText("姓名：" + strings[1]);
-                        sex.setText("性别：" + strings[2]);
-                        age.setText("年龄：" + strings[3]);
-                        phone.setText("手机号：" + strings[10]);
-                        ID.setText("身份证号：" + strings[11]);
-                        diagnosis.setText("诊断：" + strings[4]);
-                        doctor.setText("主治医师：" + strings[14]);
+                    String text = textField.getText();
+                    int id = Integer.valueOf(text);
+                    Patient patient = patientService.get(id);
+                    if (patient!=null) {     //假如能找到该记录
 
-                        Patient patient = new Patient();
+
+                        name.setText("姓名：" + patient.getName());
+                        sex.setText("性别：" + patient.getSex());
+                        age.setText("年龄：" + patient.getId());
+                        phone.setText("手机号：" + patient.getPhone_number());
+                        ID.setText("身份证号：" + patient.getIdentity_card());
+                        diagnosis.setText("诊断：" + "");
+                        doctor.setText("主治医师：" + doctorService.getName(patient.getDoc_id()));
+
                         table.getItems().removeAll(table.getItems());
-                        table.getItems().addAll(patient.madeBean(strings));
-
-                        Medicine medicine = new Medicine();
                         table_medicine.getItems().removeAll(table_medicine.getItems());
-                        table_medicine.getItems().addAll(medicine.madeBean(strings));
-
-                        CheckUp checkUp = new CheckUp();
                         table_check.getItems().removeAll(table_check.getItems());
-                        table_check.getItems().addAll(checkUp.madeBean(strings));
+
+                        table.getItems().addAll(roomService.get(id));
+                        table_medicine.getItems().addAll(dragService.listByPatientId(id));
+                        table_check.getItems().addAll(checkService.listByPatientId(id));
+//                        Patient patient = new Patient();
+//                        table.getItems().removeAll(table.getItems());
+//                        table.getItems().addAll(patient.madeBean(strings));
+//
+//                        Medicine medicine = new Medicine();
+//                        table_medicine.getItems().removeAll(table_medicine.getItems());
+//                        table_medicine.getItems().addAll(medicine.madeBean(strings));
+//
+//                        CheckUp checkUp = new CheckUp();
+//                        table_check.getItems().removeAll(table_check.getItems());
+//                        table_check.getItems().addAll(checkUp.madeBean(strings));
                     }
                 }
             }

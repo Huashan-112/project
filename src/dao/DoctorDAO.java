@@ -1,7 +1,7 @@
 package dao;
 
-import entity.Department;
 import entity.Doctor;
+import entity.Patient;
 import util.DBUtil;
 
 import java.sql.Connection;
@@ -9,21 +9,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class DepartmentDAO {
-    public Department get(int id){
-        Department department = null;
+public class DoctorDAO {
+    public Doctor get(int id){
+        Doctor doctor = null;
         try (Connection c = DBUtil.getConnection(); Statement s = c.createStatement();) {
 
-            String sql = "select * from department where id =" +id;
+            String sql = "select * from doctor where id =" +id;
 
             ResultSet rs = s.executeQuery(sql);
 
             if (rs.next()) {
                 String name = rs.getString("name");
-                String address = rs.getString("address");
-                String phone_number = rs.getString("phone_number");
-                int doc_id = rs.getInt("doc_id");
-                department = new Department(id,name,address,phone_number,doc_id);
+                String job = rs.getString("job");
+                int age = rs.getInt("age");
+                int dept_id = rs.getInt("dept_id");
+                doctor = new Doctor(id,name,job,age,dept_id);
             }
 
         } catch (SQLException e) {
@@ -31,6 +31,6 @@ public class DepartmentDAO {
             e.printStackTrace();
         }
 
-        return department;
+        return doctor;
     }
 }
