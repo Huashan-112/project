@@ -1,5 +1,7 @@
 package UI;
 
+import entity.Room;
+import entity.Patient;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -13,12 +15,17 @@ import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.util.Callback;
+import service.PatientService;
+import service.RoomService;
 
+import java.sql.Date;
 import java.util.function.UnaryOperator;
 
 public class Pane1 {
 
     private AnchorPane anchorPane1;
+    RoomService roomService = new RoomService();
+    PatientService patientService = new PatientService();
 
     public Pane1() {
         anchorPane1 = new AnchorPane();
@@ -224,48 +231,52 @@ public class Pane1 {
                 //弹窗提示保存成功，可选择清空所有或者保留
                 // 有信息没填则失败
                 if (!tf_card.getText().equals("")) {
-                    String[] s = new String[4];
                     Object object;
                     object = comboBox.getValue();
+                    String sex;
                     if (object == null) {
-                        s[0] = "";
+                        sex = "";
                     } else {
-                        s[0] = (String) comboBox.getValue();
+                        sex = (String) comboBox.getValue();
                     }
                     object = comboBox1.getValue();
+                    String dept_name;
                     if (object == null) {
-                        s[1] = "";
+                        dept_name = "";
                     } else {
-                        s[1] = (String) comboBox1.getValue();
+                        dept_name = (String) comboBox1.getValue();
                     }
+                    int ward_id;
                     object = comboBox2.getValue();
                     if (object == null) {
-                        s[2] = "";
+                        ward_id = -1;
                     } else {
-                        s[2] = (String) comboBox2.getValue();
+                        ward_id = Integer.parseInt((String) comboBox2.getValue());
                     }
+                    int bed_id;
                     object = comboBox3.getValue();
                     if (object == null) {
-                        s[3] = "";
+                        bed_id = -1;
                     } else {
-                        s[3] = (String) comboBox3.getValue();
+                        bed_id = Integer.parseInt((String) comboBox3.getValue());
                     }
-                    String[] tmp = new String[15];
-                    tmp[0] = tf_card.getText();
-                    tmp[1] = tf_name.getText();
-                    tmp[2] = s[0];
-                    tmp[3] = tf_age.getText();
-                    tmp[4] = tf_diagnosis.getText();
-                    tmp[5] = s[1];
-                    tmp[6] = s[2];
-                    tmp[7] = s[3];
-                    tmp[8] = tf_inHospital_time.getText();
-                    tmp[9] = "";
-                    tmp[10] = tf_phone.getText();
-                    tmp[11] = tf_ID.getText();
-                    tmp[12] = "";
-                    tmp[13] = "";
-                    tmp[14] = tf_doctor.getText();
+
+
+
+                    int id = Integer.parseInt(tf_card.getText()); //诊疗卡号
+                    String name = tf_name.getText();
+                    int age = Integer.parseInt(tf_age.getText());
+                    String diagnose = tf_diagnosis.getText();
+                    Date in_time = Date.valueOf(tf_inHospital_time.getText());
+                    String phone_number = tf_phone.getText();
+                    String identity_card = tf_ID.getText();
+                    int doc_id = Integer.parseInt(tf_doctor.getText());
+
+                    int room_id = roomService.add(ward_id,bed_id,dept_name,in_time);
+
+                    Patient patient = new Patient(id,name,sex,age,phone_number,identity_card,doc_id,room_id);
+                    patientService.add(patient);
+
                     //调用胡的方法，把tmp数组传给他，返回成功的话，弹窗提示成功
                     Label tip = new Label("保存成功！");
                     tip.setPrefSize(100, 40);

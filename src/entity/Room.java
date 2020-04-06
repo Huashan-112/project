@@ -2,27 +2,30 @@ package entity;
 
 import service.DepartmentService;
 
-import java.util.Date;
+import java.sql.Date;
+
 
 public class Room {
     int id;
     int ward_id;
     int bed_id;
-    int dept_id;
+    String dept_name;
     Date in_time;
     Date out_time;
 
-    //不存进数据库中
-    String dept_name;
+    public Room(){}
 
-    public Room(int id, int ward_id, int bed_id, int dept_id, Date in_time, Date out_time) {
+    public void setDept_name(String dept_name) {
+        this.dept_name = dept_name;
+    }
+
+    public Room(int id, int ward_id, int bed_id, String dept_name, Date in_time, Date out_time) {
         this.id = id;
         this.ward_id = ward_id;
         this.bed_id = bed_id;
-        this.dept_id = dept_id;
+        this.dept_name = dept_name;
         this.in_time = in_time;
         this.out_time = out_time;
-        dept_name = new DepartmentService().getName(dept_id);
     }
 
     public String getDept_name() {
@@ -51,14 +54,6 @@ public class Room {
 
     public void setBed_id(int bed_id) {
         this.bed_id = bed_id;
-    }
-
-    public int getDept_id() {
-        return dept_id;
-    }
-
-    public void setDept_id(int dept_id) {
-        this.dept_id = dept_id;
     }
 
     public Date getIn_time() {

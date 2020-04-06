@@ -9,4 +9,8 @@ public class PatientService {
     public Patient get(int id){
         return patientDAO.get(id);
     }
+
+    public void add(Patient patient){
+        patientDAO.add(patient);
+    }
 }

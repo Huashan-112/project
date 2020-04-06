@@ -5,14 +5,14 @@ public class Doctor {
     String name;
     String job;
     int age;
-    int dept_id;
+    String dept_name;
 
-    public Doctor(int id, String name, String job, int age, int dept_id) {
+    public Doctor(int id,String name, String job, int age, String dept_name) {
         this.id = id;
         this.name = name;
         this.job = job;
         this.age = age;
-        this.dept_id = dept_id;
+        this.dept_name = dept_name;
     }
 
     public int getId() {
@@ -47,11 +47,11 @@ public class Doctor {
         this.age = age;
     }
 
-    public int getDept_id() {
-        return dept_id;
+    public String getDept_name() {
+        return dept_name;
     }
 
-    public void setDept_id(int dept_id) {
-        this.dept_id = dept_id;
+    public void setDept_id(String dept_name) {
+        this.dept_name = dept_name;
     }
 }

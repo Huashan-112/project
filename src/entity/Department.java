@@ -1,27 +1,18 @@
 package entity;
 
 public class Department {
-    int id;
     String name;
     String address;
     String phone_number;
     int doc_id;
 
-    public Department(int id, String name, String address, String phone_number, int doc_id) {
-        this.id = id;
+    public Department( String name, String address, String phone_number, int doc_id) {
         this.name = name;
         this.address = address;
         this.phone_number = phone_number;
         this.doc_id = doc_id;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

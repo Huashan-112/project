@@ -4,12 +4,12 @@ public class Check {
     int id;
     String name;
     String category;
-    Float price;
+    float price;
     int count;
     int pt_id;
 
     //不存进数据库中
-    Float total_price;
+    float total_price;
 
     public Check(int id, String name, String category, Float price, int count, int pt_id) {
         this.id = id;

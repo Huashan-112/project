@@ -3,10 +3,7 @@ package dao;
 import entity.Patient;
 import util.DBUtil;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Date;
 
 public class PatientDAO {
@@ -35,5 +32,25 @@ public class PatientDAO {
         }
 
         return patient;
+    }
+
+    public void add(Patient patient){
+        String sql = "insert into room values(?,?,?,?,?,?,?,?)";
+        try (Connection c = DBUtil.getConnection(); PreparedStatement ps = c.prepareStatement(sql);) {
+            ps.setInt(1, patient.getId());
+            ps.setString(2, patient.getName());
+            ps.setString(3, patient.getSex());
+            ps.setInt(4,patient.getAge());
+            ps.setString(5,patient.getPhone_number());
+            ps.setString(6,patient.getIdentity_card());
+            ps.setInt(7,patient.getDoc_id());
+            ps.setInt(8,patient.getRoom_id());
+
+            ps.execute();
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
     }
 }

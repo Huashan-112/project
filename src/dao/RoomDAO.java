@@ -4,12 +4,8 @@ import entity.Doctor;
 import entity.Room;
 import service.DepartmentService;
 import util.DBUtil;
+import java.sql.*;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Date;
 
 public class RoomDAO {
     public Room get(int id){
@@ -23,10 +19,10 @@ public class RoomDAO {
             if (rs.next()) {
                 int ward_id = rs.getInt("ward_id");
                 int bed_id = rs.getInt("bed_id");
-                int dept_id = rs.getInt("dept_id");
+                String dept_name = rs.getString("dept_name");
                 Date in_time = rs.getDate("in_time");
                 Date out_time = rs.getDate("out_time");
-                room = new Room(id,ward_id,bed_id,dept_id,in_time,out_time);
+                room = new Room(id,ward_id,bed_id,dept_name,in_time,out_time);
 
             }
 
@@ -36,5 +32,28 @@ public class RoomDAO {
         }
 
         return room;
+    }
+
+    public int add(Room room){
+        int id=0;
+        String sql = "insert into room values(null,?,?,?,?,null)";
+        try (Connection c = DBUtil.getConnection(); PreparedStatement ps = c.prepareStatement(sql);) {
+            ps.setInt(1, room.getWard_id());
+            ps.setInt(2, room.getBed_id());
+            ps.setString(3, room.getDept_name());
+            ps.setDate(4, room.getIn_time());
+
+            ps.execute();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                id = rs.getInt(1);
+                room.setId(id);
+            }
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
+        return id;
     }
 }
