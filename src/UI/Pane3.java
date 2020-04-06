@@ -28,6 +28,7 @@ public class Pane3 {
     public void load(AnchorPane anchorPane3) {
 
         Font font5 = Font.font("YouYuan", FontWeight.BLACK, 16);
+        GridPane gridPane1 = new GridPane();
 
         //-------------------------------------------------------------  //分割线
 
@@ -73,21 +74,6 @@ public class Pane3 {
             }
         }));
 
-        Button search = new Button("搜索");
-        search.setPrefSize(100, 30);
-        search.setStyle("-fx-background-color: #2475C4");
-        search.setTextFill(Color.rgb(241, 241, 232));
-        search.setFont(font5);
-        search.setOnAction(new EventHandler<ActionEvent>() {  // 住院记录
-            @Override
-            public void handle(ActionEvent event) {
-                //先将所有框内容清空，然后调用胡的方法，将s传给他，让他查到后返回patient对象给我，我再全部显示在框中
-            }
-        });
-
-        HBox hBox = new HBox();
-        hBox.getChildren().addAll(textField, search);
-
         Line line4 = new Line(37, 190, 993, 190);
         line4.setStroke(Color.valueOf("#A9ABA7"));
 
@@ -110,8 +96,6 @@ public class Pane3 {
         sex.setPrefSize(100, 20);
         sex.setFont(font3);
         sex.setTextFill(Color.rgb(120, 126, 131));
-//        TextField tf_sex = new TextField();
-//        tf_sex.setPrefWidth(cell);
 
         ComboBox comboBox = new ComboBox();
         comboBox.setPrefWidth(80);
@@ -143,15 +127,6 @@ public class Pane3 {
         TextField tf_ID = new TextField();
         tf_ID.setPrefWidth(cell);
 
-
-        //////////////////////////
-
-        Label inHospital_info = new Label("· 入院信息");
-        inHospital_info.setPrefSize(100, 20);
-        inHospital_info.setAlignment(Pos.CENTER_RIGHT);
-        inHospital_info.setTextFill(Color.rgb(36, 117, 196));
-        inHospital_info.setFont(font4);
-
         Label card = new Label("诊疗卡号");
         card.setAlignment(Pos.CENTER_RIGHT);
         card.setPrefSize(100, 20);
@@ -160,6 +135,14 @@ public class Pane3 {
         TextField tf_card = new TextField();
         tf_card.setPrefWidth(cell);
 
+        //////////////////////////
+
+        Label inHospital_info = new Label("· 住院信息");
+        inHospital_info.setPrefSize(100, 20);
+        inHospital_info.setAlignment(Pos.CENTER_RIGHT);
+        inHospital_info.setTextFill(Color.rgb(36, 117, 196));
+        inHospital_info.setFont(font4);
+
         Label diagnosis = new Label("诊断");
         diagnosis.setAlignment(Pos.CENTER_RIGHT);
         diagnosis.setPrefSize(100, 20);
@@ -167,34 +150,6 @@ public class Pane3 {
         diagnosis.setTextFill(Color.rgb(120, 126, 131));
         TextField tf_diagnosis = new TextField();
         tf_diagnosis.setPrefWidth(cell);
-
-        Label department = new Label("科室");
-        department.setAlignment(Pos.CENTER_RIGHT);
-        department.setPrefSize(100, 20);
-        department.setFont(font3);
-        department.setTextFill(Color.rgb(120, 126, 131));
-
-        ComboBox comboBox1 = new ComboBox();
-        comboBox1.setPrefWidth(130);
-        comboBox1.setEditable(true);
-        comboBox1.getItems().addAll("内科", "五官科", "儿科", "口腔科", "妇科", "肿瘤科", "皮肤科", "外科", "神经科");
-
-        Label ward = new Label("病房号");
-        ward.setAlignment(Pos.CENTER_RIGHT);
-        ward.setPrefSize(100, 20);
-        ward.setFont(font3);
-        ward.setTextFill(Color.rgb(120, 126, 131));
-
-        ComboBox comboBox2 = new ComboBox();
-        comboBox2.setPrefWidth(130);
-        comboBox2.setEditable(true);
-        comboBox2.getItems().addAll(101, 102, 103, 104, 105);
-
-        Label bed = new Label("床位号");
-        bed.setAlignment(Pos.CENTER_RIGHT);
-        bed.setPrefSize(100, 20);
-        bed.setFont(font3);
-        bed.setTextFill(Color.rgb(120, 126, 131));
 
         Label inHospital_time = new Label("入院时间");
         inHospital_time.setAlignment(Pos.CENTER_RIGHT);
@@ -205,12 +160,53 @@ public class Pane3 {
         tf_inHospital_time.setPrefWidth(cell);
         tf_inHospital_time.setPromptText("例  2020-3-2");
 
+        Label outHospital_time = new Label("出院时间");
+        outHospital_time.setAlignment(Pos.CENTER_RIGHT);
+        outHospital_time.setPrefSize(100, 20);
+        outHospital_time.setFont(font3);
+        outHospital_time.setTextFill(Color.rgb(120, 126, 131));
+        TextField tf_outHospital_time = new TextField();
+        tf_outHospital_time.setPrefWidth(cell);
+        tf_outHospital_time.setPromptText("例  2020-3-2");
+
+        Label department = new Label("科室");
+        department.setAlignment(Pos.CENTER_RIGHT);
+        department.setPrefSize(100, 20);
+        department.setFont(font3);
+        department.setTextFill(Color.rgb(120, 126, 131));
+        ComboBox comboBox1 = new ComboBox();
+        comboBox1.setPrefWidth(130);
+        comboBox1.setEditable(true);
+        comboBox1.getItems().addAll("内科", "五官科", "儿科", "口腔科", "妇科", "肿瘤科", "皮肤科", "外科", "神经科");
+
+        Label ward = new Label("病房号");
+        ward.setAlignment(Pos.CENTER_RIGHT);
+        ward.setPrefSize(100, 20);
+        ward.setFont(font3);
+        ward.setTextFill(Color.rgb(120, 126, 131));
+        ComboBox comboBox2 = new ComboBox();
+        comboBox2.setPrefWidth(130);
+        comboBox2.setEditable(true);
+        comboBox2.getItems().addAll(101, 102, 103, 104, 105);
+
+        Label bed = new Label("床位号");
+        bed.setAlignment(Pos.CENTER_RIGHT);
+        bed.setPrefSize(100, 20);
+        bed.setFont(font3);
+        bed.setTextFill(Color.rgb(120, 126, 131));
         ComboBox comboBox3 = new ComboBox();
         comboBox3.setPrefWidth(130);
         comboBox3.setEditable(true);
         comboBox3.getItems().addAll(1, 2, 3, 4, 5);
 
-        GridPane gridPane1 = new GridPane();
+        Label doctor = new Label("主治医师");
+        doctor.setAlignment(Pos.CENTER_RIGHT);
+        doctor.setPrefSize(100, 20);
+        doctor.setFont(font3);
+        doctor.setTextFill(Color.rgb(120, 126, 131));
+        TextField tf_doctor = new TextField();
+        tf_doctor.setPrefWidth(cell);
+
         gridPane1.setHgap(12);
         gridPane1.setVgap(25);//行距
         gridPane1.setPrefSize(1050, 250);
@@ -226,44 +222,144 @@ public class Pane3 {
         gridPane1.add(tf_phone, 1, 2);
         gridPane1.add(ID, 11, 2);
         gridPane1.add(tf_ID, 12, 2);
+        gridPane1.add(card, 22, 2);
+        gridPane1.add(tf_card, 23, 2);
 
         gridPane1.add(inHospital_info, 0, 3);
-        gridPane1.add(card, 0, 4);
-        gridPane1.add(tf_card, 1, 4);
-        gridPane1.add(diagnosis, 11, 4);
-        gridPane1.add(tf_diagnosis, 12, 4);
-        gridPane1.add(department, 22, 4);
-        gridPane1.add(comboBox1, 23, 4);
-        gridPane1.add(ward, 0, 5);
-        gridPane1.add(comboBox2, 1, 5);
-        gridPane1.add(bed, 11, 5);
-        gridPane1.add(comboBox3, 12, 5);
-        gridPane1.add(inHospital_time, 22, 5);
-        gridPane1.add(tf_inHospital_time, 23, 5);
+        gridPane1.add(diagnosis, 0, 4);
+        gridPane1.add(tf_diagnosis, 1, 4);
+        gridPane1.add(inHospital_time, 11, 4);
+        gridPane1.add(tf_inHospital_time, 12, 4);
+        gridPane1.add(outHospital_time, 22, 4);
+        gridPane1.add(tf_outHospital_time, 23, 4);
+        gridPane1.add(department, 0, 5);
+        gridPane1.add(comboBox1, 1, 5);
+        gridPane1.add(ward, 11, 5);
+        gridPane1.add(comboBox2, 12, 5);
+        gridPane1.add(bed, 22, 5);
+        gridPane1.add(comboBox3, 23, 5);
+        gridPane1.add(doctor, 0, 6);
+        gridPane1.add(tf_doctor, 1, 6);
+
+        Button search = new Button("搜索");
+        search.setPrefSize(100, 30);
+        search.setStyle("-fx-background-color: #2475C4");
+        search.setTextFill(Color.rgb(241, 241, 232));
+        search.setFont(font5);
+        search.setOnAction(new EventHandler<ActionEvent>() {  // 搜索
+            @Override
+            public void handle(ActionEvent event) {
+                //先将所有框内容清空，然后调用胡的方法，将s传给他，让他查到后返回patient对象给我，我再全部显示在框中
+                Object[] objects = gridPane1.getChildren().toArray();
+                for (Object o : objects) {
+                    if (o instanceof TextField) {
+                        ((TextField) o).setText("");
+                    }
+                    if (o instanceof ComboBox) {
+                        ((ComboBox) o).setValue(new String(""));
+                    }
+                }
+                /////调用胡的方法得到字符串数组
+                String[] strings = new String[15];
+                for (int i = 0; i < 15; i++) {
+                    strings[i] = Integer.toString(i);
+                }
+                tf_card.setText(strings[0]);
+                tf_name.setText(strings[1]);
+                comboBox.setValue(strings[2]);
+                tf_age.setText(strings[3]);
+                tf_diagnosis.setText(strings[4]);
+                comboBox1.setValue(strings[5]);
+                comboBox2.setValue(strings[6]);
+                comboBox3.setValue(strings[7]);
+                tf_inHospital_time.setText(strings[8]);
+                tf_outHospital_time.setText(strings[9]);
+                tf_phone.setText(strings[10]);
+                tf_ID.setText(strings[11]);
+                tf_doctor.setText(strings[14]);
+            }
+        });
+
+        HBox hBox = new HBox();
+        hBox.getChildren().addAll(textField, search);
 
         Button save2 = new Button("保存");
         save2.setPrefSize(100, 40);
         save2.setStyle("-fx-background-color: #2475C4");
         save2.setTextFill(Color.rgb(241, 241, 232));
         save2.setFont(font5);
+        save2.setOnAction(new EventHandler<ActionEvent>() {  // 保存修改
+            @Override
+            public void handle(ActionEvent event) {
+                //把gridpane上的框里的内容汇总在一个patient对象里，调用胡的方法传给他，让他的方法将数据写进数据库
+                //弹窗提示保存成功，可选择清空所有或者保留
+                // 有信息没填则失败
+                if (!tf_card.getText().equals("") && !textField.getText().equals("")) {
+                    String[] strings = new String[15];
+                    strings[0] = tf_card.getText();
+                    strings[1] = tf_name.getText();
+                    strings[2] = (String) comboBox.getValue();
+                    strings[3] = tf_age.getText();
+                    strings[4] = tf_diagnosis.getText();
+                    strings[5] = (String) comboBox1.getValue();
+                    strings[6] = (String) comboBox2.getValue();
+                    strings[7] = (String) comboBox3.getValue();
+                    strings[8] = tf_inHospital_time.getText();
+                    strings[9] = tf_outHospital_time.getText();
+                    strings[10] = tf_phone.getText();
+                    strings[11] = tf_ID.getText();
+                    strings[12] = "";//胡传过来的药品原封不动传回去
+                    strings[13] = "";//胡传过来的检查项目传回去
+                    strings[14] = tf_doctor.getText();
+                    //调用胡的方法传数组给他
+                    for (String s : strings) {
+                        System.out.println(s);
+                    }
+                    //假设已经修改成功，然后弹窗
+                    Label tip = new Label("修改成功！");
+                    tip.setPrefSize(100, 40);
+                    tip.setTextFill(Color.rgb(113, 114, 112));
+                    tip.setFont(font5);
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setGraphic(tip);
+                    alert.setTitle("修改");
+                    alert.setHeaderText("");
+                    alert.setContentText("");
+                    alert.show();
+                    //如果找不到该诊疗卡号，则弹窗提示无该记录
+//                    Label tip1 = new Label("没有该卡号的住院记录！");
+//                    tip1.setPrefSize(200, 40);
+//                    tip1.setTextFill(Color.rgb(113, 114, 112));
+//                    tip1.setFont(font5);
+//                    Alert alert1 = new Alert(Alert.AlertType.WARNING);
+//                    alert1.setGraphic(tip1);
+//                    alert1.setTitle("");
+//                    alert1.setHeaderText("");
+//                    alert1.setContentText("");
+//                    alert1.show();
+                }
+            }
+        });
 
         Button reset2 = new Button("重置");
         reset2.setPrefSize(100, 40);
         reset2.setStyle("-fx-background-color: #2475C4");
         reset2.setTextFill(Color.rgb(241, 241, 232));
         reset2.setFont(font5);
-        save2.setOnAction(new EventHandler<ActionEvent>() {  // 住院记录
-            @Override
-            public void handle(ActionEvent event) {
-                //把gridpane上的框里的内容汇总在一个patient对象里，调用胡的方法传给他，让他的方法将数据写进数据库
-                //弹窗提示保存成功，可选择清空所有或者保留
-                // 有信息没填则失败
-            }
-        });
-        reset2.setOnAction(new EventHandler<ActionEvent>() {  // 住院记录
+        reset2.setOnAction(new EventHandler<ActionEvent>() {  // 重置
             @Override
             public void handle(ActionEvent event) {
                 //遍历gridpane，将框内容设为“”
+                textField.setText("");
+                Object[] objects = gridPane1.getChildren().toArray();
+                for (Object o : objects) {
+                    if (o instanceof TextField) {
+                        ((TextField) o).setText("");
+                    }
+                    if (o instanceof ComboBox) {
+                        ((ComboBox) o).setValue(new String(""));
+                    }
+                }
             }
         });
 
@@ -282,7 +378,6 @@ public class Pane3 {
 
         //_____________________________________________________________________________________________
 
-        //  view.getAnchorPanes(num).getChildren().removeAll();//刷新该页面前先将之前页面上的所有东西清空
         anchorPane3.getChildren().addAll(divider1, hBox, line4, gridPane1, hBox2, line1, line2, line3);
 
         AnchorPane.setLeftAnchor(divider1, 15.0);
@@ -295,7 +390,7 @@ public class Pane3 {
         AnchorPane.setTopAnchor(gridPane1, 240.0);
 
         AnchorPane.setLeftAnchor(hBox2, 410.0);
-        AnchorPane.setTopAnchor(hBox2, 620.0);
+        AnchorPane.setTopAnchor(hBox2, 650.0);
     }
 
 

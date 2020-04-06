@@ -9,7 +9,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        View view=new View();
+        View view = new View();
 
         Scene scene = new Scene(view.load_base(view), 1285, 955);
         primaryStage.setTitle("hospital");

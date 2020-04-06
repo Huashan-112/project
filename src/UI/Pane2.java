@@ -1,10 +1,9 @@
 package UI;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
@@ -13,6 +12,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 
 import java.util.function.UnaryOperator;
@@ -58,7 +60,7 @@ public class Pane2 {
         //lable--------------------------------------------------------  //分割线
 
         this.table.setEditable(true);
-        this.table.setPrefSize(1050, 330);
+        this.table.setPrefSize(1050, 340);
         TableColumn t1 = new TableColumn("诊疗卡号");
         TableColumn t2 = new TableColumn("姓名");
         TableColumn t3 = new TableColumn("性别");
@@ -77,18 +79,8 @@ public class Pane2 {
         t6.setPrefWidth(120);
         t7.setPrefWidth(90);
         t8.setPrefWidth(65);
-        t9.setPrefWidth(160);
-        t10.setPrefWidth(160);
-        //table.setStyle("-fx-background-color:#E6F2FE");
-        table.getColumns().addAll(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
-        table.setColumnResizePolicy(new Callback<TableView.ResizeFeatures, Boolean>() {
-            @Override
-            public Boolean call(TableView.ResizeFeatures param) {
-                return true;
-            }
-        });
-
-
+        t9.setPrefWidth(159);
+        t10.setPrefWidth(159);
         t1.setCellValueFactory(new PropertyValueFactory<>("card"));
         t2.setCellValueFactory(new PropertyValueFactory<>("name"));
         t3.setCellValueFactory(new PropertyValueFactory<>("sex"));
@@ -99,13 +91,22 @@ public class Pane2 {
         t8.setCellValueFactory(new PropertyValueFactory<>("bed"));
         t9.setCellValueFactory(new PropertyValueFactory<>("inTime"));
         t10.setCellValueFactory(new PropertyValueFactory<>("outTime"));
-        Patient patient1 = new Patient("31", "31", "31", "31", "31", "31", "31", "31", "31", "31", "31", "31");
-        Patient patient2 = new Patient("31", "31", "31", "31", "31", "31", "31", "31", "31", "31", "31", "31");
-        Patient patient3 = new Patient("31", "31", "31", "31", "31", "31", "31", "31", "31", "31", "31", "31");
-        ObservableList<Patient> data = FXCollections.observableArrayList();
-        data.addAll(patient1,patient2,patient3);
-        table.getItems().addAll(data);
+        //table.setStyle("-fx-background-color:#E6F2FE");
+        table.getColumns().addAll(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
+        table.setColumnResizePolicy(new Callback<TableView.ResizeFeatures, Boolean>() {
+            @Override
+            public Boolean call(TableView.ResizeFeatures param) {
+                return true;
+            }
+        });
 
+        String[] strings = new String[15];
+        for (int i = 0; i < 15; i++) {
+            strings[i] = Integer.toString(i);
+        }
+        Patient patient = new Patient();
+        patient.madeBean(strings);
+        table.getItems().addAll(patient.madeBean(strings), patient.madeBean(strings), patient.madeBean(strings));
 
         //-------------------------------------------------------------  //分割线
 
@@ -147,16 +148,7 @@ public class Pane2 {
             }
         }));
 
-        Button query = new Button("查找");
-        query.setPrefSize(100, 30);
-        query.setStyle("-fx-background-color: #2475C4");
-        query.setTextFill(Color.rgb(241, 241, 232));
-        query.setFont(font1);
-
-        HBox hBox = new HBox();
-        hBox.getChildren().addAll(textField, query);
-
-        TableView table_del = new TableView();
+        TableView<Patient> table_del = new TableView<>();
         table_del.setEditable(true);
         table_del.setPrefSize(1050, 60);
         TableColumn td1 = new TableColumn("诊疗卡号");
@@ -169,6 +161,16 @@ public class Pane2 {
         TableColumn td8 = new TableColumn("床位");
         TableColumn td9 = new TableColumn("入院时间");
         TableColumn td10 = new TableColumn("出院时间");
+        td1.setCellValueFactory(new PropertyValueFactory<>("card"));
+        td2.setCellValueFactory(new PropertyValueFactory<>("name"));
+        td3.setCellValueFactory(new PropertyValueFactory<>("sex"));
+        td4.setCellValueFactory(new PropertyValueFactory<>("age"));
+        td5.setCellValueFactory(new PropertyValueFactory<>("diagnosis"));
+        td6.setCellValueFactory(new PropertyValueFactory<>("department"));
+        td7.setCellValueFactory(new PropertyValueFactory<>("ward"));
+        td8.setCellValueFactory(new PropertyValueFactory<>("bed"));
+        td9.setCellValueFactory(new PropertyValueFactory<>("inTime"));
+        td10.setCellValueFactory(new PropertyValueFactory<>("outTime"));
         td1.setPrefWidth(110);
         td2.setPrefWidth(100);
         td3.setPrefWidth(50);
@@ -177,8 +179,8 @@ public class Pane2 {
         td6.setPrefWidth(120);
         td7.setPrefWidth(90);
         td8.setPrefWidth(65);
-        td9.setPrefWidth(160);
-        td10.setPrefWidth(160);
+        td9.setPrefWidth(159);
+        td10.setPrefWidth(159);
         //table.setStyle("-fx-background-color:#E6F2FE");
         table_del.getColumns().addAll(td1, td2, td3, td4, td5, td6, td7, td8, td9, td10);
         table.setColumnResizePolicy(new Callback<TableView.ResizeFeatures, Boolean>() {
@@ -188,16 +190,81 @@ public class Pane2 {
             }
         });
 
+        Button query = new Button("查找");
+        query.setPrefSize(100, 30);
+        query.setStyle("-fx-background-color: #2475C4");
+        query.setTextFill(Color.rgb(241, 241, 232));
+        query.setFont(font1);
+        query.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //先将表格和框内容清空，然后调用胡的方法，将s传给他，让他查到后返回patient对象给我，我再插入表格中
+                if (!textField.getText().equals("")) {
+                    table_del.getItems().removeAll(table_del.getItems());
+                    String[] s1 = new String[15];
+                    for (int i = 0; i < 15; i++) {
+                        s1[i] = Integer.toString(i);
+                    }
+                    Patient patient = new Patient();
+                    table_del.getItems().addAll(patient.madeBean(s1));
+                    table_del.refresh();
+                }
+            }
+        });
+
+        HBox hBox = new HBox();
+        hBox.getChildren().
+
+                addAll(textField, query);
+
         Button delect = new Button("删除");
         delect.setPrefSize(100, 30);
         delect.setStyle("-fx-background-color: #2475C4");
         delect.setTextFill(Color.rgb(241, 241, 232));
         delect.setFont(font1);
-        delect.setOnAction(new EventHandler<ActionEvent>() {  // 住院记录
+        delect.setOnAction(new EventHandler<ActionEvent>() {  // 删除个人住院记录
             @Override
             public void handle(ActionEvent event) {
                 //清空框和表中的内容，弹窗提示确认删除？
-                pane2.update();
+                if (!table_del.getItems().isEmpty()) {
+                    Stage stage = new Stage();
+                    Label tip = new Label("确认删除该条记录？");
+                    tip.setPrefSize(400, 40);
+                    tip.setTextFill(Color.rgb(113, 114, 112));
+                    tip.setFont(font);
+                    Button yes = new Button("确认");
+                    yes.setPrefWidth(80);
+                    yes.setOnAction(new EventHandler<ActionEvent>() {  // 确认删除
+                        @Override
+                        public void handle(ActionEvent event) {
+                            table_del.getItems().removeAll(table_del.getItems());
+                            textField.setText("");
+                            stage.close();
+                        }
+                    });
+                    Button no = new Button("取消");
+                    no.setPrefWidth(80);
+                    no.setOnAction(new EventHandler<ActionEvent>() {  // 取消删除
+                        @Override
+                        public void handle(ActionEvent event) {
+                            stage.close();
+                        }
+                    });
+                    AnchorPane anchorPane = new AnchorPane();
+                    anchorPane.getChildren().addAll(tip, yes, no);
+                    AnchorPane.setLeftAnchor(tip, 30.0);
+                    AnchorPane.setTopAnchor(tip, 30.0);
+                    AnchorPane.setLeftAnchor(yes, 250.0);
+                    AnchorPane.setTopAnchor(yes, 100.0);
+                    AnchorPane.setLeftAnchor(no, 350.0);
+                    AnchorPane.setTopAnchor(no, 100.0);
+                    Scene scene = new Scene(anchorPane, 460, 160);
+                    stage.setScene(scene);
+                    stage.initStyle(StageStyle.UTILITY);
+                    stage.initModality(Modality.APPLICATION_MODAL);
+                    stage.show();
+                    pane2.update();
+                }
             }
         });
 
@@ -206,9 +273,18 @@ public class Pane2 {
         reset.setStyle("-fx-background-color: #2475C4");
         reset.setTextFill(Color.rgb(241, 241, 232));
         reset.setFont(font1);
+        reset.setOnAction(new EventHandler<ActionEvent>() {  // 重置
+            @Override
+            public void handle(ActionEvent event) {
+                textField.setText("");
+                table_del.getItems().removeAll(table_del.getItems());
+            }
+        });
 
         HBox hBox2 = new HBox();
-        hBox2.getChildren().addAll(delect, reset);
+        hBox2.getChildren().
+
+                addAll(delect, reset);
         hBox2.setSpacing(40);
 
         Line line1 = new Line(15, 845, 1065, 845);
@@ -216,7 +292,6 @@ public class Pane2 {
 
         //_____________________________________________________________________________________________
 
-        //view.getAnchorPanes(num).getChildren().removeAll();//刷新该页面前先将之前页面上的所有东西清空
         anchorPane2.getChildren().addAll(table, divider1, divider2, hBox, table_del, hBox2, line1);
 
         AnchorPane.setLeftAnchor(divider1, 15.0);

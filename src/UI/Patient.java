@@ -3,7 +3,6 @@ package UI;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Patient {
-
     private SimpleStringProperty card;
     private SimpleStringProperty name;
     private SimpleStringProperty sex;
@@ -16,8 +15,11 @@ public class Patient {
     private SimpleStringProperty outTime;
     private SimpleStringProperty phone;
     private SimpleStringProperty ID;
+    private SimpleStringProperty medicine;
+    private SimpleStringProperty check;
+    private SimpleStringProperty doctor;
 
-    public Patient(String s1, String s2, String s3, String s4, String s5, String s6, String s7, String s8, String s9, String s10, String s11, String s12) {
+    public Patient() {
         card = new SimpleStringProperty();
         name = new SimpleStringProperty();
         sex = new SimpleStringProperty();
@@ -30,6 +32,27 @@ public class Patient {
         outTime = new SimpleStringProperty();
         phone = new SimpleStringProperty();
         ID = new SimpleStringProperty();
+        medicine = new SimpleStringProperty();
+        check = new SimpleStringProperty();
+        doctor = new SimpleStringProperty();
+    }
+
+    public Patient(String s1, String s2, String s3, String s4, String s5, String s6, String s7, String s8, String s9, String s10, String s11, String s12, String s13, String s14, String s15) {
+        card = new SimpleStringProperty();
+        name = new SimpleStringProperty();
+        sex = new SimpleStringProperty();
+        age = new SimpleStringProperty();
+        diagnosis = new SimpleStringProperty();
+        department = new SimpleStringProperty();
+        ward = new SimpleStringProperty();
+        bed = new SimpleStringProperty();
+        inTime = new SimpleStringProperty();
+        outTime = new SimpleStringProperty();
+        phone = new SimpleStringProperty();
+        ID = new SimpleStringProperty();
+        medicine = new SimpleStringProperty();
+        check = new SimpleStringProperty();
+        doctor = new SimpleStringProperty();
         card.set(s1);
         name.set(s2);
         sex.set(s3);
@@ -43,6 +66,14 @@ public class Patient {
         outTime.set(s11);
         phone.set(s11);
         ID.set(s12);
+        medicine.set(s13);
+        check.set(s14);
+        doctor.set(s15);
+    }
+
+    public Patient madeBean(String[] s1) {
+        Patient patient = new Patient(s1[0], s1[1], s1[2], s1[3], s1[4], s1[5], s1[6], s1[7], s1[8], s1[9], s1[10], s1[11], s1[12], s1[13], s1[14]);
+        return patient;
     }
 
     public String getCard() {
@@ -188,4 +219,29 @@ public class Patient {
     public void setID(String ID) {
         this.ID.set(ID);
     }
+
+    public String getMedicine() {
+        return medicine.get();
+    }
+
+    public SimpleStringProperty medicineProperty() {
+        return medicine;
+    }
+
+    public void setMedicine(String medicine) {
+        this.medicine.set(medicine);
+    }
+
+    public String getCheck() {
+        return check.get();
+    }
+
+    public SimpleStringProperty checkProperty() {
+        return check;
+    }
+
+    public void setCheck(String check) {
+        this.check.set(check);
+    }
+
 }

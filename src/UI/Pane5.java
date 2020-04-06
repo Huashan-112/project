@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -16,10 +17,10 @@ import java.util.function.UnaryOperator;
 
 public class Pane5 {
 
-    private  AnchorPane anchorPane5;
+    private AnchorPane anchorPane5;
 
-    public  Pane5(){
-        anchorPane5=new AnchorPane();
+    public Pane5() {
+        anchorPane5 = new AnchorPane();
         anchorPane5.setVisible(false);
         anchorPane5.setPrefSize(1080, 855);
         anchorPane5.setStyle("-fx-background-color:#ffffff");
@@ -43,43 +44,6 @@ public class Pane5 {
                 return null;
             }
         }));
-
-        Button button = new Button("查询");
-        button.setPrefSize(100, 40);
-        button.setStyle("-fx-background-color: #2475C4");
-        button.setTextFill(Color.rgb(241, 241, 232));
-        button.setFont(font);
-        button.setOnAction(new EventHandler<ActionEvent>() {  // 住院记录
-            @Override
-            public void handle(ActionEvent event) {
-                //先清空下方的所有数据，然后调用胡的方法，将卡号传给他，让他找到该人的记录，返回来patient对象，我再一一插入表格中
-                //可能还要有药品和检查项目的表（里面记录药品的检查项目的
-            }
-        });
-
-        HBox hBox = new HBox();
-        hBox.getChildren().addAll(textField, button);
-
-        TableView table = new TableView();
-        table.setEditable(true);
-        table.setPrefSize(1050, 70);
-        TableColumn t1 = new TableColumn("病房号");
-        TableColumn t2 = new TableColumn("床位号");
-        TableColumn t3 = new TableColumn("科室");
-        TableColumn t4 = new TableColumn("入院时间");
-        TableColumn t5 = new TableColumn("出院时间");
-        t1.setPrefWidth(200);
-        t2.setPrefWidth(200);
-        t3.setPrefWidth(220);
-        t4.setPrefWidth(220);
-        t5.setPrefWidth(220);
-        table.getColumns().addAll(t1, t2, t3, t4, t5);
-        table.setColumnResizePolicy(new Callback<TableView.ResizeFeatures, Boolean>() {
-            @Override
-            public Boolean call(TableView.ResizeFeatures param) {
-                return true;
-            }
-        });
 
         //lable--------------------------------------------------------
 
@@ -159,23 +123,35 @@ public class Pane5 {
 
         //lable--------------------------------------------------------  //分割线
 
-        TableView table_medicine = new TableView();
-        table_medicine.setEditable(true);
-        table_medicine.setPrefSize(1050, 120);
-        TableColumn tc1 = new TableColumn("药品编码");
-        TableColumn tc2 = new TableColumn("药品名称");
-        TableColumn tc3 = new TableColumn("数量");
-        TableColumn tc4 = new TableColumn("单价");
-        TableColumn tc5 = new TableColumn("总金额");
-        tc1.setPrefWidth(250);
-        tc2.setPrefWidth(250);
-        tc3.setPrefWidth(150);
-        tc4.setPrefWidth(150);
-        tc5.setPrefWidth(250);
-        table_medicine.getColumns().addAll(tc1, tc2, tc3, tc4, tc5);
+        TableView table = new TableView();
+        table.setEditable(true);
+        table.setPrefSize(1050, 60);
+        TableColumn t1 = new TableColumn("科室");
+        TableColumn t2 = new TableColumn("病房号");
+        TableColumn t3 = new TableColumn("床位号");
+        TableColumn t4 = new TableColumn("入院时间");
+        TableColumn t5 = new TableColumn("出院时间");
+        t1.setPrefWidth(208);
+        t2.setPrefWidth(200);
+        t3.setPrefWidth(200);
+        t4.setPrefWidth(220);
+        t5.setPrefWidth(220);
+        t1.setCellValueFactory(new PropertyValueFactory<>("department"));
+        t2.setCellValueFactory(new PropertyValueFactory<>("ward"));
+        t3.setCellValueFactory(new PropertyValueFactory<>("bed"));
+        t4.setCellValueFactory(new PropertyValueFactory<>("inTime"));
+        t5.setCellValueFactory(new PropertyValueFactory<>("outTime"));
+        table.getColumns().addAll(t1, t2, t3, t4, t5);
+        table.setColumnResizePolicy(new Callback<TableView.ResizeFeatures, Boolean>() {
+            @Override
+            public Boolean call(TableView.ResizeFeatures param) {
+                return true;
+            }
+        });
 
+        //-------------------------------------------------------------  //分割线
 
-        Label divider3_note = new Label("已用药物");//分割线
+        Label divider3_note = new Label("已用药物");
         divider3_note.setPrefSize(400, 30);
         divider3_note.setTextFill(Color.rgb(90, 90, 90));
         divider3_note.setFont(font2);
@@ -192,6 +168,28 @@ public class Pane5 {
         divider3.getChildren().addAll(divider3_decoration, divider3_note);
         AnchorPane.setLeftAnchor(divider3_note, 35.0);
         AnchorPane.setTopAnchor(divider3_note, 5.0);
+
+        //-------------------------------------------------------------  //分割线
+
+        TableView table_medicine = new TableView();
+        table_medicine.setEditable(true);
+        table_medicine.setPrefSize(1050, 115);
+        TableColumn tc1 = new TableColumn("药品编码");
+        TableColumn tc2 = new TableColumn("药品名称");
+        TableColumn tc3 = new TableColumn("数量");
+        TableColumn tc4 = new TableColumn("单价");
+        TableColumn tc5 = new TableColumn("总金额");
+        tc1.setPrefWidth(250);
+        tc2.setPrefWidth(250);
+        tc3.setPrefWidth(150);
+        tc4.setPrefWidth(150);
+        tc5.setPrefWidth(248);
+        tc1.setCellValueFactory(new PropertyValueFactory<>("indexes"));
+        tc2.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tc3.setCellValueFactory(new PropertyValueFactory<>("num"));
+        tc4.setCellValueFactory(new PropertyValueFactory<>("price"));
+        tc5.setCellValueFactory(new PropertyValueFactory<>("total_price"));
+        table_medicine.getColumns().addAll(tc1, tc2, tc3, tc4, tc5);
 
         //-------------------------------------------------------------  //分割线
 
@@ -217,7 +215,7 @@ public class Pane5 {
 
         TableView table_check = new TableView();
         table_check.setEditable(true);
-        table_check.setPrefSize(1050, 120);
+        table_check.setPrefSize(1050, 115);
         TableColumn check1 = new TableColumn("项目编码");
         TableColumn check2 = new TableColumn("项目名称");
         TableColumn check3 = new TableColumn("数量");
@@ -227,7 +225,12 @@ public class Pane5 {
         check2.setPrefWidth(250);
         check3.setPrefWidth(150);
         check4.setPrefWidth(150);
-        check5.setPrefWidth(250);
+        check5.setPrefWidth(248);
+        check1.setCellValueFactory(new PropertyValueFactory<>("indexes"));
+        check2.setCellValueFactory(new PropertyValueFactory<>("name"));
+        check3.setCellValueFactory(new PropertyValueFactory<>("num"));
+        check4.setCellValueFactory(new PropertyValueFactory<>("price"));
+        check5.setCellValueFactory(new PropertyValueFactory<>("total_price"));
         table_check.getColumns().addAll(check1, check2, check3, check4, check5);
 
         Button reset = new Button("重置");
@@ -235,20 +238,73 @@ public class Pane5 {
         reset.setStyle("-fx-background-color: #2475C4");
         reset.setTextFill(Color.rgb(241, 241, 232));
         reset.setFont(font);
-        reset.setOnAction(new EventHandler<ActionEvent>() {  // 住院记录
+        reset.setOnAction(new EventHandler<ActionEvent>() {  // 重置
             @Override
             public void handle(ActionEvent event) {
                 //所有框设内容为空,将表中内容清空
                 textField.setText("");
+                name.setText("姓名：");
+                sex.setText("性别：");
+                age.setText("年龄：");
+                phone.setText("手机号：");
+                ID.setText("身份证号：");
+                diagnosis.setText("诊断：");
+                doctor.setText("主治医师：");
+                table.getItems().removeAll(table.getItems());
+                table_medicine.getItems().removeAll(table_medicine.getItems());
+                table_check.getItems().removeAll(table_check.getItems());
             }
         });
 
         Line line1 = new Line(15, 845, 1065, 845);
         line1.setStroke(Color.valueOf("#5C5D5B"));
 
+        Button button = new Button("查询");
+        button.setPrefSize(100, 40);
+        button.setStyle("-fx-background-color: #2475C4");
+        button.setTextFill(Color.rgb(241, 241, 232));
+        button.setFont(font);
+        button.setOnAction(new EventHandler<ActionEvent>() {  // 查询患者个人信息
+            @Override
+            public void handle(ActionEvent event) {
+                //先清空下方的所有数据，然后调用胡的方法，将卡号传给他，让他找到该人的记录，返回来patient对象，我再一一插入表格中
+                //可能还要有药品和检查项目的表（里面记录药品的检查项目的
+                if (!textField.getText().equals("")) {
+                    //调用胡的方法，返回字符串数组
+                    if (true) {     //假如能找到该记录
+                        String[] strings = new String[15];
+                        for (int i = 0; i < 15; i++) {
+                            strings[i] = Integer.toString(i);
+                        }
+                        name.setText("姓名：" + strings[1]);
+                        sex.setText("性别：" + strings[2]);
+                        age.setText("年龄：" + strings[3]);
+                        phone.setText("手机号：" + strings[10]);
+                        ID.setText("身份证号：" + strings[11]);
+                        diagnosis.setText("诊断：" + strings[4]);
+                        doctor.setText("主治医师：" + strings[14]);
+
+                        Patient patient = new Patient();
+                        table.getItems().removeAll(table.getItems());
+                        table.getItems().addAll(patient.madeBean(strings));
+
+                        Medicine medicine = new Medicine();
+                        table_medicine.getItems().removeAll(table_medicine.getItems());
+                        table_medicine.getItems().addAll(medicine.madeBean(strings));
+
+                        CheckUp checkUp = new CheckUp();
+                        table_check.getItems().removeAll(table_check.getItems());
+                        table_check.getItems().addAll(checkUp.madeBean(strings));
+                    }
+                }
+            }
+        });
+
+        HBox hBox = new HBox();
+        hBox.getChildren().addAll(textField, button);
+
         //_____________________________________________________________________
 
-        //view.getAnchorPanes(num).getChildren().removeAll();//刷新该页面前先将之前页面上的所有东西清空
         anchorPane5.getChildren().addAll(hBox, line, label, hBox1, hBox2, divider2, table, divider3, table_medicine, divider4, table_check, reset, line1);
 
         AnchorPane.setLeftAnchor(hBox, 125.0);

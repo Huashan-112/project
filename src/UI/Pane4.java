@@ -16,10 +16,10 @@ import java.util.function.UnaryOperator;
 
 public class Pane4 {
 
-    private  AnchorPane anchorPane4;
+    private AnchorPane anchorPane4;
 
-    public  Pane4(){
-        anchorPane4=new AnchorPane();
+    public Pane4() {
+        anchorPane4 = new AnchorPane();
         anchorPane4.setVisible(false);
         anchorPane4.setPrefSize(1080, 855);
         anchorPane4.setStyle("-fx-background-color:#ffffff");
@@ -52,21 +52,6 @@ public class Pane4 {
             }
         }));
 
-        Button query = new Button("搜索");
-        query.setPrefSize(100, 30);
-        query.setStyle("-fx-background-color: #2475C4");
-        query.setTextFill(Color.rgb(241, 241, 232));
-        query.setFont(font1);
-        query.setOnAction(new EventHandler<ActionEvent>() {  // 住院记录
-            @Override
-            public void handle(ActionEvent event) {
-                //先清空下方的所有数据，然后调用胡的方法，将卡号传给他，让他找到该人的记录，返回来patient对象，我再显示基本信息
-            }
-        });
-
-        HBox hBox = new HBox();
-        hBox.getChildren().addAll(label, textField, query);
-
         Line line = new Line(15, 75, 1065, 75);
         line.setStroke(Color.valueOf("#BCBEBA"));
 
@@ -95,6 +80,52 @@ public class Pane4 {
         HBox hBox1 = new HBox();
         hBox1.getChildren().addAll(name, sex, age, diagnosis);
         hBox1.setSpacing(60);
+
+        Button query = new Button("搜索");
+        query.setPrefSize(100, 30);
+        query.setStyle("-fx-background-color: #2475C4");
+        query.setTextFill(Color.rgb(241, 241, 232));
+        query.setFont(font1);
+        query.setOnAction(new EventHandler<ActionEvent>() {  //  搜索
+            @Override
+            public void handle(ActionEvent event) {
+                //先清空下方的所有数据，然后调用胡的方法，将卡号传给他，让他找到该人的记录，返回来patient对象，我再显示基本信息
+                if (!textField.getText().equals("")) {
+                    //调用胡的方法，返回查找成功与否，成功则清空下方
+                    String[] strings = new String[15];
+                    for (int i = 0; i < 5; i++) {
+                        strings[i] = Integer.toString(i);
+                    }
+                    if (true) {
+                        Object[] objects = hBox1.getChildren().toArray();
+                        for (Object o : objects) {
+                            if (o instanceof TextField) {
+                                ((TextField) o).setText("");
+                            }
+                        }
+                        name.setText("姓名：" + strings[1]);
+                        sex.setText("性别：" + strings[2]);
+                        age.setText("年龄：" + strings[3]);
+                        diagnosis.setText("诊断：" + strings[4]);
+                    } else {
+                        Label tip1 = new Label("未找到该卡号的病人!");
+                        tip1.setPrefSize(200, 40);
+                        tip1.setTextFill(Color.rgb(113, 114, 112));
+                        tip1.setFont(font1);
+                        Alert alert1 = new Alert(Alert.AlertType.WARNING);
+                        alert1.setGraphic(tip1);
+                        alert1.setTitle("");
+                        alert1.setHeaderText("");
+                        alert1.setContentText("");
+                        alert1.show();
+                    }
+                }
+            }
+        });
+
+        HBox hBox = new HBox();
+        hBox.getChildren().addAll(label, textField, query);
+
 
         //-------------------------------------------------------------  //分割线
 
@@ -170,42 +201,42 @@ public class Pane4 {
         ComboBox<String> comboBox1 = new ComboBox<>();
         comboBox1.setPrefWidth(150);
         comboBox1.setEditable(true);
-        comboBox1.getItems().addAll("头孢匹罗","罗红霉素");
+        comboBox1.getItems().addAll("头孢匹罗", "罗红霉素");
 
         ComboBox<String> comboBox2 = new ComboBox<>();
         comboBox2.setPrefWidth(150);
         comboBox2.setEditable(true);
-        comboBox2.getItems().addAll("地塞米松","泼尼松龙");
+        comboBox2.getItems().addAll("地塞米松", "泼尼松龙");
 
         ComboBox<String> comboBox3 = new ComboBox<>();
         comboBox3.setPrefWidth(150);
         comboBox3.setEditable(true);
-        comboBox3.getItems().addAll("布洛芬","他克莫司");
+        comboBox3.getItems().addAll("布洛芬", "他克莫司");
 
         ComboBox<String> comboBox4 = new ComboBox<>();
         comboBox4.setPrefWidth(150);
         comboBox4.setEditable(true);
-        comboBox4.getItems().addAll("曲安奈德","阿昔洛韦");
+        comboBox4.getItems().addAll("曲安奈德", "阿昔洛韦");
 
         ComboBox<String> comboBox5 = new ComboBox<>();
         comboBox5.setPrefWidth(150);
         comboBox5.setEditable(true);
-        comboBox5.getItems().addAll("舒尼替尼","利妥昔单抗");
+        comboBox5.getItems().addAll("舒尼替尼", "利妥昔单抗");
 
         ComboBox<String> comboBox6 = new ComboBox<>();
         comboBox6.setPrefWidth(150);
         comboBox6.setEditable(true);
-        comboBox6.getItems().addAll("氯雷他定","左西替利");
+        comboBox6.getItems().addAll("氯雷他定", "左西替利");
 
         ComboBox<String> comboBox7 = new ComboBox<>();
         comboBox7.setPrefWidth(150);
         comboBox7.setEditable(true);
-        comboBox7.getItems().addAll("利巴韦林","氨甲环酸");
+        comboBox7.getItems().addAll("利巴韦林", "氨甲环酸");
 
         ComboBox<String> comboBox8 = new ComboBox<>();
         comboBox8.setPrefWidth(150);
         comboBox8.setEditable(true);
-        comboBox8.getItems().addAll("硝酸甘油","卡托普利");
+        comboBox8.getItems().addAll("硝酸甘油", "卡托普利");
 
         GridPane gridPane1 = new GridPane();
         gridPane1.setHgap(12);
@@ -241,16 +272,55 @@ public class Pane4 {
         save1.setStyle("-fx-background-color: #2475C4");
         save1.setTextFill(Color.rgb(241, 241, 232));
         save1.setFont(font1);
+        save1.setOnAction(new EventHandler<ActionEvent>() {  // 保存开药
+            @Override
+            public void handle(ActionEvent event) {
+                //遍历所有Combobox，将框内容设为“”
+                if (!name.getText().equals("姓名：") && !textField.getText().equals("")) {
+                    StringBuilder stringBuilder = new StringBuilder("");
+                    Object[] objects = gridPane1.getChildren().toArray();
+                    for (Object o : objects) {
+                        if (o instanceof ComboBox) {
+                            String s = (String) ((ComboBox) o).getValue();
+                            if (s == null || (s != null && s.equals(""))) {
+
+                            } else {
+                                stringBuilder.append((String) ((ComboBox) o).getValue());
+                                stringBuilder.append(" ");
+                            }
+                        }
+                    }
+                    System.out.println(textField.getText());
+                    System.out.println(stringBuilder.toString());
+                    Label tip = new Label("保存成功！");
+                    tip.setPrefSize(100, 40);
+                    tip.setTextFill(Color.rgb(113, 114, 112));
+                    tip.setFont(font1);
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setGraphic(tip);
+                    alert.setTitle("开药");
+                    alert.setHeaderText("");
+                    alert.setContentText("");
+                    alert.show();
+                }
+            }
+        });
 
         Button reset = new Button("重置");
         reset.setPrefSize(100, 30);
         reset.setStyle("-fx-background-color: #2475C4");
         reset.setTextFill(Color.rgb(241, 241, 232));
         reset.setFont(font1);
-        reset.setOnAction(new EventHandler<ActionEvent>() {  // 住院记录
+        reset.setOnAction(new EventHandler<ActionEvent>() {  // 重置开药
             @Override
             public void handle(ActionEvent event) {
                 //遍历所有Combobox，将框内容设为“”
+                Object[] objects = gridPane1.getChildren().toArray();
+                for (Object o : objects) {
+                    if (o instanceof ComboBox) {
+                        ((ComboBox) o).setValue(new String(""));
+                    }
+                }
             }
         });
 
@@ -309,10 +379,10 @@ public class Pane4 {
         CheckBox checkBox9 = new CheckBox("B超");
         CheckBox checkBox10 = new CheckBox("X光");
         CheckBox checkBox11 = new CheckBox("胸片");
-        CheckBox checkBox12= new CheckBox("胃镜");
-        CheckBox checkBox13= new CheckBox("肠镜");
-        CheckBox checkBox14= new CheckBox("腹腔镜");
-        CheckBox checkBox15= new CheckBox("宫腔镜");
+        CheckBox checkBox12 = new CheckBox("胃镜");
+        CheckBox checkBox13 = new CheckBox("肠镜");
+        CheckBox checkBox14 = new CheckBox("腹腔镜");
+        CheckBox checkBox15 = new CheckBox("宫腔镜");
 
         GridPane gridPane2 = new GridPane();
         gridPane2.setHgap(25);
@@ -343,17 +413,51 @@ public class Pane4 {
         save2.setStyle("-fx-background-color: #2475C4");
         save2.setTextFill(Color.rgb(241, 241, 232));
         save2.setFont(font1);
+        save2.setOnAction(new EventHandler<ActionEvent>() {  // 保存检查
+            @Override
+            public void handle(ActionEvent event) {
+                if (!name.getText().equals("姓名：") && !textField.getText().equals("")) {
+                    StringBuilder stringBuilder = new StringBuilder("");
+                    Object[] objects = gridPane2.getChildren().toArray();
+                    for (Object o : objects) {
+                        if (o instanceof CheckBox) {
+                            if (((CheckBox) o).isSelected()) {         //被选中
+                                stringBuilder.append(((CheckBox) o).getText());
+                                stringBuilder.append(" ");
+                            }
+                        }
+                    }
+                    System.out.println(textField.getText());
+                    System.out.println(stringBuilder.toString());
+                    Label tip = new Label("保存成功！");
+                    tip.setPrefSize(100, 40);
+                    tip.setTextFill(Color.rgb(113, 114, 112));
+                    tip.setFont(font1);
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setGraphic(tip);
+                    alert.setTitle("开立检查");
+                    alert.setHeaderText("");
+                    alert.setContentText("");
+                    alert.show();
+                }
+            }
+        });
 
         Button reset2 = new Button("重置");
         reset2.setPrefSize(100, 30);
         reset2.setStyle("-fx-background-color: #2475C4");
         reset2.setTextFill(Color.rgb(241, 241, 232));
         reset2.setFont(font1);
-        reset2.setOnAction(new EventHandler<ActionEvent>() {  // 住院记录
+        reset2.setOnAction(new EventHandler<ActionEvent>() {  // 重置检查
             @Override
             public void handle(ActionEvent event) {
                 //遍历所有checkbox，将选择状态设为未选择
-                checkBox1.setSelected(false);
+                Object[] objects = gridPane2.getChildren().toArray();
+                for (Object o : objects) {
+                    if (o instanceof CheckBox) {
+                        ((CheckBox) o).setSelected(false);
+                    }
+                }
             }
         });
 
