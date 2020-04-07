@@ -292,14 +292,14 @@ public class Pane5 {
                         age.setText("年龄：" + patient.getId());
                         phone.setText("手机号：" + patient.getPhone_number());
                         ID.setText("身份证号：" + patient.getIdentity_card());
-                        diagnosis.setText("诊断：" + "");
+                        diagnosis.setText("诊断：" + patient.getDiagnose());
                         doctor.setText("主治医师：" + doctorService.getName(patient.getDoc_id()));
 
                         table.getItems().removeAll(table.getItems());
                         table_medicine.getItems().removeAll(table_medicine.getItems());
                         table_check.getItems().removeAll(table_check.getItems());
 
-                        table.getItems().addAll(roomService.get(id));
+                        table.getItems().addAll(roomService.get(patient.getRoom_id()));
                         table_medicine.getItems().addAll(dragService.listByPatientId(id));
                         table_check.getItems().addAll(checkService.listByPatientId(id));
 //                        Patient patient = new Patient();

@@ -7,18 +7,28 @@ public class Patient {
     int age;
     String phone_number;
     String identity_card;
+    String diagnose;
     int doc_id;
     int room_id;
 
-    public Patient(int id, String name, String sex, int age, String phone_number, String identity_card, int doc_id, int room_id) {
+    public Patient(int id, String name, String sex, int age, String phone_number,String identity_card,String diagnose, int doc_id, int room_id) {
         this.id = id;
         this.name = name;
         this.sex = sex;
         this.age = age;
         this.phone_number = phone_number;
         this.identity_card = identity_card;
+        this.diagnose = diagnose;
         this.doc_id = doc_id;
         this.room_id = room_id;
+    }
+
+    public String getDiagnose() {
+        return diagnose;
+    }
+
+    public void setDiagnose(String diagnose) {
+        this.diagnose = diagnose;
     }
 
     public int getId() {

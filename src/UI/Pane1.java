@@ -274,7 +274,7 @@ public class Pane1 {
 
                     int room_id = roomService.add(ward_id,bed_id,dept_name,in_time);
 
-                    Patient patient = new Patient(id,name,sex,age,phone_number,identity_card,doc_id,room_id);
+                    Patient patient = new Patient(id,name,sex,age,phone_number,identity_card,diagnose,doc_id,room_id);
                     patientService.add(patient);
 
                     //调用胡的方法，把tmp数组传给他，返回成功的话，弹窗提示成功
@@ -420,9 +420,9 @@ public class Pane1 {
                         s1[i] = Integer.toString(i);
                     }
                     // Patient patient = new Patient(s1[0], s1[1], s1[2], s1[3], s1[4], s1[5], s1[6], s1[7], s1[8], s1[9], s1[10], s1[11], s1[12], s1[13]);
-                    Patient patient = new Patient();
-                    table_outHospital.getItems().addAll(patient.madeBean(s1));
-                    table_outHospital.refresh();
+//                    Patient patient = new Patient();
+//                    table_outHospital.getItems().addAll(patient.madeBean(s1));
+//                    table_outHospital.refresh();
                 }
             }
         });

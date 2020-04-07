@@ -22,8 +22,8 @@ public class DoctorDAO {
                 String name = rs.getString("name");
                 String job = rs.getString("job");
                 int age = rs.getInt("age");
-                int dept_id = rs.getInt("dept_id");
-                doctor = new Doctor(id,name,job,age,dept_id);
+                String dept_name = rs.getString("dept_name");
+                doctor = new Doctor(id,name,job,age,dept_name);
             }
 
         } catch (SQLException e) {
