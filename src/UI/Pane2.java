@@ -16,13 +16,21 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
+import service.PatientService;
+import entity.Patient;
+import service.RoomService;
 
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 public class Pane2 {
 
+    //待做
+    //1、住院记录要添加监听事件，每次点击到"查找住院记录"都要重新加载 "所有住院记录" 的这个table
     private AnchorPane anchorPane2;
     private TableView<Patient> table;
+    PatientService patientService = new PatientService();
+    RoomService roomService = new RoomService();
 
     public Pane2() {
         anchorPane2 = new AnchorPane();
@@ -81,16 +89,16 @@ public class Pane2 {
         t8.setPrefWidth(65);
         t9.setPrefWidth(159);
         t10.setPrefWidth(159);
-        t1.setCellValueFactory(new PropertyValueFactory<>("card"));
+        t1.setCellValueFactory(new PropertyValueFactory<>("id"));
         t2.setCellValueFactory(new PropertyValueFactory<>("name"));
         t3.setCellValueFactory(new PropertyValueFactory<>("sex"));
         t4.setCellValueFactory(new PropertyValueFactory<>("age"));
-        t5.setCellValueFactory(new PropertyValueFactory<>("diagnosis"));
-        t6.setCellValueFactory(new PropertyValueFactory<>("department"));
-        t7.setCellValueFactory(new PropertyValueFactory<>("ward"));
-        t8.setCellValueFactory(new PropertyValueFactory<>("bed"));
-        t9.setCellValueFactory(new PropertyValueFactory<>("inTime"));
-        t10.setCellValueFactory(new PropertyValueFactory<>("outTime"));
+        t5.setCellValueFactory(new PropertyValueFactory<>("diagnose"));
+        t6.setCellValueFactory(new PropertyValueFactory<>("dept_name"));
+        t7.setCellValueFactory(new PropertyValueFactory<>("ward_id"));
+        t8.setCellValueFactory(new PropertyValueFactory<>("bed_id"));
+        t9.setCellValueFactory(new PropertyValueFactory<>("in_time"));
+        t10.setCellValueFactory(new PropertyValueFactory<>("out_time"));
         //table.setStyle("-fx-background-color:#E6F2FE");
         table.getColumns().addAll(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
         table.setColumnResizePolicy(new Callback<TableView.ResizeFeatures, Boolean>() {
@@ -100,13 +108,12 @@ public class Pane2 {
             }
         });
 
-        String[] strings = new String[15];
-        for (int i = 0; i < 15; i++) {
-            strings[i] = Integer.toString(i);
+        //get PatientList
+        List<Patient> list = patientService.list();
+        for(Patient patient : list){
+            patient.setRoomDetail(roomService.get(patient.getRoom_id()));
         }
-        Patient patient = new Patient();
-        patient.madeBean(strings);
-        table.getItems().addAll(patient.madeBean(strings), patient.madeBean(strings), patient.madeBean(strings));
+        table.getItems().addAll(list);
 
         //-------------------------------------------------------------  //分割线
 
@@ -161,16 +168,16 @@ public class Pane2 {
         TableColumn td8 = new TableColumn("床位");
         TableColumn td9 = new TableColumn("入院时间");
         TableColumn td10 = new TableColumn("出院时间");
-        td1.setCellValueFactory(new PropertyValueFactory<>("card"));
+        td1.setCellValueFactory(new PropertyValueFactory<>("id"));
         td2.setCellValueFactory(new PropertyValueFactory<>("name"));
         td3.setCellValueFactory(new PropertyValueFactory<>("sex"));
         td4.setCellValueFactory(new PropertyValueFactory<>("age"));
-        td5.setCellValueFactory(new PropertyValueFactory<>("diagnosis"));
-        td6.setCellValueFactory(new PropertyValueFactory<>("department"));
-        td7.setCellValueFactory(new PropertyValueFactory<>("ward"));
-        td8.setCellValueFactory(new PropertyValueFactory<>("bed"));
-        td9.setCellValueFactory(new PropertyValueFactory<>("inTime"));
-        td10.setCellValueFactory(new PropertyValueFactory<>("outTime"));
+        td5.setCellValueFactory(new PropertyValueFactory<>("diagnose"));
+        td6.setCellValueFactory(new PropertyValueFactory<>("dept_name"));
+        td7.setCellValueFactory(new PropertyValueFactory<>("ward_id"));
+        td8.setCellValueFactory(new PropertyValueFactory<>("bed_id"));
+        td9.setCellValueFactory(new PropertyValueFactory<>("in_time"));
+        td10.setCellValueFactory(new PropertyValueFactory<>("out_time"));
         td1.setPrefWidth(110);
         td2.setPrefWidth(100);
         td3.setPrefWidth(50);
@@ -200,13 +207,12 @@ public class Pane2 {
             public void handle(ActionEvent event) {
                 //先将表格和框内容清空，然后调用胡的方法，将s传给他，让他查到后返回patient对象给我，我再插入表格中
                 if (!textField.getText().equals("")) {
+                    int id = Integer.parseInt(textField.getText());
                     table_del.getItems().removeAll(table_del.getItems());
-                    String[] s1 = new String[15];
-                    for (int i = 0; i < 15; i++) {
-                        s1[i] = Integer.toString(i);
-                    }
-                    Patient patient = new Patient();
-                    table_del.getItems().addAll(patient.madeBean(s1));
+                    //query patient
+                    Patient patient = patientService.get(id);
+                    patient.setRoomDetail(roomService.get(patient.getRoom_id()));
+                    table_del.getItems().addAll(patient);
                     table_del.refresh();
                 }
             }

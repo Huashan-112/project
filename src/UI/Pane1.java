@@ -15,6 +15,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.util.Callback;
+import service.DoctorService;
 import service.PatientService;
 import service.RoomService;
 
@@ -23,9 +24,15 @@ import java.util.function.UnaryOperator;
 
 public class Pane1 {
 
+    //待做
+    //1、新增入院前应添加check方法，检查所有选项是否为空，输入格式是否正确（可以用throw Exception形式，格式不正确数据库插入会报错）
+    //还有病房号床位号是否已经有人使用
+
     private AnchorPane anchorPane1;
+    GridPane gridPane1;
     RoomService roomService = new RoomService();
     PatientService patientService = new PatientService();
+    DoctorService doctorService = new DoctorService();
 
     public Pane1() {
         anchorPane1 = new AnchorPane();
@@ -186,7 +193,7 @@ public class Pane1 {
         comboBox3.setEditable(true);
         comboBox3.getItems().addAll(1, 2, 3, 4, 5);
 
-        GridPane gridPane1 = new GridPane();
+        gridPane1 = new GridPane();
         gridPane1.setHgap(12);
         gridPane1.setVgap(15);//行距
         gridPane1.setPrefSize(1050, 250);
@@ -230,19 +237,21 @@ public class Pane1 {
                 //把gridpane上的框里的内容汇总在一个字符串数组里，调用胡的方法传给他，让他的方法将数据写进数据库
                 //弹窗提示保存成功，可选择清空所有或者保留
                 // 有信息没填则失败
-                if (!tf_card.getText().equals("")) {
+                if (!tf_card.getText().equals("")&&!tf_name.getText().equals("")&&!tf_ID.getText().equals("")
+                        &&tf_diagnosis.getText().equals("")&&tf_doctor.getText().equals("")&&tf_inHospital_time.getText().equals("")
+                        ) {
                     Object object;
                     object = comboBox.getValue();
                     String sex;
                     if (object == null) {
-                        sex = "";
+                        sex = null;
                     } else {
                         sex = (String) comboBox.getValue();
                     }
                     object = comboBox1.getValue();
                     String dept_name;
                     if (object == null) {
-                        dept_name = "";
+                        dept_name = null;
                     } else {
                         dept_name = (String) comboBox1.getValue();
                     }
@@ -270,10 +279,16 @@ public class Pane1 {
                     Date in_time = Date.valueOf(tf_inHospital_time.getText());
                     String phone_number = tf_phone.getText();
                     String identity_card = tf_ID.getText();
-                    int doc_id = Integer.parseInt(tf_doctor.getText());
+                    String doc_name = tf_doctor.getText();
+                    //get id
+                    int doc_id = doctorService.getId(doc_name);
+
+                    /**
+                     * Check
+                     */
+
 
                     int room_id = roomService.add(ward_id,bed_id,dept_name,in_time);
-
                     Patient patient = new Patient(id,name,sex,age,phone_number,identity_card,diagnose,doc_id,room_id);
                     patientService.add(patient);
 
@@ -588,6 +603,7 @@ public class Pane1 {
         AnchorPane.setLeftAnchor(hBox1, 410.0);
         AnchorPane.setTopAnchor(hBox1, 780.0);
     }
+
 
 
     public AnchorPane getAnchorPane1() {

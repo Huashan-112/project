@@ -284,8 +284,10 @@ public class Pane5 {
                     String text = textField.getText();
                     int id = Integer.valueOf(text);
                     Patient patient = patientService.get(id);
+
                     if (patient!=null) {     //假如能找到该记录
 
+                        patient.setDoc_name(doctorService.get(patient.getDoc_id()));
 
                         name.setText("姓名：" + patient.getName());
                         sex.setText("性别：" + patient.getSex());
@@ -293,7 +295,7 @@ public class Pane5 {
                         phone.setText("手机号：" + patient.getPhone_number());
                         ID.setText("身份证号：" + patient.getIdentity_card());
                         diagnosis.setText("诊断：" + patient.getDiagnose());
-                        doctor.setText("主治医师：" + doctorService.getName(patient.getDoc_id()));
+                        doctor.setText("主治医师：" + patient.getDoc_name());
 
                         table.getItems().removeAll(table.getItems());
                         table_medicine.getItems().removeAll(table_medicine.getItems());

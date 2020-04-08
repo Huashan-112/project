@@ -56,4 +56,22 @@ public class RoomDAO {
         }
         return id;
     }
+    public void update(Room room){
+        String sql = "update room set ward_id=?,bed_id=?,dept_name=?,in_time=?,out_time=? where id =?";
+        try (Connection c = DBUtil.getConnection(); PreparedStatement ps = c.prepareStatement(sql);) {
+            ps.setInt(1, room.getWard_id());
+            ps.setInt(2, room.getBed_id());
+            ps.setString(3, room.getDept_name());
+            ps.setDate(4, room.getIn_time());
+            ps.setDate(5,room.getOut_time());
+            ps.setInt(6,room.getId());
+
+            ps.execute();
+
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
+    }
 }

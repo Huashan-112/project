@@ -1,5 +1,7 @@
 package UI;
 
+import entity.Patient;
+import entity.Room;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -11,12 +13,20 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import service.DoctorService;
+import service.PatientService;
+import service.RoomService;
 
+import java.sql.Date;
 import java.util.function.UnaryOperator;
 
 public class Pane3 {
-
+    //待做
+    //同Pane1 保存前check方法
     private AnchorPane anchorPane3;
+    PatientService patientService = new PatientService();
+    RoomService roomService = new RoomService();
+    DoctorService doctorService = new DoctorService();
 
     public Pane3() {
         anchorPane3 = new AnchorPane();
@@ -222,8 +232,9 @@ public class Pane3 {
         gridPane1.add(tf_phone, 1, 2);
         gridPane1.add(ID, 11, 2);
         gridPane1.add(tf_ID, 12, 2);
-        gridPane1.add(card, 22, 2);
-        gridPane1.add(tf_card, 23, 2);
+        //诊疗卡号不可修改
+        //gridPane1.add(card, 22, 2);
+        //gridPane1.add(tf_card, 23, 2);
 
         gridPane1.add(inHospital_info, 0, 3);
         gridPane1.add(diagnosis, 0, 4);
@@ -260,23 +271,23 @@ public class Pane3 {
                     }
                 }
                 /////调用胡的方法得到字符串数组
-                String[] strings = new String[15];
-                for (int i = 0; i < 15; i++) {
-                    strings[i] = Integer.toString(i);
-                }
-                tf_card.setText(strings[0]);
-                tf_name.setText(strings[1]);
-                comboBox.setValue(strings[2]);
-                tf_age.setText(strings[3]);
-                tf_diagnosis.setText(strings[4]);
-                comboBox1.setValue(strings[5]);
-                comboBox2.setValue(strings[6]);
-                comboBox3.setValue(strings[7]);
-                tf_inHospital_time.setText(strings[8]);
-                tf_outHospital_time.setText(strings[9]);
-                tf_phone.setText(strings[10]);
-                tf_ID.setText(strings[11]);
-                tf_doctor.setText(strings[14]);
+                int id = Integer.parseInt(textField.getText());
+                Patient patient = patientService.get(id);
+                patient.setRoomDetail(roomService.get(patient.getRoom_id()));
+                patient.setDoc_name(doctorService.get(patient.getDoc_id()));
+
+                tf_name.setText(patient.getName());
+                comboBox.setValue(patient.getSex());
+                tf_age.setText(patient.getAge()+"");
+                tf_diagnosis.setText(patient.getDiagnose());
+                comboBox1.setValue(patient.getDept_name());
+                comboBox2.setValue(patient.getWard_id());
+                comboBox3.setValue(patient.getBed_id());
+                tf_inHospital_time.setText(patient.getIn_time().toString());
+                tf_outHospital_time.setText(patient.getOut_time().toString());
+                tf_phone.setText(patient.getPhone_number());
+                tf_ID.setText(patient.getIdentity_card());
+                tf_doctor.setText(patient.getDoc_name());
             }
         });
 
@@ -294,27 +305,35 @@ public class Pane3 {
                 //把gridpane上的框里的内容汇总在一个patient对象里，调用胡的方法传给他，让他的方法将数据写进数据库
                 //弹窗提示保存成功，可选择清空所有或者保留
                 // 有信息没填则失败
-                if (!tf_card.getText().equals("") && !textField.getText().equals("")) {
-                    String[] strings = new String[15];
-                    strings[0] = tf_card.getText();
-                    strings[1] = tf_name.getText();
-                    strings[2] = (String) comboBox.getValue();
-                    strings[3] = tf_age.getText();
-                    strings[4] = tf_diagnosis.getText();
-                    strings[5] = (String) comboBox1.getValue();
-                    strings[6] = (String) comboBox2.getValue();
-                    strings[7] = (String) comboBox3.getValue();
-                    strings[8] = tf_inHospital_time.getText();
-                    strings[9] = tf_outHospital_time.getText();
-                    strings[10] = tf_phone.getText();
-                    strings[11] = tf_ID.getText();
-                    strings[12] = "";//胡传过来的药品原封不动传回去
-                    strings[13] = "";//胡传过来的检查项目传回去
-                    strings[14] = tf_doctor.getText();
-                    //调用胡的方法传数组给他
-                    for (String s : strings) {
-                        System.out.println(s);
-                    }
+                if (!textField.getText().equals("")) {
+
+
+                    int id = Integer.parseInt(textField.getText()); //诊疗卡号
+                    String name = tf_name.getText();
+                    int age = Integer.parseInt(tf_age.getText());
+                    String diagnose = tf_diagnosis.getText();
+                    Date in_time = Date.valueOf(tf_inHospital_time.getText());
+                    Date out_time = Date.valueOf(tf_outHospital_time.getText());
+                    String phone_number = tf_phone.getText();
+                    String identity_card = tf_ID.getText();
+                    String doc_name = tf_doctor.getText();
+                    //System.out.println(doc_name);
+                    //get id
+                    int doc_id = doctorService.getId(doc_name);
+                    String sex = comboBox.getValue().toString();
+                    String dept_name = comboBox1.getValue().toString();
+                    int ward_id = Integer.parseInt(comboBox2.getValue().toString());
+                    int bed_id = Integer.parseInt(comboBox3.getValue().toString());
+
+                    Patient p1 = patientService.get(id);
+                    int room_id = p1.getRoom_id();
+                    Patient patient = new Patient(id,name,sex,age,phone_number,identity_card,diagnose,doc_id,room_id);
+                    Room room = new Room(room_id,ward_id,bed_id,dept_name,in_time,out_time);
+
+                    //update
+                    patientService.update(patient);
+                    roomService.update(room);
+
                     //假设已经修改成功，然后弹窗
                     Label tip = new Label("修改成功！");
                     tip.setPrefSize(100, 40);

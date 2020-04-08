@@ -33,4 +33,29 @@ public class DoctorDAO {
 
         return doctor;
     }
+
+    public Doctor get(String name){
+        Doctor doctor = null;
+        try (Connection c = DBUtil.getConnection(); Statement s = c.createStatement();) {
+
+            //String 转码 “"\""+name+"\""
+            String sql = "select * from doctor where name =" +"\""+name+"\"";
+
+            ResultSet rs = s.executeQuery(sql);
+
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                String job = rs.getString("job");
+                int age = rs.getInt("age");
+                String dept_name = rs.getString("dept_name");
+                doctor = new Doctor(id,name,job,age,dept_name);
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
+
+        return doctor;
+    }
 }

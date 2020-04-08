@@ -20,4 +20,8 @@ public class RoomService {
         room.setIn_time(in_time);
         return roomDAO.add(room);
     }
+
+    public void update(Room room){
+        roomDAO.update(room);
+    }
 }
