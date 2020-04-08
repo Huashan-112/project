@@ -1,0 +1,76 @@
+DROP DATABASE IF EXISTS hospital;
+create database hospital;
+use hospital;
+CREATE TABLE department(
+  name varchar(100) not null,
+  address varchar(100) DEFAULT NULL,
+  phone_number varchar(100) DEFAULT NULL,
+  doc_id int DEFAULT NULL,
+  PRIMARY KEY (name)
+)  DEFAULT CHARSET=utf8;
+
+CREATE TABLE doctor(
+  id int AUTO_INCREMENT,
+  name varchar(100) DEFAULT NULL,
+  job varchar(100) DEFAULT NULL,
+  age int DEFAULT NULL,
+  dept_name varchar(100) DEFAULT NULL,  
+  PRIMARY KEY (id),
+  CONSTRAINT `fk_doctor_department` FOREIGN KEY (`dept_name`) REFERENCES `department` (`name`)
+)  DEFAULT CHARSET=utf8;
+
+CREATE TABLE room(
+  id int AUTO_INCREMENT,
+  ward_id int DEFAULT NULL,
+  bed_id int DEFAULT NULL,
+  dept_name varchar(100) DEFAULT NULL,
+  in_time datetime DEFAULT NULL,
+  out_time datetime DEFAULT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT `fk_room_department` FOREIGN KEY (`dept_name`) REFERENCES `department` (`name`)
+)  DEFAULT CHARSET=utf8;
+
+CREATE TABLE patient(
+  id int AUTO_INCREMENT,
+  name varchar(100) DEFAULT NULL,
+  sex varchar(100) DEFAULT NULL,
+  age int DEFAULT NULL,
+  phone_number varchar(100) DEFAULT NULL,
+  identity_card varchar(100) DEFAULT NULL,
+  diagnose varchar(100) DEFAULT NULL,
+  doc_id int DEFAULT NULL,
+  room_id int DEFAULT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT `fk_patient_doctor` FOREIGN KEY (`doc_id`) REFERENCES `doctor` (`id`),
+  CONSTRAINT `fk_patient_room` FOREIGN KEY (`room_id`) REFERENCES `room` (`id`)
+)  DEFAULT CHARSET=utf8;
+
+CREATE TABLE check1(
+  id int AUTO_INCREMENT,
+  name varchar(100) DEFAULT NULL,
+  category varchar(100) DEFAULT NULL, 
+  price float DEFAULT NULL,
+  count int DEFAULT NULL,
+  pt_id int DEFAULT NULL, 
+  PRIMARY KEY (id) ,
+  CONSTRAINT `fk_check_patient` FOREIGN KEY (`pt_id`) REFERENCES `patient` (`id`)
+)  DEFAULT CHARSET=utf8;
+
+CREATE TABLE drag(
+  id int AUTO_INCREMENT,
+  name varchar(100) DEFAULT NULL,
+  category varchar(100) DEFAULT NULL, 
+  price float DEFAULT NULL,
+  count int DEFAULT NULL,
+  pt_id int DEFAULT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT `fk_drag_patient` FOREIGN KEY (`pt_id`) REFERENCES `patient` (`id`)
+)  DEFAULT CHARSET=utf8;
+
+insert into department values("内科","15-112","12345",1);
+insert into doctor values(1,"小绿","医生",30,"内科");
+insert into room values(1,101,1,"内科","2020-4-6","2020-4-20");
+insert into patient values(1,"小五","男",26,"1234","12345","发烧"，1,1);
+insert into check1 values(1,"血常规","检验",50,1,1);
+insert into check1 values(2,"尿常规","检验",100,1,1);
+insert into drag values(1,"阿昔洛韦","皮肤类",50,1,1);
