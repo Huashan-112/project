@@ -19,12 +19,10 @@ import java.sql.Date;
 import java.util.function.UnaryOperator;
 
 public class Pane3 {
-    //待做
-    //同Pane1 保存前check方法
+
+    //检查病房号床位号是否已经有人使用
+
     private AnchorPane anchorPane3;
-    PatientService patientService = new PatientService();
-    RoomService roomService = new RoomService();
-    DoctorService doctorService = new DoctorService();
 
     public Pane3() {
         anchorPane3 = new AnchorPane();
@@ -174,7 +172,7 @@ public class Pane3 {
         inHospital_time.setTextFill(Color.rgb(120, 126, 131));
         TextField tf_inHospital_time = new TextField();
         tf_inHospital_time.setPrefWidth(cell);
-        tf_inHospital_time.setPromptText("例  2020-3-2");
+        tf_inHospital_time.setPromptText("例  2020-03-02");
 
         Label outHospital_time = new Label("出院时间");
         outHospital_time.setAlignment(Pos.CENTER_RIGHT);
@@ -183,7 +181,7 @@ public class Pane3 {
         outHospital_time.setTextFill(Color.rgb(120, 126, 131));
         TextField tf_outHospital_time = new TextField();
         tf_outHospital_time.setPrefWidth(cell);
-        tf_outHospital_time.setPromptText("例  2020-3-2");
+        tf_outHospital_time.setPromptText("例  2020-03-02");
 
         Label department = new Label("科室");
         department.setAlignment(Pos.CENTER_RIGHT);
@@ -238,9 +236,6 @@ public class Pane3 {
         gridPane1.add(tf_phone, 1, 2);
         gridPane1.add(ID, 11, 2);
         gridPane1.add(tf_ID, 12, 2);
-        //诊疗卡号不可修改
-        //gridPane1.add(card, 22, 2);
-        //gridPane1.add(tf_card, 23, 2);
 
         gridPane1.add(inHospital_info, 0, 3);
         gridPane1.add(diagnosis, 0, 4);
@@ -266,34 +261,46 @@ public class Pane3 {
         search.setOnAction(new EventHandler<ActionEvent>() {  // 搜索
             @Override
             public void handle(ActionEvent event) {
-                //先将所有框内容清空，然后调用胡的方法，将s传给他，让他查到后返回patient对象给我，我再全部显示在框中
-                Object[] objects = gridPane1.getChildren().toArray();
-                for (Object o : objects) {
-                    if (o instanceof TextField) {
-                        ((TextField) o).setText("");
-                    }
-                    if (o instanceof ComboBox) {
-                        ((ComboBox) o).setValue(new String(""));
+
+                if (!textField.getText().equals("")) {
+                    Patient patient = patientService.get(Integer.valueOf(textField.getText()));
+                    if (patient == null) {
+                        util.tip("没有该记录！请输入正确的卡号", "");
+                        textField.setText("");
+                    } else {//有记录
+                        //先将下面所有框的内容清空，然后调用胡的方法，将s传给他，让他查到后返回patient对象给我，我再全部显示在框中
+                        Object[] objects = gridPane1.getChildren().toArray();
+                        for (Object o : objects) {
+                            if (o instanceof TextField) {
+                                ((TextField) o).setText("");
+                            }
+                            if (o instanceof ComboBox) {
+                                ((ComboBox) o).setValue(null);
+                            }
+                        }
+                        //显示数据
+                        patient.setRoomDetail(roomService.get(patient.getRoom_id()));
+                        patient.setDoc_name(doctorService.get(patient.getDoc_id()));
+
+                        tf_name.setText(patient.getName());
+                        comboBox.setValue(patient.getSex());
+                        tf_age.setText(patient.getAge() + "");
+                        tf_diagnosis.setText(patient.getDiagnose());
+                        comboBox1.setValue(patient.getDept_name());
+                        comboBox2.setValue(patient.getWard_id());
+                        comboBox3.setValue(patient.getBed_id());
+                        tf_inHospital_time.setText(patient.getIn_time().toString());
+                        tf_phone.setText(patient.getPhone_number());
+                        tf_ID.setText(patient.getIdentity_card());
+                        tf_doctor.setText(patient.getDoc_name());
+                        // tf_outHospital_time.setText(patient.getOut_time().toString());
+                        if (patient.getOut_time() == null) {//还没有出院时间的情况下，patient.getOut_time()是空吗？？
+                            tf_outHospital_time.setText("");
+                        } else {
+                            tf_outHospital_time.setText(patient.getOut_time().toString());
+                        }
                     }
                 }
-                /////调用胡的方法得到字符串数组
-                int id = Integer.parseInt(textField.getText());
-                Patient patient = patientService.get(id);
-                patient.setRoomDetail(roomService.get(patient.getRoom_id()));
-                patient.setDoc_name(doctorService.get(patient.getDoc_id()));
-
-                tf_name.setText(patient.getName());
-                comboBox.setValue(patient.getSex());
-                tf_age.setText(patient.getAge()+"");
-                tf_diagnosis.setText(patient.getDiagnose());
-                comboBox1.setValue(patient.getDept_name());
-                comboBox2.setValue(patient.getWard_id());
-                comboBox3.setValue(patient.getBed_id());
-                tf_inHospital_time.setText(patient.getIn_time().toString());
-                tf_outHospital_time.setText(patient.getOut_time().toString());
-                tf_phone.setText(patient.getPhone_number());
-                tf_ID.setText(patient.getIdentity_card());
-                tf_doctor.setText(patient.getDoc_name());
             }
         });
 
@@ -313,55 +320,50 @@ public class Pane3 {
                 // 有信息没填则失败
                 if (!textField.getText().equals("")) {
 
+                    if (textField.getText().equals("") || tf_name.getText().equals("") || comboBox.getValue() == null || tf_age.getText().equals("") || tf_phone.getText().equals("") || tf_ID.getText().equals("") ||
+                            tf_diagnosis.getText().equals("") || comboBox1.getValue() == null || comboBox2.getValue() == null || comboBox3.getValue() == null || tf_doctor.getText().equals("") || tf_inHospital_time.getText().equals("")) {
+                        util.tip("请完整填写信息！", "");
+                    } else {
+                        if (!util.isLegalDate(tf_inHospital_time.getText())) {
+                            util.tip("时间的填写格式不正确！", "");
+                        } else {//封装成patient
+                            int id = Integer.parseInt(textField.getText()); //诊疗卡号
+                            String name = tf_name.getText();
+                            int age = Integer.parseInt(tf_age.getText());
+                            String diagnose = tf_diagnosis.getText();
+                            Date in_time = Date.valueOf(tf_inHospital_time.getText());
+                            String phone_number = tf_phone.getText();
+                            String identity_card = tf_ID.getText();
+                            String doc_name = tf_doctor.getText();
+                            int doc_id = doctorService.getId(doc_name);   //get doctor id
+                            String sex = comboBox.getValue().toString();
+                            String dept_name = comboBox1.getValue().toString();
+                            int ward_id = Integer.parseInt(comboBox2.getValue().toString());
+                            int bed_id = Integer.parseInt(comboBox3.getValue().toString());
 
-                    int id = Integer.parseInt(textField.getText()); //诊疗卡号
-                    String name = tf_name.getText();
-                    int age = Integer.parseInt(tf_age.getText());
-                    String diagnose = tf_diagnosis.getText();
-                    Date in_time = Date.valueOf(tf_inHospital_time.getText());
-                    Date out_time = Date.valueOf(tf_outHospital_time.getText());
-                    String phone_number = tf_phone.getText();
-                    String identity_card = tf_ID.getText();
-                    String doc_name = tf_doctor.getText();
-                    //System.out.println(doc_name);
-                    //get id
-                    int doc_id = doctorService.getId(doc_name);
-                    String sex = comboBox.getValue().toString();
-                    String dept_name = comboBox1.getValue().toString();
-                    int ward_id = Integer.parseInt(comboBox2.getValue().toString());
-                    int bed_id = Integer.parseInt(comboBox3.getValue().toString());
+                            Date out_time = null;
+                            if (!tf_outHospital_time.getText().equals("") && !util.isLegalDate(tf_outHospital_time.getText())) {
+                                util.tip("出院时间格式不正确！", "");
+                            } else {
+                                if (tf_outHospital_time.getText().equals("")) {
+                                    out_time = null;//表示还在住院中
+                                } else {
+                                    out_time = Date.valueOf(tf_outHospital_time.getText());
+                                }
 
-                    Patient p1 = patientService.get(id);
-                    int room_id = p1.getRoom_id();
-                    Patient patient = new Patient(id,name,sex,age,phone_number,identity_card,diagnose,doc_id,room_id);
-                    Room room = new Room(room_id,ward_id,bed_id,dept_name,in_time,out_time);
+                                Patient p1 = patientService.get(id);
+                                int room_id = p1.getRoom_id();
+                                Patient patient = new Patient(id, name, sex, age, phone_number, identity_card, diagnose, doc_id, room_id);
+                                Room room = new Room(room_id, ward_id, bed_id, dept_name, in_time, out_time);
 
-                    //update
-                    patientService.update(patient);
-                    roomService.update(room);
+                                //update
+                                patientService.update(patient);
+                                roomService.update(room);
 
-                    //假设已经修改成功，然后弹窗
-                    Label tip = new Label("修改成功！");
-                    tip.setPrefSize(100, 40);
-                    tip.setTextFill(Color.rgb(113, 114, 112));
-                    tip.setFont(font5);
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setGraphic(tip);
-                    alert.setTitle("修改");
-                    alert.setHeaderText("");
-                    alert.setContentText("");
-                    alert.show();
-                    //如果找不到该诊疗卡号，则弹窗提示无该记录
-//                    Label tip1 = new Label("没有该卡号的住院记录！");
-//                    tip1.setPrefSize(200, 40);
-//                    tip1.setTextFill(Color.rgb(113, 114, 112));
-//                    tip1.setFont(font5);
-//                    Alert alert1 = new Alert(Alert.AlertType.WARNING);
-//                    alert1.setGraphic(tip1);
-//                    alert1.setTitle("");
-//                    alert1.setHeaderText("");
-//                    alert1.setContentText("");
-//                    alert1.show();
+                                util.tip("修改成功！", "");
+                            }
+                        }
+                    }
                 }
             }
         });
@@ -382,7 +384,7 @@ public class Pane3 {
                         ((TextField) o).setText("");
                     }
                     if (o instanceof ComboBox) {
-                        ((ComboBox) o).setValue(new String(""));
+                        ((ComboBox) o).setValue(null);
                     }
                 }
             }

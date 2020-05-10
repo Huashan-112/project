@@ -22,7 +22,7 @@ import java.util.function.UnaryOperator;
 
 public class Pane1 {
 
-    //还有病房号床位号是否已经有人使用
+    //病房号床位号是否已经有人使用
 
     private AnchorPane anchorPane1;
     GridPane gridPane1;
@@ -428,7 +428,7 @@ public class Pane1 {
         outTime.setTextFill(Color.rgb(120, 126, 131));
         TextField tf_outTime = new TextField();
         tf_outTime.setPrefWidth(cell);
-        tf_outTime.setPromptText("例    2020-3-2");
+        tf_outTime.setPromptText("例   2020-03-02");
 
         Label recovery = new Label("恢复状况");
         recovery.setAlignment(Pos.CENTER_RIGHT);
@@ -497,13 +497,8 @@ public class Pane1 {
                 // 成功修改记录则弹窗提示，然后可以选择清空所有或保留
                 //否则弹窗失败
                 if (!table_outHospital.getItems().isEmpty() && !tf_outTime.getText().equals("")) {     //textField.getText()永不为空！！！
-//调用胡的方法传数组给他，并返回是否修改成功
-//                    String[] strings = new String[2];
-//                    strings[0] = textField.getText();
-//                    strings[1] = tf_outTime.getText();
-//                    for (int i = 0; i < 2; i++) {
-//                        System.out.println(strings[i]);
-//                    }
+                    //调用胡的方法传数组给他，并返回是否修改成功
+                    //是否要保存出院时间？
                     util.tip("保存成功！", "");
                 } else {
                     util.tip("请完整填写信息！", "");

@@ -1,5 +1,6 @@
 package UI;
 
+import entity.Patient;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -98,35 +99,25 @@ public class Pane4 {
         query.setOnAction(new EventHandler<ActionEvent>() {  //  搜索
             @Override
             public void handle(ActionEvent event) {
+
                 //先清空下方的所有数据，然后调用胡的方法，将卡号传给他，让他找到该人的记录，返回来patient对象，我再显示基本信息
                 if (!textField.getText().equals("")) {
                     //调用胡的方法，返回查找成功与否，成功则清空下方
-                    String[] strings = new String[15];
-                    for (int i = 0; i < 5; i++) {
-                        strings[i] = Integer.toString(i);
-                    }
-                    if (true) {
+                    Patient patient = patientService.get(Integer.valueOf(textField.getText()));
+                    if (patient != null) {
                         Object[] objects = hBox1.getChildren().toArray();
                         for (Object o : objects) {
                             if (o instanceof TextField) {
                                 ((TextField) o).setText("");
                             }
                         }
-                        name.setText("姓名：" + strings[1]);
-                        sex.setText("性别：" + strings[2]);
-                        age.setText("年龄：" + strings[3]);
-                        diagnosis.setText("诊断：" + strings[4]);
+                        name.setText("姓名：" + patient.getName());
+                        sex.setText("性别：" + patient.getSex());
+                        age.setText("年龄：" + patient.getAge());
+                        diagnosis.setText("诊断：" + patient.getDiagnose());
                     } else {
-                        Label tip1 = new Label("未找到该卡号的病人!");
-                        tip1.setPrefSize(200, 40);
-                        tip1.setTextFill(Color.rgb(113, 114, 112));
-                        tip1.setFont(font1);
-                        Alert alert1 = new Alert(Alert.AlertType.WARNING);
-                        alert1.setGraphic(tip1);
-                        alert1.setTitle("");
-                        alert1.setHeaderText("");
-                        alert1.setContentText("");
-                        alert1.show();
+                        util.tip("未找到该卡号的病人!", "");
+                        textField.setText("");
                     }
                 }
             }
@@ -284,7 +275,8 @@ public class Pane4 {
         save1.setOnAction(new EventHandler<ActionEvent>() {  // 保存开药
             @Override
             public void handle(ActionEvent event) {
-                //遍历所有Combobox，将框内容设为“”
+
+                //遍历所有Combobox，将框内容设为null
                 if (!name.getText().equals("姓名：") && !textField.getText().equals("")) {
                     StringBuilder stringBuilder = new StringBuilder("");
                     Object[] objects = gridPane1.getChildren().toArray();
@@ -299,18 +291,10 @@ public class Pane4 {
                             }
                         }
                     }
-                    System.out.println(textField.getText());
-                    System.out.println(stringBuilder.toString());
-                    Label tip = new Label("保存成功！");
-                    tip.setPrefSize(100, 40);
-                    tip.setTextFill(Color.rgb(113, 114, 112));
-                    tip.setFont(font1);
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setGraphic(tip);
-                    alert.setTitle("开药");
-                    alert.setHeaderText("");
-                    alert.setContentText("");
-                    alert.show();
+//                    System.out.println(textField.getText());
+//                    System.out.println(stringBuilder.toString());
+
+                    util.tip("开药成功！", "");
                 }
             }
         });
@@ -323,11 +307,11 @@ public class Pane4 {
         reset.setOnAction(new EventHandler<ActionEvent>() {  // 重置开药
             @Override
             public void handle(ActionEvent event) {
-                //遍历所有Combobox，将框内容设为“”
+                //遍历所有Combobox，将框内容设为null
                 Object[] objects = gridPane1.getChildren().toArray();
                 for (Object o : objects) {
                     if (o instanceof ComboBox) {
-                        ((ComboBox) o).setValue(new String(""));
+                        ((ComboBox) o).setValue(null);
                     }
                 }
             }

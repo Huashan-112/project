@@ -211,7 +211,7 @@ public class Pane2 {
                 if (!textField.getText().equals("")) {
                     int id = Integer.parseInt(textField.getText());
                     table_del.getItems().removeAll(table_del.getItems());
-                    //query patient
+                    //查找
                     Patient patient = patientService.get(id);
                     if (patient == null) {
                         textField.setText("");
@@ -226,9 +226,7 @@ public class Pane2 {
         });
 
         HBox hBox = new HBox();
-        hBox.getChildren().
-
-                addAll(textField, query);
+        hBox.getChildren().addAll(textField, query);
 
         Button delect = new Button("删除");
         delect.setPrefSize(100, 30);
@@ -240,11 +238,13 @@ public class Pane2 {
             public void handle(ActionEvent event) {
                 //清空框和表中的内容，弹窗提示确认删除？
                 if (!table_del.getItems().isEmpty()) {
+
                     Stage stage = new Stage();
                     Label tip = new Label("确认删除该条记录？");
                     tip.setPrefSize(400, 40);
                     tip.setTextFill(Color.rgb(113, 114, 112));
                     tip.setFont(font);
+
                     Button yes = new Button("确认");
                     yes.setPrefWidth(80);
                     yes.setOnAction(new EventHandler<ActionEvent>() {  // 确认删除
@@ -254,9 +254,11 @@ public class Pane2 {
                             textField.setText("");
 
                             patientService.delete(Integer.valueOf(textField.getText()));//从数据库中删除
+                            pane2.update();//更新总表
                             stage.close();
                         }
                     });
+
                     Button no = new Button("取消");
                     no.setPrefWidth(80);
                     no.setOnAction(new EventHandler<ActionEvent>() {  // 取消删除
@@ -265,6 +267,7 @@ public class Pane2 {
                             stage.close();
                         }
                     });
+
                     AnchorPane anchorPane = new AnchorPane();
                     anchorPane.getChildren().addAll(tip, yes, no);
                     AnchorPane.setLeftAnchor(tip, 30.0);
@@ -278,7 +281,6 @@ public class Pane2 {
                     stage.initStyle(StageStyle.UTILITY);
                     stage.initModality(Modality.APPLICATION_MODAL);
                     stage.show();
-                    pane2.update();
                 }
             }
         });
