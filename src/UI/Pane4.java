@@ -100,17 +100,9 @@ public class Pane4 {
             @Override
             public void handle(ActionEvent event) {
 
-                //先清空下方的所有数据，然后调用胡的方法，将卡号传给他，让他找到该人的记录，返回来patient对象，我再显示基本信息
                 if (!textField.getText().equals("")) {
-                    //调用胡的方法，返回查找成功与否，成功则清空下方
                     Patient patient = patientService.get(Integer.valueOf(textField.getText()));
                     if (patient != null) {
-                        Object[] objects = hBox1.getChildren().toArray();
-                        for (Object o : objects) {
-                            if (o instanceof TextField) {
-                                ((TextField) o).setText("");
-                            }
-                        }
                         name.setText("姓名：" + patient.getName());
                         sex.setText("性别：" + patient.getSex());
                         age.setText("年龄：" + patient.getAge());
@@ -276,8 +268,8 @@ public class Pane4 {
             @Override
             public void handle(ActionEvent event) {
 
-                //遍历所有Combobox，将框内容设为null
                 if (!name.getText().equals("姓名：") && !textField.getText().equals("")) {
+                    //获取诊疗卡号和所开的药物，调用胡的方法传递给胡
                     StringBuilder stringBuilder = new StringBuilder("");
                     Object[] objects = gridPane1.getChildren().toArray();
                     for (Object o : objects) {
@@ -409,7 +401,9 @@ public class Pane4 {
         save2.setOnAction(new EventHandler<ActionEvent>() {  // 保存检查
             @Override
             public void handle(ActionEvent event) {
+
                 if (!name.getText().equals("姓名：") && !textField.getText().equals("")) {
+                    //获取诊疗卡号和所开的检查项目，调用胡的方法传递给胡
                     StringBuilder stringBuilder = new StringBuilder("");
                     Object[] objects = gridPane2.getChildren().toArray();
                     for (Object o : objects) {
