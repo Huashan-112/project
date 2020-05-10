@@ -15,24 +15,17 @@ import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.util.Callback;
-import service.DoctorService;
-import service.PatientService;
-import service.RoomService;
+import service.*;
 
 import java.sql.Date;
 import java.util.function.UnaryOperator;
 
 public class Pane1 {
 
-    //待做
-    //1、新增入院前应添加check方法，检查所有选项是否为空，输入格式是否正确（可以用throw Exception形式，格式不正确数据库插入会报错）
     //还有病房号床位号是否已经有人使用
 
     private AnchorPane anchorPane1;
     GridPane gridPane1;
-    RoomService roomService = new RoomService();
-    PatientService patientService = new PatientService();
-    DoctorService doctorService = new DoctorService();
 
     public Pane1() {
         anchorPane1 = new AnchorPane();
@@ -42,6 +35,14 @@ public class Pane1 {
     }
 
     public void load(AnchorPane anchorPane1) {
+
+        RoomService roomService = new RoomService();
+        PatientService patientService = new PatientService();
+        DoctorService doctorService = new DoctorService();
+        CheckService checkService = new CheckService();
+        DepartmentService departmentService = new DepartmentService();
+        DragService dragService = new DragService();
+        Util util = new Util();
 
         Font font5 = Font.font("YouYuan", FontWeight.BLACK, 16);
 
@@ -161,7 +162,7 @@ public class Pane1 {
         inHospital_time.setTextFill(Color.rgb(120, 126, 131));
         TextField tf_inHospital_time = new TextField();
         tf_inHospital_time.setPrefWidth(cell);
-        tf_inHospital_time.setPromptText("例    2020-3-2");
+        tf_inHospital_time.setPromptText("例   2020-03-02");
 
         Label department = new Label("科室");
         department.setAlignment(Pos.CENTER_RIGHT);
@@ -231,84 +232,47 @@ public class Pane1 {
         save2.setStyle("-fx-background-color: #2475C4");
         save2.setTextFill(Color.rgb(241, 241, 232));
         save2.setFont(font5);
-        save2.setOnAction(new EventHandler<ActionEvent>() {  // 住院记录
+        save2.setOnAction(new EventHandler<ActionEvent>() {  // 入院保存
             @Override
             public void handle(ActionEvent event) {
-                //把gridpane上的框里的内容汇总在一个字符串数组里，调用胡的方法传给他，让他的方法将数据写进数据库
+                //textField的初始内容是"",combobox的初始内容是null
                 //弹窗提示保存成功，可选择清空所有或者保留
-                // 有信息没填则失败
-                if (!tf_card.getText().equals("")&&!tf_name.getText().equals("")&&!tf_ID.getText().equals("")
-                        &&tf_diagnosis.getText().equals("")&&tf_doctor.getText().equals("")&&tf_inHospital_time.getText().equals("")
+                if (tf_card.getText().equals("") || tf_name.getText().equals("") || tf_ID.getText().equals("")
+                        || tf_diagnosis.getText().equals("") || tf_doctor.getText().equals("") || tf_inHospital_time.getText().equals("") || comboBox.getValue() == null || comboBox1.getValue() == null ||
+                        comboBox2.getValue() == null || comboBox3.getValue() == null
                         ) {
-                    Object object;
-                    object = comboBox.getValue();
-                    String sex;
-                    if (object == null) {
-                        sex = null;
+                    util.tip("请完整填写信息！", "入院");
+                } else {//已完整填写信息
+                    if (util.isLegalDate(tf_inHospital_time.getText())) {//判断是否是合法的日期格式
+                        String sex = (String) comboBox.getValue();
+                        String dept_name = (String) comboBox1.getValue();
+                        int ward_id = Integer.parseInt((String) comboBox2.getValue());
+                        int bed_id = Integer.parseInt((String) comboBox3.getValue());
+                        int id = Integer.parseInt(tf_card.getText());
+                        String name = tf_name.getText();
+                        int age = Integer.parseInt(tf_age.getText());
+                        String diagnose = tf_diagnosis.getText();
+                        Date in_time = Date.valueOf(tf_inHospital_time.getText());
+                        String phone_number = tf_phone.getText();
+                        String identity_card = tf_ID.getText();
+                        String doc_name = tf_doctor.getText();
+
+                        //get id
+                        int doc_id = doctorService.getId(doc_name);
+
+                        /**
+                         * Check
+                         */
+                        int room_id = roomService.add(ward_id, bed_id, dept_name, in_time);
+                        Patient patient = new Patient(id, name, sex, age, phone_number, identity_card, diagnose, doc_id, room_id);
+                        patientService.add(patient);
+
+                        //调用胡的方法，返回成功的话，弹窗提示成功
+                        util.tip("保存成功！", "入院");
+//                  util.tip("保存失败！已有该住院记录！", "入院");
                     } else {
-                        sex = (String) comboBox.getValue();
+                        util.tip("入院时间格式不对！", "入院");
                     }
-                    object = comboBox1.getValue();
-                    String dept_name;
-                    if (object == null) {
-                        dept_name = null;
-                    } else {
-                        dept_name = (String) comboBox1.getValue();
-                    }
-                    int ward_id;
-                    object = comboBox2.getValue();
-                    if (object == null) {
-                        ward_id = -1;
-                    } else {
-                        ward_id = Integer.parseInt((String) comboBox2.getValue());
-                    }
-                    int bed_id;
-                    object = comboBox3.getValue();
-                    if (object == null) {
-                        bed_id = -1;
-                    } else {
-                        bed_id = Integer.parseInt((String) comboBox3.getValue());
-                    }
-
-
-
-                    int id = Integer.parseInt(tf_card.getText()); //诊疗卡号
-                    String name = tf_name.getText();
-                    int age = Integer.parseInt(tf_age.getText());
-                    String diagnose = tf_diagnosis.getText();
-                    Date in_time = Date.valueOf(tf_inHospital_time.getText());
-                    String phone_number = tf_phone.getText();
-                    String identity_card = tf_ID.getText();
-                    String doc_name = tf_doctor.getText();
-                    //get id
-                    int doc_id = doctorService.getId(doc_name);
-
-                    /**
-                     * Check
-                     */
-
-
-                    int room_id = roomService.add(ward_id,bed_id,dept_name,in_time);
-                    Patient patient = new Patient(id,name,sex,age,phone_number,identity_card,diagnose,doc_id,room_id);
-                    patientService.add(patient);
-
-                    //调用胡的方法，把tmp数组传给他，返回成功的话，弹窗提示成功
-                    Label tip = new Label("保存成功！");
-                    tip.setPrefSize(100, 40);
-                    tip.setTextFill(Color.rgb(113, 114, 112));
-                    tip.setFont(font5);
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setGraphic(tip);
-                    alert.setTitle("入院");
-                    alert.setHeaderText("");
-                    alert.setContentText("");
-                    alert.show();
-//                Alert alert1 = new Alert(Alert.AlertType.WARNING);
-//                alert1.setGraphic(new Button("保存失败！已有该住院记录。"));
-//                alert1.setTitle("入院");
-//                alert1.setHeaderText("");
-//                alert1.setContentText("");
-//                alert1.show();
                 }
             }
         });
@@ -327,7 +291,7 @@ public class Pane1 {
                     if (o instanceof TextField) {
                         ((TextField) o).setText("");
                     } else if (o instanceof ComboBox) {
-                        ((ComboBox) o).setValue(new String(""));
+                        ((ComboBox) o).setValue(null);
                     } else continue;
                 }
             }
@@ -361,7 +325,7 @@ public class Pane1 {
 
         Font font6 = Font.font("YouYuan", FontWeight.BLACK, 16);
 
-        TableView<Patient> table_outHospital = new TableView<>();
+        TableView<UI.Patient> table_outHospital = new TableView<>();
         table_outHospital.setEditable(true);
         table_outHospital.setPrefSize(1050, 60);
         TableColumn td1 = new TableColumn("诊疗卡号");
@@ -369,33 +333,33 @@ public class Pane1 {
         TableColumn td3 = new TableColumn("性别");
         TableColumn td4 = new TableColumn("年龄");
         TableColumn td5 = new TableColumn("诊断");
-        TableColumn td6 = new TableColumn("科室");
+        TableColumn td6 = new TableColumn("主治医师");
         TableColumn td7 = new TableColumn("病房");
-        TableColumn td8 = new TableColumn("床位");
-        TableColumn td9 = new TableColumn("入院时间");
-        TableColumn td10 = new TableColumn("出院时间");
+        TableColumn td8 = new TableColumn("手机号");
+//        TableColumn td8 = new TableColumn("床位");
+//        TableColumn td9 = new TableColumn("入院时间");
+//        TableColumn td10 = new TableColumn("出院时间");
         td1.setCellValueFactory(new PropertyValueFactory<>("card"));
         td2.setCellValueFactory(new PropertyValueFactory<>("name"));
         td3.setCellValueFactory(new PropertyValueFactory<>("sex"));
         td4.setCellValueFactory(new PropertyValueFactory<>("age"));
         td5.setCellValueFactory(new PropertyValueFactory<>("diagnosis"));
-        td6.setCellValueFactory(new PropertyValueFactory<>("department"));
+        td6.setCellValueFactory(new PropertyValueFactory<>("doctor"));
         td7.setCellValueFactory(new PropertyValueFactory<>("ward"));
-        td8.setCellValueFactory(new PropertyValueFactory<>("bed"));
-        td9.setCellValueFactory(new PropertyValueFactory<>("inTime"));
-        td10.setCellValueFactory(new PropertyValueFactory<>("outTime"));
-        td1.setPrefWidth(110);
-        td2.setPrefWidth(100);
-        td3.setPrefWidth(50);
-        td4.setPrefWidth(65);
-        td5.setPrefWidth(130);
-        td6.setPrefWidth(120);
-        td7.setPrefWidth(90);
-        td8.setPrefWidth(65);
-        td9.setPrefWidth(158);
-        td10.setPrefWidth(160);
+        td8.setCellValueFactory(new PropertyValueFactory<>("phone"));
+//        td8.setCellValueFactory(new PropertyValueFactory<>("bed"));
+//        td9.setCellValueFactory(new PropertyValueFactory<>("inTime"));
+//        td10.setCellValueFactory(new PropertyValueFactory<>("outTime"));
+        td1.setPrefWidth(160);
+        td2.setPrefWidth(130);
+        td3.setPrefWidth(80);
+        td4.setPrefWidth(80);
+        td5.setPrefWidth(150);
+        td6.setPrefWidth(150);
+        td7.setPrefWidth(150);
+        td8.setPrefWidth(145);
         //table.setStyle("-fx-background-color:#E6F2FE");
-        table_outHospital.getColumns().addAll(td1, td2, td3, td4, td5, td6, td7, td8, td9, td10);
+        table_outHospital.getColumns().addAll(td1, td2, td3, td4, td5, td6, td7, td8);
         table_outHospital.setColumnResizePolicy(new Callback<TableView.ResizeFeatures, Boolean>() {
             @Override
             public Boolean call(TableView.ResizeFeatures param) {
@@ -429,15 +393,21 @@ public class Pane1 {
             public void handle(ActionEvent event) {
                 //先将表格和框内容清空，然后调用胡的方法，将s传给他，让他查到后返回patient对象给我，我再插入表格中
                 if (!textField.getText().equals("")) {
-                    table_outHospital.getItems().removeAll(table_outHospital.getItems());
-                    String[] s1 = new String[15];
-                    for (int i = 0; i < 15; i++) {
-                        s1[i] = Integer.toString(i);
+                    table_outHospital.getItems().removeAll(table_outHospital.getItems());//先将表格和框内容清空
+                    Patient patient = patientService.get(Integer.valueOf(textField.getText()));
+                    if (patient == null) {//没找到
+                        util.tip("没有该记录！请输入正确卡号", "");
+//
+//                        Patient patient1 = new Patient(1, "2", "3", 4, "5", "6", "7", 8, 9);
+//                        table_outHospital.getItems().add(util.changePatient(patient1));
+//                        table_outHospital.refresh();
+
+                    } else {//找到了
+                        table_outHospital.getItems().add(util.changePatient(patient));
+                        table_outHospital.refresh();
                     }
-                    // Patient patient = new Patient(s1[0], s1[1], s1[2], s1[3], s1[4], s1[5], s1[6], s1[7], s1[8], s1[9], s1[10], s1[11], s1[12], s1[13]);
-//                    Patient patient = new Patient();
-//                    table_outHospital.getItems().addAll(patient.madeBean(s1));
-//                    table_outHospital.refresh();
+                } else {
+                    util.tip("请填写诊疗卡号！", "");
                 }
             }
         });
@@ -527,23 +497,16 @@ public class Pane1 {
                 // 成功修改记录则弹窗提示，然后可以选择清空所有或保留
                 //否则弹窗失败
                 if (!table_outHospital.getItems().isEmpty() && !tf_outTime.getText().equals("")) {     //textField.getText()永不为空！！！
-                    String[] strings = new String[2];
-                    strings[0] = textField.getText();
-                    strings[1] = tf_outTime.getText();
-                    //调用胡的方法传数组给他，并返回是否修改成功
-                    for (int i = 0; i < 2; i++) {
-                        System.out.println(strings[i]);
-                    }
-                    Label tip = new Label("保存成功！");
-                    tip.setPrefSize(100, 40);
-                    tip.setTextFill(Color.rgb(113, 114, 112));
-                    tip.setFont(font5);
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setGraphic(tip);
-                    alert.setTitle("出院");
-                    alert.setHeaderText("");
-                    alert.setContentText("");
-                    alert.show();
+//调用胡的方法传数组给他，并返回是否修改成功
+//                    String[] strings = new String[2];
+//                    strings[0] = textField.getText();
+//                    strings[1] = tf_outTime.getText();
+//                    for (int i = 0; i < 2; i++) {
+//                        System.out.println(strings[i]);
+//                    }
+                    util.tip("保存成功！", "");
+                } else {
+                    util.tip("请完整填写信息！", "");
                 }
             }
         });
@@ -603,7 +566,6 @@ public class Pane1 {
         AnchorPane.setLeftAnchor(hBox1, 410.0);
         AnchorPane.setTopAnchor(hBox1, 780.0);
     }
-
 
 
     public AnchorPane getAnchorPane1() {

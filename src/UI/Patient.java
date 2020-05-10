@@ -60,10 +60,9 @@ public class Patient {
         diagnosis.set(s5);
         department.set(s6);
         ward.set(s7);
-        ward.set(s8);
-        bed.set(s9);
-        inTime.set(s10);
-        outTime.set(s11);
+        bed.set(s8);
+        inTime.set(s9);
+        outTime.set(s10);
         phone.set(s11);
         ID.set(s12);
         medicine.set(s13);
@@ -244,4 +243,15 @@ public class Patient {
         this.check.set(check);
     }
 
+    public String getDoctor() {
+        return doctor.get();
+    }
+
+    public SimpleStringProperty doctorProperty() {
+        return doctor;
+    }
+
+    public void setDoctor(String doctor) {
+        this.doctor.set(doctor);
+    }
 }

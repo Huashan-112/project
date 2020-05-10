@@ -37,6 +37,15 @@ public class Pane5 {
     }
 
     public void load(AnchorPane anchorPane5) {
+
+        RoomService roomService = new RoomService();
+        PatientService patientService = new PatientService();
+        DoctorService doctorService = new DoctorService();
+        CheckService checkService = new CheckService();
+        DepartmentService departmentService = new DepartmentService();
+        DragService dragService = new DragService();
+        Util util = new Util();
+
         Font font = Font.font("YouYuan", FontWeight.BLACK, 16);
 
         TextField textField = new TextField();

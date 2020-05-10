@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import service.*;
 
 import java.util.function.UnaryOperator;
 
@@ -26,6 +27,14 @@ public class Pane4 {
     }
 
     public void load(AnchorPane anchorPane4) {
+
+        RoomService roomService = new RoomService();
+        PatientService patientService = new PatientService();
+        DoctorService doctorService = new DoctorService();
+        CheckService checkService = new CheckService();
+        DepartmentService departmentService = new DepartmentService();
+        DragService dragService = new DragService();
+        Util util = new Util();
 
         Font font1 = Font.font("YouYuan", FontWeight.BLACK, 16);
         Font font3 = Font.font("YouYuan", FontWeight.BLACK, 15);

@@ -1,5 +1,7 @@
 package UI;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -16,21 +18,16 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
-import service.PatientService;
+import service.*;
 import entity.Patient;
-import service.RoomService;
 
 import java.util.List;
 import java.util.function.UnaryOperator;
 
 public class Pane2 {
 
-    //待做
-    //1、住院记录要添加监听事件，每次点击到"查找住院记录"都要重新加载 "所有住院记录" 的这个table
     private AnchorPane anchorPane2;
     private TableView<Patient> table;
-    PatientService patientService = new PatientService();
-    RoomService roomService = new RoomService();
 
     public Pane2() {
         anchorPane2 = new AnchorPane();
@@ -41,6 +38,14 @@ public class Pane2 {
     }
 
     public void load(AnchorPane anchorPane2, TableView table, Pane2 pane2) {
+
+        RoomService roomService = new RoomService();
+        PatientService patientService = new PatientService();
+        DoctorService doctorService = new DoctorService();
+        CheckService checkService = new CheckService();
+        DepartmentService departmentService = new DepartmentService();
+        DragService dragService = new DragService();
+        Util util = new Util();
 
         Font font = Font.font("YouYuan", FontWeight.BLACK, 16);
 
@@ -73,34 +78,35 @@ public class Pane2 {
         TableColumn t2 = new TableColumn("姓名");
         TableColumn t3 = new TableColumn("性别");
         TableColumn t4 = new TableColumn("年龄");
-        TableColumn t5 = new TableColumn("诊断");
-        TableColumn t6 = new TableColumn("科室");
-        TableColumn t7 = new TableColumn("病房");
-        TableColumn t8 = new TableColumn("床位");
-        TableColumn t9 = new TableColumn("入院时间");
-        TableColumn t10 = new TableColumn("出院时间");
-        t1.setPrefWidth(110);
-        t2.setPrefWidth(100);
-        t3.setPrefWidth(50);
-        t4.setPrefWidth(65);
-        t5.setPrefWidth(130);
-        t6.setPrefWidth(120);
-        t7.setPrefWidth(90);
-        t8.setPrefWidth(65);
-        t9.setPrefWidth(159);
-        t10.setPrefWidth(159);
+        TableColumn t5 = new TableColumn("手机号");
+        TableColumn t6 = new TableColumn("身份证号");
+        TableColumn t7 = new TableColumn("诊断");
+        TableColumn t8 = new TableColumn("主治医师");
+        TableColumn t9 = new TableColumn("病房号");
+//        TableColumn t9 = new TableColumn("入院时间");
+//        TableColumn t10 = new TableColumn("出院时间");
+        t1.setPrefWidth(120);
+        t2.setPrefWidth(110);
+        t3.setPrefWidth(60);
+        t4.setPrefWidth(75);
+        t5.setPrefWidth(140);
+        t6.setPrefWidth(130);
+        t7.setPrefWidth(100);
+        t8.setPrefWidth(160);
+        t9.setPrefWidth(149);
+//        t10.setPrefWidth(159);
         t1.setCellValueFactory(new PropertyValueFactory<>("id"));
         t2.setCellValueFactory(new PropertyValueFactory<>("name"));
         t3.setCellValueFactory(new PropertyValueFactory<>("sex"));
         t4.setCellValueFactory(new PropertyValueFactory<>("age"));
-        t5.setCellValueFactory(new PropertyValueFactory<>("diagnose"));
-        t6.setCellValueFactory(new PropertyValueFactory<>("dept_name"));
-        t7.setCellValueFactory(new PropertyValueFactory<>("ward_id"));
-        t8.setCellValueFactory(new PropertyValueFactory<>("bed_id"));
-        t9.setCellValueFactory(new PropertyValueFactory<>("in_time"));
-        t10.setCellValueFactory(new PropertyValueFactory<>("out_time"));
+        t5.setCellValueFactory(new PropertyValueFactory<>("phone_number"));
+        t6.setCellValueFactory(new PropertyValueFactory<>("identity_card"));
+        t7.setCellValueFactory(new PropertyValueFactory<>("diagnose"));
+        t8.setCellValueFactory(new PropertyValueFactory<>("doc_id"));
+        t9.setCellValueFactory(new PropertyValueFactory<>("room_id"));
+//        t10.setCellValueFactory(new PropertyValueFactory<>("out_time"));
         //table.setStyle("-fx-background-color:#E6F2FE");
-        table.getColumns().addAll(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
+        table.getColumns().addAll(t1, t2, t3, t4, t5, t6, t7, t8, t9);
         table.setColumnResizePolicy(new Callback<TableView.ResizeFeatures, Boolean>() {
             @Override
             public Boolean call(TableView.ResizeFeatures param) {
@@ -108,11 +114,11 @@ public class Pane2 {
             }
         });
 
-        //get PatientList
+        //显示所有住院记录
         List<Patient> list = patientService.list();
-        for(Patient patient : list){
-            patient.setRoomDetail(roomService.get(patient.getRoom_id()));
-        }
+//        for (Patient patient : list) {
+//            patient.setRoomDetail(roomService.get(patient.getRoom_id()));
+//        }
         table.getItems().addAll(list);
 
         //-------------------------------------------------------------  //分割线
@@ -162,34 +168,30 @@ public class Pane2 {
         TableColumn td2 = new TableColumn("姓名");
         TableColumn td3 = new TableColumn("性别");
         TableColumn td4 = new TableColumn("年龄");
-        TableColumn td5 = new TableColumn("诊断");
-        TableColumn td6 = new TableColumn("科室");
-        TableColumn td7 = new TableColumn("病房");
-        TableColumn td8 = new TableColumn("床位");
-        TableColumn td9 = new TableColumn("入院时间");
-        TableColumn td10 = new TableColumn("出院时间");
+        TableColumn td5 = new TableColumn("手机号");
+        TableColumn td6 = new TableColumn("身份证号");
+        TableColumn td7 = new TableColumn("诊断");
+        TableColumn td8 = new TableColumn("主治医师");
+        TableColumn td9 = new TableColumn("病房号");
+        td1.setPrefWidth(120);
+        td2.setPrefWidth(110);
+        td3.setPrefWidth(60);
+        td4.setPrefWidth(75);
+        td5.setPrefWidth(140);
+        td6.setPrefWidth(130);
+        td7.setPrefWidth(100);
+        td8.setPrefWidth(160);
+        td9.setPrefWidth(149);
         td1.setCellValueFactory(new PropertyValueFactory<>("id"));
         td2.setCellValueFactory(new PropertyValueFactory<>("name"));
         td3.setCellValueFactory(new PropertyValueFactory<>("sex"));
         td4.setCellValueFactory(new PropertyValueFactory<>("age"));
-        td5.setCellValueFactory(new PropertyValueFactory<>("diagnose"));
-        td6.setCellValueFactory(new PropertyValueFactory<>("dept_name"));
-        td7.setCellValueFactory(new PropertyValueFactory<>("ward_id"));
-        td8.setCellValueFactory(new PropertyValueFactory<>("bed_id"));
-        td9.setCellValueFactory(new PropertyValueFactory<>("in_time"));
-        td10.setCellValueFactory(new PropertyValueFactory<>("out_time"));
-        td1.setPrefWidth(110);
-        td2.setPrefWidth(100);
-        td3.setPrefWidth(50);
-        td4.setPrefWidth(65);
-        td5.setPrefWidth(130);
-        td6.setPrefWidth(120);
-        td7.setPrefWidth(90);
-        td8.setPrefWidth(65);
-        td9.setPrefWidth(159);
-        td10.setPrefWidth(159);
-        //table.setStyle("-fx-background-color:#E6F2FE");
-        table_del.getColumns().addAll(td1, td2, td3, td4, td5, td6, td7, td8, td9, td10);
+        td5.setCellValueFactory(new PropertyValueFactory<>("phone_number"));
+        td6.setCellValueFactory(new PropertyValueFactory<>("identity_card"));
+        td7.setCellValueFactory(new PropertyValueFactory<>("diagnose"));
+        td8.setCellValueFactory(new PropertyValueFactory<>("doc_id"));
+        td9.setCellValueFactory(new PropertyValueFactory<>("room_id"));
+        table_del.getColumns().addAll(td1, td2, td3, td4, td5, td6, td7, td8, td9);
         table.setColumnResizePolicy(new Callback<TableView.ResizeFeatures, Boolean>() {
             @Override
             public Boolean call(TableView.ResizeFeatures param) {
@@ -211,9 +213,14 @@ public class Pane2 {
                     table_del.getItems().removeAll(table_del.getItems());
                     //query patient
                     Patient patient = patientService.get(id);
-                    patient.setRoomDetail(roomService.get(patient.getRoom_id()));
-                    table_del.getItems().addAll(patient);
-                    table_del.refresh();
+                    if (patient == null) {
+                        textField.setText("");
+                        util.tip("无此记录！请输入正确的卡号", "");
+                    } else {
+                        //patient.setRoomDetail(roomService.get(patient.getRoom_id()));
+                        table_del.getItems().addAll(patient);
+                        table_del.refresh();
+                    }
                 }
             }
         });
@@ -243,8 +250,10 @@ public class Pane2 {
                     yes.setOnAction(new EventHandler<ActionEvent>() {  // 确认删除
                         @Override
                         public void handle(ActionEvent event) {
-                            table_del.getItems().removeAll(table_del.getItems());
+                            table_del.getItems().removeAll(table_del.getItems());//删除界面的数据
                             textField.setText("");
+
+                            patientService.delete(Integer.valueOf(textField.getText()));//从数据库中删除
                             stage.close();
                         }
                     });
@@ -288,9 +297,7 @@ public class Pane2 {
         });
 
         HBox hBox2 = new HBox();
-        hBox2.getChildren().
-
-                addAll(delect, reset);
+        hBox2.getChildren().addAll(delect, reset);
         hBox2.setSpacing(40);
 
         Line line1 = new Line(15, 845, 1065, 845);
@@ -320,12 +327,13 @@ public class Pane2 {
     }
 
     public void update() {
+        PatientService patientService = new PatientService();
         //把表格里的内容清空，然后调用胡的方法，重新获取数据库所有数据，重新显示在表格上
-//        table.getItems().removeAll(table.getItems());
-//        Patient patient = new Patient("31", "31", "31", "831", "31", "318", "31", "381", "31", "31", "318", "31");
+        table.getItems().removeAll(table.getItems());
+        List<Patient> list = patientService.list();
 //        ObservableList<Patient> data = FXCollections.observableArrayList(patient);
-//        table.getItems().addAll(data);
-//        table.refresh();
+        table.getItems().addAll(list);
+        table.refresh();
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////

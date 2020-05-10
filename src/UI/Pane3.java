@@ -13,9 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import service.DoctorService;
-import service.PatientService;
-import service.RoomService;
+import service.*;
 
 import java.sql.Date;
 import java.util.function.UnaryOperator;
@@ -36,6 +34,14 @@ public class Pane3 {
     }
 
     public void load(AnchorPane anchorPane3) {
+
+        RoomService roomService = new RoomService();
+        PatientService patientService = new PatientService();
+        DoctorService doctorService = new DoctorService();
+        CheckService checkService = new CheckService();
+        DepartmentService departmentService = new DepartmentService();
+        DragService dragService = new DragService();
+        Util util = new Util();
 
         Font font5 = Font.font("YouYuan", FontWeight.BLACK, 16);
         GridPane gridPane1 = new GridPane();
