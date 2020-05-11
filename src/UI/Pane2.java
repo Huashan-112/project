@@ -83,8 +83,6 @@ public class Pane2 {
         TableColumn t7 = new TableColumn("诊断");
         TableColumn t8 = new TableColumn("主治医师");
         TableColumn t9 = new TableColumn("病房号");
-//        TableColumn t9 = new TableColumn("入院时间");
-//        TableColumn t10 = new TableColumn("出院时间");
         t1.setPrefWidth(120);
         t2.setPrefWidth(110);
         t3.setPrefWidth(60);
@@ -94,7 +92,6 @@ public class Pane2 {
         t7.setPrefWidth(100);
         t8.setPrefWidth(160);
         t9.setPrefWidth(149);
-//        t10.setPrefWidth(159);
         t1.setCellValueFactory(new PropertyValueFactory<>("id"));
         t2.setCellValueFactory(new PropertyValueFactory<>("name"));
         t3.setCellValueFactory(new PropertyValueFactory<>("sex"));
@@ -102,10 +99,8 @@ public class Pane2 {
         t5.setCellValueFactory(new PropertyValueFactory<>("phone_number"));
         t6.setCellValueFactory(new PropertyValueFactory<>("identity_card"));
         t7.setCellValueFactory(new PropertyValueFactory<>("diagnose"));
-        t8.setCellValueFactory(new PropertyValueFactory<>("doc_id"));
-        t9.setCellValueFactory(new PropertyValueFactory<>("room_id"));
-//        t10.setCellValueFactory(new PropertyValueFactory<>("out_time"));
-        //table.setStyle("-fx-background-color:#E6F2FE");
+        t8.setCellValueFactory(new PropertyValueFactory<>("doc_name"));
+        t9.setCellValueFactory(new PropertyValueFactory<>("ward_id"));
         table.getColumns().addAll(t1, t2, t3, t4, t5, t6, t7, t8, t9);
         table.setColumnResizePolicy(new Callback<TableView.ResizeFeatures, Boolean>() {
             @Override
@@ -116,9 +111,10 @@ public class Pane2 {
 
         //显示所有住院记录
         List<Patient> list = patientService.list();
-//        for (Patient patient : list) {
-//            patient.setRoomDetail(roomService.get(patient.getRoom_id()));
-//        }
+        for (Patient patient : list) {
+            patient.setRoomDetail(roomService.get(patient.getRoom_id()));
+            patient.setDoc_name(doctorService.get(patient.getDoc_id()));//获取主治医师名字
+        }
         table.getItems().addAll(list);
 
         //-------------------------------------------------------------  //分割线
@@ -190,7 +186,7 @@ public class Pane2 {
         td6.setCellValueFactory(new PropertyValueFactory<>("identity_card"));
         td7.setCellValueFactory(new PropertyValueFactory<>("diagnose"));
         td8.setCellValueFactory(new PropertyValueFactory<>("doc_id"));
-        td9.setCellValueFactory(new PropertyValueFactory<>("room_id"));
+        td9.setCellValueFactory(new PropertyValueFactory<>("ward_id"));
         table_del.getColumns().addAll(td1, td2, td3, td4, td5, td6, td7, td8, td9);
         table.setColumnResizePolicy(new Callback<TableView.ResizeFeatures, Boolean>() {
             @Override
@@ -207,17 +203,19 @@ public class Pane2 {
         query.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //先将表格和框内容清空，然后调用胡的方法，将s传给他，让他查到后返回patient对象给我，我再插入表格中
+
                 if (!textField.getText().equals("")) {
-                    int id = Integer.parseInt(textField.getText());
-                    table_del.getItems().removeAll(table_del.getItems());
-                    //查找
-                    Patient patient = patientService.get(id);
+
+                    Patient patient = patientService.get(Integer.parseInt(textField.getText()));
+
                     if (patient == null) {
                         textField.setText("");
                         util.tip("无此记录！请输入正确的卡号", "");
                     } else {
-                        //patient.setRoomDetail(roomService.get(patient.getRoom_id()));
+
+                        table_del.getItems().removeAll(table_del.getItems());//将表格和框内容清空
+                        patient.setRoomDetail(roomService.get(patient.getRoom_id()));//获取病房号等
+                        patient.setDoc_name(doctorService.get(patient.getDoc_id()));//获取主治医师名字
                         table_del.getItems().addAll(patient);
                         table_del.refresh();
                     }
@@ -236,8 +234,8 @@ public class Pane2 {
         delect.setOnAction(new EventHandler<ActionEvent>() {  // 删除个人住院记录
             @Override
             public void handle(ActionEvent event) {
-                //清空框和表中的内容，弹窗提示确认删除？
-                if (!table_del.getItems().isEmpty()) {
+
+                if (!table_del.getItems().isEmpty() && !textField.getText().equals("")) {
 
                     Stage stage = new Stage();
                     Label tip = new Label("确认删除该条记录？");
@@ -250,6 +248,7 @@ public class Pane2 {
                     yes.setOnAction(new EventHandler<ActionEvent>() {  // 确认删除
                         @Override
                         public void handle(ActionEvent event) {
+
                             table_del.getItems().removeAll(table_del.getItems());//删除界面的数据
                             textField.setText("");
 
@@ -329,11 +328,20 @@ public class Pane2 {
     }
 
     public void update() {
+
         PatientService patientService = new PatientService();
-        //把表格里的内容清空，然后调用胡的方法，重新获取数据库所有数据，重新显示在表格上
+        RoomService roomService = new RoomService();
+        DoctorService doctorService = new DoctorService();
+
         table.getItems().removeAll(table.getItems());
+
         List<Patient> list = patientService.list();
-//        ObservableList<Patient> data = FXCollections.observableArrayList(patient);
+        for (Patient patient : list) {
+            patient.setRoomDetail(roomService.get(patient.getRoom_id()));
+            patient.setDoc_name(doctorService.get(patient.getDoc_id()));//获取主治医师名字
+        }
+
+        //ObservableList<Patient> data = FXCollections.observableArrayList(patient);
         table.getItems().addAll(list);
         table.refresh();
     }
