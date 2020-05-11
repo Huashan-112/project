@@ -270,14 +270,13 @@ public class Pane4 {
 
                 if (!name.getText().equals("姓名：") && !textField.getText().equals("")) {
                     //获取诊疗卡号和所开的药物，调用胡的方法传递给胡
-                    StringBuilder stringBuilder = new StringBuilder("");
+                    StringBuilder stringBuilder = new StringBuilder();
                     Object[] objects = gridPane1.getChildren().toArray();
-                    for (Object o : objects) {
-                        if (o instanceof ComboBox) {
-                            String s = (String) ((ComboBox) o).getValue();
-                            if (s == null || (s != null && s.equals(""))) {
 
-                            } else {
+                    for (Object o : objects) {
+
+                        if (o instanceof ComboBox) {
+                            if (((ComboBox) o).getValue() != null) {
                                 stringBuilder.append((String) ((ComboBox) o).getValue());
                                 stringBuilder.append(" ");
                             }
@@ -416,16 +415,8 @@ public class Pane4 {
                     }
                     System.out.println(textField.getText());
                     System.out.println(stringBuilder.toString());
-                    Label tip = new Label("保存成功！");
-                    tip.setPrefSize(100, 40);
-                    tip.setTextFill(Color.rgb(113, 114, 112));
-                    tip.setFont(font1);
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setGraphic(tip);
-                    alert.setTitle("开立检查");
-                    alert.setHeaderText("");
-                    alert.setContentText("");
-                    alert.show();
+
+                    util.tip("开立检查成功！", "");
                 }
             }
         });

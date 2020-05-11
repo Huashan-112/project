@@ -281,15 +281,15 @@ public class Pane5 {
             @Override
             public void handle(ActionEvent event) {
 
-                //先清空下方的所有数据
                 if (!textField.getText().equals("")) {
-                    //调用胡的方法，返回字符串数组
-                    String text = textField.getText();
-                    int id = Integer.valueOf(text);
-                    Patient patient = patientService.get(id);
 
-                    if (patient != null) {     //假如能找到该记录
+                    if (patientService.get(Integer.valueOf(textField.getText())) == null) {
+                        util.tip("没有该记录！请输入正确的卡号", "");
+                    } else {
 
+                        String text = textField.getText();
+                        int id = Integer.valueOf(text);
+                        Patient patient = patientService.get(id);
                         patient.setDoc_name(doctorService.get(patient.getDoc_id()));
 
                         name.setText("姓名：" + patient.getName());
@@ -313,8 +313,6 @@ public class Pane5 {
                         if (checkService.listByPatientId(id).size() != 0) {
                             table_check.getItems().addAll(checkService.listByPatientId(id));
                         }
-                    } else {
-                        util.tip("没有该记录！请输入正确的卡号", "");
                     }
                 }
             }
