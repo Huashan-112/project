@@ -56,6 +56,7 @@ public class RoomDAO {
         }
         return id;
     }
+
     public void update(Room room){
         String sql = "update room set ward_id=?,bed_id=?,dept_name=?,in_time=?,out_time=? where id =?";
         try (Connection c = DBUtil.getConnection(); PreparedStatement ps = c.prepareStatement(sql);) {

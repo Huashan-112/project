@@ -22,7 +22,7 @@ import java.util.function.UnaryOperator;
 
 public class Pane1 {
 
-    //病房号床位号是否已经有人使用
+    //病房号床位号是否已经有人使用,2 入院时，判断是否已有该住院记录
 
     private AnchorPane anchorPane1;
     GridPane gridPane1;
@@ -236,8 +236,7 @@ public class Pane1 {
             @Override
             public void handle(ActionEvent event) {
 
-                //textField的初始内容是"",combobox的初始内容是null
-                //弹窗提示保存成功，可选择清空所有或者保留
+                //textField的初始内容是"",comboBox的初始内容是null
                 if (tf_card.getText().equals("") || tf_name.getText().equals("") || tf_ID.getText().equals("") || tf_diagnosis.getText().equals("") || tf_doctor.getText().equals("") || tf_inHospital_time.getText().equals("") || comboBox.getValue() == null || comboBox1.getValue() == null || comboBox2.getValue() == null || comboBox3.getValue() == null) {
                     util.tip("请完整填写信息！", "入院");
                 } else {//已完整填写信息
@@ -256,18 +255,13 @@ public class Pane1 {
                         String identity_card = tf_ID.getText();
                         String doc_name = tf_doctor.getText();
 
-                        //get id
                         int doc_id = doctorService.getId(doc_name);
 
-                        /**
-                         * Check
-                         */
-                        int room_id = roomService.add(ward_id, bed_id, dept_name, in_time);
+                        int room_id = roomService.add(ward_id, bed_id, dept_name, in_time);//这里room的out_time为null
                         Patient patient = new Patient(id, name, sex, age, phone_number, identity_card, diagnose, doc_id, room_id);
                         patientService.add(patient);
 
                         util.tip("保存成功！", "入院");
-                        //util.tip("保存失败！已有该住院记录！", "入院");
 
                     } else {
                         util.tip("入院时间的格式不对！", "入院");
@@ -485,15 +479,21 @@ public class Pane1 {
             @Override
             public void handle(ActionEvent event) {
 
-                //将出院时间插入后，传该对象回给胡，让他修改库中这条数据
-                // 成功修改记录则弹窗提示，然后可以选择清空所有或保留
-                //否则弹窗失败
-                if (!table_outHospital.getItems().isEmpty() && !tf_outTime.getText().equals("")) {     //textField.getText()永不为空！！！
-                    //调用胡的方法传数组给他，并返回是否修改成功
-                    //是否要保存出院时间？
-                    util.tip("保存成功！", "");
+                if (!table_outHospital.getItems().isEmpty() && !tf_outTime.getText().equals("") && !tf_outTime.getText().equals("")) {
+
+                    Patient patient = patientService.get(Integer.valueOf(textField.getText()));
+                    Room room = roomService.get(patient.getRoom_id());
+
+                    if (!util.isLegalDate(tf_outTime.getText())) {
+                        util.tip("出院时间的格式不正确！", "");
+                    } else {
+                        room.setOut_time(Date.valueOf(tf_outTime.getText()));
+                        roomService.update(room);
+                        util.tip("保存成功！", "");
+                    }
+
                 } else {
-                    util.tip("请完整填写信息！", "");
+                    util.tip("请先搜索记录并填写！", "");
                 }
             }
         });
