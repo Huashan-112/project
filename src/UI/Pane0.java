@@ -39,13 +39,13 @@ public class Pane0 {
         TextField username = new TextField();
         username.setPrefWidth(350);
         username.setPrefHeight(40);
-        username.setOpacity(0.5);//0.3
+        username.setOpacity(0.6);
         username.setPromptText("请输入用户名");
 
         TextField password = new TextField();
         password.setPrefWidth(350);
         password.setPrefHeight(40);
-        password.setOpacity(0.5);
+        password.setOpacity(0.6);
         password.setPromptText("请输入密码");
 
         Button login = new Button("登录");

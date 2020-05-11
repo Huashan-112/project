@@ -23,12 +23,6 @@ public class Pane5 {
 
     private AnchorPane anchorPane5;
 
-    public PatientService patientService = new PatientService();
-    public DoctorService doctorService = new DoctorService();
-    public RoomService roomService = new RoomService();
-    public DragService dragService = new DragService();
-    public CheckService checkService = new CheckService();
-
     public Pane5() {
         anchorPane5 = new AnchorPane();
         anchorPane5.setVisible(false);
@@ -286,15 +280,15 @@ public class Pane5 {
         button.setOnAction(new EventHandler<ActionEvent>() {  // 查询患者个人信息
             @Override
             public void handle(ActionEvent event) {
-                //先清空下方的所有数据，然后调用胡的方法，将卡号传给他，让他找到该人的记录，返回来patient对象，我再一一插入表格中
-                //可能还要有药品和检查项目的表（里面记录药品的检查项目的
+
+                //先清空下方的所有数据
                 if (!textField.getText().equals("")) {
                     //调用胡的方法，返回字符串数组
                     String text = textField.getText();
                     int id = Integer.valueOf(text);
                     Patient patient = patientService.get(id);
 
-                    if (patient!=null) {     //假如能找到该记录
+                    if (patient != null) {     //假如能找到该记录
 
                         patient.setDoc_name(doctorService.get(patient.getDoc_id()));
 
@@ -306,24 +300,21 @@ public class Pane5 {
                         diagnosis.setText("诊断：" + patient.getDiagnose());
                         doctor.setText("主治医师：" + patient.getDoc_name());
 
+                        //清空表的数据
                         table.getItems().removeAll(table.getItems());
                         table_medicine.getItems().removeAll(table_medicine.getItems());
                         table_check.getItems().removeAll(table_check.getItems());
 
+                        //显示查询的数据
                         table.getItems().addAll(roomService.get(patient.getRoom_id()));
-                        table_medicine.getItems().addAll(dragService.listByPatientId(id));
-                        table_check.getItems().addAll(checkService.listByPatientId(id));
-//                        Patient patient = new Patient();
-//                        table.getItems().removeAll(table.getItems());
-//                        table.getItems().addAll(patient.madeBean(strings));
-//
-//                        Medicine medicine = new Medicine();
-//                        table_medicine.getItems().removeAll(table_medicine.getItems());
-//                        table_medicine.getItems().addAll(medicine.madeBean(strings));
-//
-//                        CheckUp checkUp = new CheckUp();
-//                        table_check.getItems().removeAll(table_check.getItems());
-//                        table_check.getItems().addAll(checkUp.madeBean(strings));
+                        if (dragService.listByPatientId(id).size() != 0) {
+                            table_medicine.getItems().addAll(dragService.listByPatientId(id));
+                        }
+                        if (checkService.listByPatientId(id).size() != 0) {
+                            table_check.getItems().addAll(checkService.listByPatientId(id));
+                        }
+                    } else {
+                        util.tip("没有该记录！请输入正确的卡号", "");
                     }
                 }
             }

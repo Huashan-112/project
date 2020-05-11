@@ -235,14 +235,13 @@ public class Pane1 {
         save2.setOnAction(new EventHandler<ActionEvent>() {  // 入院保存
             @Override
             public void handle(ActionEvent event) {
+
                 //textField的初始内容是"",combobox的初始内容是null
                 //弹窗提示保存成功，可选择清空所有或者保留
-                if (tf_card.getText().equals("") || tf_name.getText().equals("") || tf_ID.getText().equals("")
-                        || tf_diagnosis.getText().equals("") || tf_doctor.getText().equals("") || tf_inHospital_time.getText().equals("") || comboBox.getValue() == null || comboBox1.getValue() == null ||
-                        comboBox2.getValue() == null || comboBox3.getValue() == null
-                        ) {
+                if (tf_card.getText().equals("") || tf_name.getText().equals("") || tf_ID.getText().equals("") || tf_diagnosis.getText().equals("") || tf_doctor.getText().equals("") || tf_inHospital_time.getText().equals("") || comboBox.getValue() == null || comboBox1.getValue() == null || comboBox2.getValue() == null || comboBox3.getValue() == null) {
                     util.tip("请完整填写信息！", "入院");
                 } else {//已完整填写信息
+
                     if (util.isLegalDate(tf_inHospital_time.getText())) {//判断是否是合法的日期格式
                         String sex = (String) comboBox.getValue();
                         String dept_name = (String) comboBox1.getValue();
@@ -267,11 +266,11 @@ public class Pane1 {
                         Patient patient = new Patient(id, name, sex, age, phone_number, identity_card, diagnose, doc_id, room_id);
                         patientService.add(patient);
 
-                        //调用胡的方法，返回成功的话，弹窗提示成功
                         util.tip("保存成功！", "入院");
-//                  util.tip("保存失败！已有该住院记录！", "入院");
+                        //util.tip("保存失败！已有该住院记录！", "入院");
+
                     } else {
-                        util.tip("入院时间格式不对！", "入院");
+                        util.tip("入院时间的格式不对！", "入院");
                     }
                 }
             }
@@ -285,7 +284,8 @@ public class Pane1 {
         reset2.setOnAction(new EventHandler<ActionEvent>() {  // 住院记录
             @Override
             public void handle(ActionEvent event) {
-                //遍历gridpane，将框内容设为“”
+
+                //遍历gridpane
                 Object[] objects = gridPane1.getChildren().toArray();
                 for (Object o : objects) {
                     if (o instanceof TextField) {
@@ -325,40 +325,33 @@ public class Pane1 {
 
         Font font6 = Font.font("YouYuan", FontWeight.BLACK, 16);
 
-        TableView<UI.Patient> table_outHospital = new TableView<>();
+        TableView<Patient> table_outHospital = new TableView<>();
         table_outHospital.setEditable(true);
         table_outHospital.setPrefSize(1050, 60);
-        TableColumn td1 = new TableColumn("诊疗卡号");
-        TableColumn td2 = new TableColumn("姓名");
-        TableColumn td3 = new TableColumn("性别");
-        TableColumn td4 = new TableColumn("年龄");
-        TableColumn td5 = new TableColumn("诊断");
+        TableColumn td1 = new TableColumn("姓名");
+        TableColumn td2 = new TableColumn("性别");
+        TableColumn td3 = new TableColumn("年龄");
+        TableColumn td5 = new TableColumn("手机号");
+        TableColumn td4 = new TableColumn("诊断");
         TableColumn td6 = new TableColumn("主治医师");
         TableColumn td7 = new TableColumn("病房");
-        TableColumn td8 = new TableColumn("手机号");
-//        TableColumn td8 = new TableColumn("床位");
-//        TableColumn td9 = new TableColumn("入院时间");
-//        TableColumn td10 = new TableColumn("出院时间");
-        td1.setCellValueFactory(new PropertyValueFactory<>("card"));
-        td2.setCellValueFactory(new PropertyValueFactory<>("name"));
-        td3.setCellValueFactory(new PropertyValueFactory<>("sex"));
-        td4.setCellValueFactory(new PropertyValueFactory<>("age"));
-        td5.setCellValueFactory(new PropertyValueFactory<>("diagnosis"));
-        td6.setCellValueFactory(new PropertyValueFactory<>("doctor"));
-        td7.setCellValueFactory(new PropertyValueFactory<>("ward"));
-        td8.setCellValueFactory(new PropertyValueFactory<>("phone"));
-//        td8.setCellValueFactory(new PropertyValueFactory<>("bed"));
-//        td9.setCellValueFactory(new PropertyValueFactory<>("inTime"));
-//        td10.setCellValueFactory(new PropertyValueFactory<>("outTime"));
-        td1.setPrefWidth(160);
-        td2.setPrefWidth(130);
+        TableColumn td8 = new TableColumn("入院时间");
+        td1.setCellValueFactory(new PropertyValueFactory<>("name"));
+        td2.setCellValueFactory(new PropertyValueFactory<>("sex"));
+        td3.setCellValueFactory(new PropertyValueFactory<>("age"));
+        td4.setCellValueFactory(new PropertyValueFactory<>("phone_number"));
+        td5.setCellValueFactory(new PropertyValueFactory<>("diagnose"));
+        td6.setCellValueFactory(new PropertyValueFactory<>("doc_name"));
+        td7.setCellValueFactory(new PropertyValueFactory<>("ward_id"));
+        td8.setCellValueFactory(new PropertyValueFactory<>("in_time"));
+        td1.setPrefWidth(130);
+        td2.setPrefWidth(80);
         td3.setPrefWidth(80);
-        td4.setPrefWidth(80);
+        td4.setPrefWidth(150);
         td5.setPrefWidth(150);
         td6.setPrefWidth(150);
-        td7.setPrefWidth(150);
-        td8.setPrefWidth(145);
-        //table.setStyle("-fx-background-color:#E6F2FE");
+        td7.setPrefWidth(145);
+        td8.setPrefWidth(160);
         table_outHospital.getColumns().addAll(td1, td2, td3, td4, td5, td6, td7, td8);
         table_outHospital.setColumnResizePolicy(new Callback<TableView.ResizeFeatures, Boolean>() {
             @Override
@@ -391,19 +384,17 @@ public class Pane1 {
         query.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //先将表格和框内容清空，然后调用胡的方法，将s传给他，让他查到后返回patient对象给我，我再插入表格中
+
                 if (!textField.getText().equals("")) {
                     table_outHospital.getItems().removeAll(table_outHospital.getItems());//先将表格和框内容清空
                     Patient patient = patientService.get(Integer.valueOf(textField.getText()));
                     if (patient == null) {//没找到
                         util.tip("没有该记录！请输入正确卡号", "");
-//
-//                        Patient patient1 = new Patient(1, "2", "3", 4, "5", "6", "7", 8, 9);
-//                        table_outHospital.getItems().add(util.changePatient(patient1));
-//                        table_outHospital.refresh();
-
                     } else {//找到了
-                        table_outHospital.getItems().add(util.changePatient(patient));
+                        patient.setDoc_name(doctorService.get(patient.getDoc_id()));//获取主治医师名字
+                        patient.setWard_id(roomService.get(patient.getRoom_id()).getWard_id());//获取病房号
+                        patient.setIn_time(roomService.get(patient.getRoom_id()).getIn_time());//获取入院时间
+                        table_outHospital.getItems().add(patient);
                         table_outHospital.refresh();
                     }
                 } else {
@@ -493,6 +484,7 @@ public class Pane1 {
         save1.setOnAction(new EventHandler<ActionEvent>() {  // 出院保存
             @Override
             public void handle(ActionEvent event) {
+
                 //将出院时间插入后，传该对象回给胡，让他修改库中这条数据
                 // 成功修改记录则弹窗提示，然后可以选择清空所有或保留
                 //否则弹窗失败
@@ -514,6 +506,7 @@ public class Pane1 {
         reset.setOnAction(new EventHandler<ActionEvent>() {  // 出院重置
             @Override
             public void handle(ActionEvent event) {
+
                 //遍历所有框，设内容为空,将表中内容清空
                 textField.setText("");
                 table_outHospital.getItems().removeAll(table_outHospital.getItems());

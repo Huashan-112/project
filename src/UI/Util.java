@@ -42,21 +42,7 @@ public class Util {
         alert.show();
     }
 
-    public Patient changePatient(entity.Patient p) {
-
-        DoctorService doctorService = new DoctorService();
-
-        String s1 = String.valueOf(p.getId());
-        String s2 = p.getName();
-        String s3 = p.getSex();
-        String s4 = String.valueOf(p.getAge());
-        String s5 = p.getPhone_number();
-        String s6 = p.getIdentity_card();
-        String s7 = p.getDiagnose();
-        String s8 = doctorService.get(p.getId()).getName();
-        String s9 = String.valueOf(p.getRoom_id());
-
-        return new Patient(s1, s2, s3, s4, s7, "", s9, "", "", s5, s6, "", "", "", s8);
+    public void checkBed() {
 
     }
 }
