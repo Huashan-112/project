@@ -1,5 +1,7 @@
 package UI;
 
+import dao.DoctorDAO;
+import entity.Doctor;
 import entity.Patient;
 import entity.Room;
 import javafx.event.ActionEvent;
@@ -20,8 +22,6 @@ import java.util.function.UnaryOperator;
 
 public class Pane3 {
 
-    //检查病房号床位号是否已经有人使用
-
     private AnchorPane anchorPane3;
 
     public Pane3() {
@@ -36,6 +36,7 @@ public class Pane3 {
         RoomService roomService = new RoomService();
         PatientService patientService = new PatientService();
         DoctorService doctorService = new DoctorService();
+        DoctorDAO doctorDAO = new DoctorDAO();
         CheckService checkService = new CheckService();
         DepartmentService departmentService = new DepartmentService();
         DragService dragService = new DragService();
@@ -69,7 +70,6 @@ public class Pane3 {
 
         Font font4 = Font.font("YouYuan", FontWeight.BLACK, 17);
         Font font3 = Font.font("YouYuan", FontWeight.BLACK, 15);
-        Font font6 = Font.font("YouYuan", FontWeight.BLACK, 16);
         int cell = 130;
 
         TextField textField = new TextField();
@@ -263,21 +263,14 @@ public class Pane3 {
             public void handle(ActionEvent event) {
 
                 if (!textField.getText().equals("")) {
+
                     Patient patient = patientService.get(Integer.valueOf(textField.getText()));
+
                     if (patient == null) {
                         util.tip("没有该记录！请输入正确的卡号", "");
                         textField.setText("");
                     } else {//有记录
-                        //先将下面所有框的内容清空，然后调用胡的方法，将s传给他，让他查到后返回patient对象给我，我再全部显示在框中
-                        Object[] objects = gridPane1.getChildren().toArray();
-                        for (Object o : objects) {
-                            if (o instanceof TextField) {
-                                ((TextField) o).setText("");
-                            }
-                            if (o instanceof ComboBox) {
-                                ((ComboBox) o).setValue(null);
-                            }
-                        }
+
                         //显示数据
                         patient.setRoomDetail(roomService.get(patient.getRoom_id()));
                         patient.setDoc_name(doctorService.get(patient.getDoc_id()));
@@ -285,17 +278,16 @@ public class Pane3 {
                         tf_name.setText(patient.getName());
                         comboBox.setValue(patient.getSex());
                         tf_age.setText(patient.getAge() + "");
+                        tf_phone.setText(patient.getPhone_number());
+                        tf_ID.setText(patient.getIdentity_card());
                         tf_diagnosis.setText(patient.getDiagnose());
+                        tf_inHospital_time.setText(patient.getIn_time().toString());
                         comboBox1.setValue(patient.getDept_name());
                         comboBox2.setValue(patient.getWard_id());
                         comboBox3.setValue(patient.getBed_id());
-                        tf_inHospital_time.setText(patient.getIn_time().toString());
-                        tf_phone.setText(patient.getPhone_number());
-                        tf_ID.setText(patient.getIdentity_card());
                         tf_doctor.setText(patient.getDoc_name());
-                        // tf_outHospital_time.setText(patient.getOut_time().toString());
-                        if (patient.getOut_time() == null) {//还没有出院时间的情况下，patient.getOut_time()是空吗？？
-                            tf_outHospital_time.setText("");
+                        if (patient.getOut_time() == null) {
+                            tf_outHospital_time.setText("");//显示为空，表示还在住院中
                         } else {
                             tf_outHospital_time.setText(patient.getOut_time().toString());
                         }
@@ -312,58 +304,54 @@ public class Pane3 {
         save2.setStyle("-fx-background-color: #2475C4");
         save2.setTextFill(Color.rgb(241, 241, 232));
         save2.setFont(font5);
-        save2.setOnAction(new EventHandler<ActionEvent>() {  // 保存修改
+        save2.setOnAction(new EventHandler<ActionEvent>() { //保存修改
             @Override
             public void handle(ActionEvent event) {
-                //把gridpane上的框里的内容汇总在一个patient对象里，调用胡的方法传给他，让他的方法将数据写进数据库
-                //弹窗提示保存成功，可选择清空所有或者保留
-                // 有信息没填则失败
-                if (!textField.getText().equals("")) {
 
-                    if (textField.getText().equals("") || tf_name.getText().equals("") || comboBox.getValue() == null || tf_age.getText().equals("") || tf_phone.getText().equals("") || tf_ID.getText().equals("") ||
-                            tf_diagnosis.getText().equals("") || comboBox1.getValue() == null || comboBox2.getValue() == null || comboBox3.getValue() == null || tf_doctor.getText().equals("") || tf_inHospital_time.getText().equals("")) {
-                        util.tip("请完整填写信息！", "");
+                if (textField.getText().equals("") || tf_name.getText().equals("") || comboBox.getValue() == null || tf_age.getText().equals("") || tf_phone.getText().equals("") || tf_ID.getText().equals("") || tf_diagnosis.getText().equals("") || tf_inHospital_time.getText().equals("") || comboBox1.getValue() == null || comboBox2.getValue() == null || comboBox3.getValue() == null || tf_doctor.getText().equals("")) {
+                    util.tip("请完整填写信息！", "");
+                } else if (doctorDAO.get(tf_doctor.getText()) == null) {
+                    util.tip("没有该医生！请核对后输入", "");
+                } else if (!util.isLegalDate(tf_inHospital_time.getText())) {
+                    util.tip("入院时间的格式不正确！", "");
+                } else if (!tf_outHospital_time.getText().equals("") && !util.isLegalDate(tf_outHospital_time.getText())) {//封装成patient
+                    util.tip("出院时间格式不正确！", "");
+                } else if (util.isUsed_bed((String) comboBox2.getValue(), (String) comboBox3.getValue()) == 2) {
+                    util.tip("该病房已满！请换病房", "");
+                } else if (util.isUsed_bed((String) comboBox2.getValue(), (String) comboBox3.getValue()) == 1) {
+                    util.tip("该床位已经被使用！", "");
+                } else {
+
+                    Date out_time;
+                    if (tf_outHospital_time.getText().equals("")) {
+                        out_time = null;//表示还在住院中
                     } else {
-                        if (!util.isLegalDate(tf_inHospital_time.getText())) {
-                            util.tip("时间的填写格式不正确！", "");
-                        } else {//封装成patient
-                            int id = Integer.parseInt(textField.getText()); //诊疗卡号
-                            String name = tf_name.getText();
-                            int age = Integer.parseInt(tf_age.getText());
-                            String diagnose = tf_diagnosis.getText();
-                            Date in_time = Date.valueOf(tf_inHospital_time.getText());
-                            String phone_number = tf_phone.getText();
-                            String identity_card = tf_ID.getText();
-                            String doc_name = tf_doctor.getText();
-                            int doc_id = doctorService.getId(doc_name);   //get doctor id
-                            String sex = comboBox.getValue().toString();
-                            String dept_name = comboBox1.getValue().toString();
-                            int ward_id = Integer.parseInt(comboBox2.getValue().toString());
-                            int bed_id = Integer.parseInt(comboBox3.getValue().toString());
-
-                            Date out_time = null;
-                            if (!tf_outHospital_time.getText().equals("") && !util.isLegalDate(tf_outHospital_time.getText())) {
-                                util.tip("出院时间格式不正确！", "");
-                            } else {
-                                if (tf_outHospital_time.getText().equals("")) {
-                                    out_time = null;//表示还在住院中
-                                } else {
-                                    out_time = Date.valueOf(tf_outHospital_time.getText());
-                                }
-
-                                Patient p1 = patientService.get(id);
-                                int room_id = p1.getRoom_id();
-                                Patient patient = new Patient(id, name, sex, age, phone_number, identity_card, diagnose, doc_id, room_id);
-                                Room room = new Room(room_id, ward_id, bed_id, dept_name, in_time, out_time);
-
-                                //update
-                                patientService.update(patient);
-                                roomService.update(room);
-
-                                util.tip("修改成功！", "");
-                            }
-                        }
+                        out_time = Date.valueOf(tf_outHospital_time.getText());
                     }
+
+                    int doc_id = doctorService.getId(tf_doctor.getText());   //get doctor id
+                    int id = Integer.parseInt(textField.getText()); //诊疗卡号
+                    String name = tf_name.getText();
+                    int age = Integer.parseInt(tf_age.getText());
+                    String diagnose = tf_diagnosis.getText();
+                    Date in_time = Date.valueOf(tf_inHospital_time.getText());
+                    String phone_number = tf_phone.getText();
+                    String identity_card = tf_ID.getText();
+                    String sex = comboBox.getValue().toString();
+                    String dept_name = comboBox1.getValue().toString();
+                    int ward_id = Integer.parseInt(comboBox2.getValue().toString());
+                    int bed_id = Integer.parseInt(comboBox3.getValue().toString());
+
+                    Patient p1 = patientService.get(id);
+                    int room_id = p1.getRoom_id();
+                    Patient patient = new Patient(id, name, sex, age, phone_number, identity_card, diagnose, doc_id, room_id);
+                    Room room = new Room(room_id, ward_id, bed_id, dept_name, in_time, out_time);
+
+                    //update
+                    patientService.update(patient);
+                    roomService.update(room);
+
+                    util.tip("修改成功！", "");
                 }
             }
         });
@@ -376,7 +364,8 @@ public class Pane3 {
         reset2.setOnAction(new EventHandler<ActionEvent>() {  // 重置
             @Override
             public void handle(ActionEvent event) {
-                //遍历gridpane，将框内容设为“”
+
+                //遍历gridPane，将框内容设为""
                 textField.setText("");
                 Object[] objects = gridPane1.getChildren().toArray();
                 for (Object o : objects) {
@@ -391,7 +380,9 @@ public class Pane3 {
         });
 
         HBox hBox2 = new HBox();
-        hBox2.getChildren().addAll(save2, reset2);
+        hBox2.getChildren().
+
+                addAll(save2, reset2);
         hBox2.setSpacing(40);
 
         Line line1 = new Line(15, 845, 1065, 845);
@@ -405,7 +396,9 @@ public class Pane3 {
 
         //_____________________________________________________________________________________________
 
-        anchorPane3.getChildren().addAll(divider1, hBox, line4, gridPane1, hBox2, line1, line2, line3);
+        anchorPane3.getChildren().
+
+                addAll(divider1, hBox, line4, gridPane1, hBox2, line1, line2, line3);
 
         AnchorPane.setLeftAnchor(divider1, 15.0);
         AnchorPane.setTopAnchor(divider1, 20.0);

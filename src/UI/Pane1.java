@@ -237,40 +237,34 @@ public class Pane1 {
                 //textField的初始内容是"",comboBox的初始内容是null
                 if (tf_name.getText().equals("") || tf_age.getText().equals("") || tf_phone.getText().equals("") || tf_ID.getText().equals("") || tf_card.getText().equals("") || tf_diagnosis.getText().equals("") || tf_doctor.getText().equals("") || tf_inHospital_time.getText().equals("") || comboBox.getValue() == null || comboBox1.getValue() == null || comboBox2.getValue() == null || comboBox3.getValue() == null) {
                     util.tip("请完整填写信息！", "入院");
-                } else {//已完整填写信息
+                } else if (!util.isLegalDate(tf_inHospital_time.getText())) {
+                    util.tip("入院时间的格式不对！", "入院");
+                } else if (util.isUsed_bed((String) comboBox2.getValue(), (String) comboBox3.getValue()) == 2) {
+                    util.tip("该病房已满！请换病房", "");
+                } else if (util.isUsed_bed((String) comboBox2.getValue(), (String) comboBox3.getValue()) == 1) {
+                    util.tip("该床位已经被使用！", "");
+                } else {
 
-                    if (util.isLegalDate(tf_inHospital_time.getText())) {//判断是否是合法的日期格式
+                    String sex = (String) comboBox.getValue();
+                    String dept_name = (String) comboBox1.getValue();
+                    int ward_id = Integer.parseInt((String) comboBox2.getValue());
+                    int bed_id = Integer.parseInt((String) comboBox3.getValue());
+                    int id = Integer.parseInt(tf_card.getText());
+                    String name = tf_name.getText();
+                    int age = Integer.parseInt(tf_age.getText());
+                    String diagnose = tf_diagnosis.getText();
+                    Date in_time = Date.valueOf(tf_inHospital_time.getText());
+                    String phone_number = tf_phone.getText();
+                    String identity_card = tf_ID.getText();
+                    String doc_name = tf_doctor.getText();
 
-                        if (util.isUsed_bed((String) comboBox2.getValue(), (String) comboBox3.getValue()) == 1) {
-                            util.tip("该床位已经被使用！", "");
-                        } else if (util.isUsed_bed((String) comboBox2.getValue(), (String) comboBox3.getValue()) == 2) {
-                            util.tip("该病房已满！请换病房", "");
-                        } else {
+                    int doc_id = doctorService.getId(doc_name);
 
-                            String sex = (String) comboBox.getValue();
-                            String dept_name = (String) comboBox1.getValue();
-                            int ward_id = Integer.parseInt((String) comboBox2.getValue());
-                            int bed_id = Integer.parseInt((String) comboBox3.getValue());
-                            int id = Integer.parseInt(tf_card.getText());
-                            String name = tf_name.getText();
-                            int age = Integer.parseInt(tf_age.getText());
-                            String diagnose = tf_diagnosis.getText();
-                            Date in_time = Date.valueOf(tf_inHospital_time.getText());
-                            String phone_number = tf_phone.getText();
-                            String identity_card = tf_ID.getText();
-                            String doc_name = tf_doctor.getText();
+                    int room_id = roomService.add(ward_id, bed_id, dept_name, in_time);//这里room的out_time为null
+                    Patient patient = new Patient(id, name, sex, age, phone_number, identity_card, diagnose, doc_id, room_id);
+                    patientService.add(patient);
 
-                            int doc_id = doctorService.getId(doc_name);
-
-                            int room_id = roomService.add(ward_id, bed_id, dept_name, in_time);//这里room的out_time为null
-                            Patient patient = new Patient(id, name, sex, age, phone_number, identity_card, diagnose, doc_id, room_id);
-                            patientService.add(patient);
-
-                            util.tip("保存成功！", "入院");
-                        }
-                    } else {
-                        util.tip("入院时间的格式不对！", "入院");
-                    }
+                    util.tip("保存成功！", "入院");
                 }
             }
         });
@@ -280,7 +274,9 @@ public class Pane1 {
         reset2.setStyle("-fx-background-color: #2475C4");
         reset2.setTextFill(Color.rgb(241, 241, 232));
         reset2.setFont(font5);
-        reset2.setOnAction(new EventHandler<ActionEvent>() {  // 住院记录
+        reset2.setOnAction(new EventHandler<ActionEvent>()
+
+        {  // 住院记录
             @Override
             public void handle(ActionEvent event) {
 
@@ -297,7 +293,9 @@ public class Pane1 {
         });
 
         HBox hBox2 = new HBox();
-        hBox2.getChildren().addAll(save2, reset2);
+        hBox2.getChildren().
+
+                addAll(save2, reset2);
         hBox2.setSpacing(40);
 
         //-------------------------------------------------------------  //分割线
@@ -316,7 +314,9 @@ public class Pane1 {
         AnchorPane divider2 = new AnchorPane();
         divider2.setPrefSize(1050, 40);
         divider2.setStyle("-fx-background-color: #F4FEE5");
-        divider2.getChildren().addAll(divider2_decoration, divider2_note);
+        divider2.getChildren().
+
+                addAll(divider2_decoration, divider2_note);
         AnchorPane.setLeftAnchor(divider2_note, 35.0);
         AnchorPane.setTopAnchor(divider2_note, 5.0);
 
@@ -351,8 +351,12 @@ public class Pane1 {
         td6.setPrefWidth(150);
         td7.setPrefWidth(145);
         td8.setPrefWidth(160);
-        table_outHospital.getColumns().addAll(td1, td2, td3, td4, td5, td6, td7, td8);
-        table_outHospital.setColumnResizePolicy(new Callback<TableView.ResizeFeatures, Boolean>() {
+        table_outHospital.getColumns().
+
+                addAll(td1, td2, td3, td4, td5, td6, td7, td8);
+        table_outHospital.setColumnResizePolicy(new Callback<TableView.ResizeFeatures, Boolean>()
+
+        {
             @Override
             public Boolean call(TableView.ResizeFeatures param) {
                 return true;
@@ -364,7 +368,9 @@ public class Pane1 {
         textField.requestFocus();
         textField.setPrefColumnCount(5);
         textField.setPromptText("请输入出院者的诊疗卡号");
-        textField.setTextFormatter(new TextFormatter<String>(new UnaryOperator<TextFormatter.Change>() {
+        textField.setTextFormatter(new TextFormatter<String>(new UnaryOperator<TextFormatter.Change>()
+
+        {
             @Override
             public TextFormatter.Change apply(TextFormatter.Change t) {
                 String value = t.getText();
@@ -380,7 +386,9 @@ public class Pane1 {
         query.setStyle("-fx-background-color: #2475C4");
         query.setTextFill(Color.rgb(241, 241, 232));
         query.setFont(font5);
-        query.setOnAction(new EventHandler<ActionEvent>() {
+        query.setOnAction(new EventHandler<ActionEvent>()
+
+        {
             @Override
             public void handle(ActionEvent event) {
 
@@ -402,7 +410,9 @@ public class Pane1 {
         });
 
         HBox hBox = new HBox();
-        hBox.getChildren().addAll(textField, query);
+        hBox.getChildren().
+
+                addAll(textField, query);
 
         Label label = new Label("· 出院信息");
         label.setPrefSize(100, 20);
@@ -427,7 +437,9 @@ public class Pane1 {
         ComboBox comboBox4 = new ComboBox();
         comboBox4.setPrefWidth(130);
         comboBox4.setEditable(true);
-        comboBox4.getItems().addAll("健康", "良好", "一般");
+        comboBox4.getItems().
+
+                addAll("健康", "良好", "一般");
 
         Label cost = new Label("花费总额");
         cost.setAlignment(Pos.CENTER_RIGHT);
@@ -479,7 +491,9 @@ public class Pane1 {
         save1.setStyle("-fx-background-color: #2475C4");
         save1.setTextFill(Color.rgb(241, 241, 232));
         save1.setFont(font5);
-        save1.setOnAction(new EventHandler<ActionEvent>() {  // 出院保存
+        save1.setOnAction(new EventHandler<ActionEvent>()
+
+        {  // 出院保存
             @Override
             public void handle(ActionEvent event) {
 
@@ -507,7 +521,9 @@ public class Pane1 {
         reset.setStyle("-fx-background-color: #2475C4");
         reset.setTextFill(Color.rgb(241, 241, 232));
         reset.setFont(font5);
-        reset.setOnAction(new EventHandler<ActionEvent>() {  // 出院重置
+        reset.setOnAction(new EventHandler<ActionEvent>()
+
+        {  // 出院重置
             @Override
             public void handle(ActionEvent event) {
 
@@ -524,7 +540,9 @@ public class Pane1 {
         });
 
         HBox hBox1 = new HBox();
-        hBox1.getChildren().addAll(save1, reset);
+        hBox1.getChildren().
+
+                addAll(save1, reset);
         hBox1.setSpacing(40);
 
         Line line1 = new Line(15, 845, 1065, 845);
@@ -532,7 +550,9 @@ public class Pane1 {
 
         //_____________________________________________________________________________________________
 
-        anchorPane1.getChildren().addAll(divider1, gridPane1, hBox2, divider2, hBox, table_outHospital, gridPane2, hBox1, line1);
+        anchorPane1.getChildren().
+
+                addAll(divider1, gridPane1, hBox2, divider2, hBox, table_outHospital, gridPane2, hBox1, line1);
 
         AnchorPane.setLeftAnchor(divider1, 15.0);
         AnchorPane.setTopAnchor(divider1, 15.0);
