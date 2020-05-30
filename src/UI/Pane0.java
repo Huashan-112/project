@@ -66,6 +66,7 @@ public class Pane0 {
                     button5.setDisable(false);
                     anchorPane0.setVisible(false);
                     anchorPane1.setVisible(true);
+                    View.currentPane = 1;
                     exit.setVisible(true);
                 }
             }

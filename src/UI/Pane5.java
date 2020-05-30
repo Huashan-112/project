@@ -294,7 +294,7 @@ public class Pane5 {
 
                         name.setText("姓名：" + patient.getName());
                         sex.setText("性别：" + patient.getSex());
-                        age.setText("年龄：" + patient.getId());
+                        age.setText("年龄：" + patient.getAge());
                         phone.setText("手机号：" + patient.getPhone_number());
                         ID.setText("身份证号：" + patient.getIdentity_card());
                         diagnosis.setText("诊断：" + patient.getDiagnose());

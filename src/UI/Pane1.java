@@ -91,8 +91,10 @@ public class Pane1 {
         sex.setFont(font3);
         sex.setTextFill(Color.rgb(120, 126, 131));
         ComboBox comboBox = new ComboBox();
-        comboBox.setPrefWidth(80);
-        comboBox.setEditable(true);
+        comboBox.setPrefWidth(100);
+        comboBox.setEditable(false);
+        comboBox.setStyle("-fx-background-color: #EEEEEE");
+        comboBox.setPromptText("请选择");
         comboBox.getItems().addAll("男", "女");
 
         Label age = new Label("年龄");
@@ -162,16 +164,6 @@ public class Pane1 {
         tf_inHospital_time.setPrefWidth(cell);
         tf_inHospital_time.setPromptText("例   2020-03-02");
 
-        Label department = new Label("科室");
-        department.setAlignment(Pos.CENTER_RIGHT);
-        department.setPrefSize(100, 20);
-        department.setFont(font3);
-        department.setTextFill(Color.rgb(120, 126, 131));
-        ComboBox comboBox1 = new ComboBox();
-        comboBox1.setPrefWidth(130);
-        comboBox1.setEditable(true);
-        comboBox1.getItems().addAll("内科", "五官科", "儿科", "口腔科", "妇科", "肿瘤科", "皮肤科", "外科", "神经科");
-
         Label ward = new Label("病房号");
         ward.setAlignment(Pos.CENTER_RIGHT);
         ward.setPrefSize(100, 20);
@@ -179,7 +171,9 @@ public class Pane1 {
         ward.setTextFill(Color.rgb(120, 126, 131));
         ComboBox comboBox2 = new ComboBox();
         comboBox2.setPrefWidth(130);
-        comboBox2.setEditable(true);
+        comboBox2.setEditable(false);
+        comboBox2.setStyle("-fx-background-color: #EEEEEE");
+        comboBox2.setPromptText("请选择");
         comboBox2.getItems().addAll(101, 102, 103, 104, 105);
 
         Label bed = new Label("床位号");
@@ -189,7 +183,9 @@ public class Pane1 {
         bed.setTextFill(Color.rgb(120, 126, 131));
         ComboBox comboBox3 = new ComboBox();
         comboBox3.setPrefWidth(130);
-        comboBox3.setEditable(true);
+        comboBox3.setEditable(false);
+        comboBox3.setStyle("-fx-background-color: #EEEEEE");
+        comboBox3.setPromptText("请选择");
         comboBox3.getItems().addAll(1, 2, 3, 4, 5);
 
         gridPane1 = new GridPane();
@@ -218,12 +214,10 @@ public class Pane1 {
         gridPane1.add(tf_doctor, 12, 4);
         gridPane1.add(inHospital_time, 22, 4);
         gridPane1.add(tf_inHospital_time, 23, 4);
-        gridPane1.add(department, 0, 5);
-        gridPane1.add(comboBox1, 1, 5);
-        gridPane1.add(ward, 11, 5);
-        gridPane1.add(comboBox2, 12, 5);
-        gridPane1.add(bed, 22, 5);
-        gridPane1.add(comboBox3, 23, 5);
+        gridPane1.add(ward, 0, 5);
+        gridPane1.add(comboBox2, 1, 5);
+        gridPane1.add(bed, 11, 5);
+        gridPane1.add(comboBox3, 12, 5);
 
         Button save2 = new Button("保存");
         save2.setPrefSize(100, 30);
@@ -234,21 +228,22 @@ public class Pane1 {
             @Override
             public void handle(ActionEvent event) {
 
-                //textField的初始内容是"",comboBox的初始内容是null
-                if (tf_name.getText().equals("") || tf_age.getText().equals("") || tf_phone.getText().equals("") || tf_ID.getText().equals("") || tf_card.getText().equals("") || tf_diagnosis.getText().equals("") || tf_doctor.getText().equals("") || tf_inHospital_time.getText().equals("") || comboBox.getValue() == null || comboBox1.getValue() == null || comboBox2.getValue() == null || comboBox3.getValue() == null) {
+                //textField的初始内容是"",comboBox只有2种情况，要么为null，要么选择了
+                if (tf_name.getText().equals("") || tf_age.getText().equals("") || tf_phone.getText().equals("") || tf_ID.getText().equals("") || tf_card.getText().equals("") || tf_diagnosis.getText().equals("") || tf_doctor.getText().equals("") || tf_inHospital_time.getText().equals("") || comboBox.getValue() == null || comboBox2.getValue() == null || comboBox3.getValue() == null) {
                     util.tip("请完整填写信息！", "入院");
                 } else if (!util.isLegalDate(tf_inHospital_time.getText())) {
                     util.tip("入院时间的格式不对！", "入院");
-                } else if (util.isUsed_bed((String) comboBox2.getValue(), (String) comboBox3.getValue()) == 2) {
+                } else if (util.isUsed_bed((Integer) comboBox2.getValue(), (Integer) comboBox3.getValue()) == 2) {
                     util.tip("该病房已满！请换病房", "");
-                } else if (util.isUsed_bed((String) comboBox2.getValue(), (String) comboBox3.getValue()) == 1) {
+                } else if (util.isUsed_bed((Integer) comboBox2.getValue(), (Integer) comboBox3.getValue()) == 1) {
                     util.tip("该床位已经被使用！", "");
+                } else if (doctorService.getId(tf_doctor.getText()) == 0) {
+                    util.tip("没有该医生！请核查后输入", "");
                 } else {
 
                     String sex = (String) comboBox.getValue();
-                    String dept_name = (String) comboBox1.getValue();
-                    int ward_id = Integer.parseInt((String) comboBox2.getValue());
-                    int bed_id = Integer.parseInt((String) comboBox3.getValue());
+                    int ward_id = (Integer) comboBox2.getValue();
+                    int bed_id = (Integer) comboBox3.getValue();
                     int id = Integer.parseInt(tf_card.getText());
                     String name = tf_name.getText();
                     int age = Integer.parseInt(tf_age.getText());
@@ -259,6 +254,8 @@ public class Pane1 {
                     String doc_name = tf_doctor.getText();
 
                     int doc_id = doctorService.getId(doc_name);
+
+                    String dept_name = doctorService.get(doctorService.getId(doc_name)).getDept_name();//根据医生名字获取医生所属的科室名，也是病人的科室名
 
                     int room_id = roomService.add(ward_id, bed_id, dept_name, in_time);//这里room的out_time为null
                     Patient patient = new Patient(id, name, sex, age, phone_number, identity_card, diagnose, doc_id, room_id);
@@ -333,7 +330,7 @@ public class Pane1 {
         TableColumn td5 = new TableColumn("手机号");
         TableColumn td4 = new TableColumn("诊断");
         TableColumn td6 = new TableColumn("主治医师");
-        TableColumn td7 = new TableColumn("病房");
+        TableColumn td7 = new TableColumn("病房号");
         TableColumn td8 = new TableColumn("入院时间");
         td1.setCellValueFactory(new PropertyValueFactory<>("name"));
         td2.setCellValueFactory(new PropertyValueFactory<>("sex"));
@@ -436,10 +433,10 @@ public class Pane1 {
         recovery.setTextFill(Color.rgb(120, 126, 131));
         ComboBox comboBox4 = new ComboBox();
         comboBox4.setPrefWidth(130);
-        comboBox4.setEditable(true);
-        comboBox4.getItems().
-
-                addAll("健康", "良好", "一般");
+        comboBox4.setEditable(false);
+        comboBox4.setStyle("-fx-background-color: #EEEEEE");
+        comboBox4.setPromptText("请选择");
+        comboBox4.getItems().addAll("健康", "良好", "一般");
 
         Label cost = new Label("花费总额");
         cost.setAlignment(Pos.CENTER_RIGHT);

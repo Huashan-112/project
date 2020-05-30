@@ -12,7 +12,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class View {
-    public static int currentPane = 9;
+    public static int currentPane = 0;
     private Pane0 pane0;
     private Pane1 pane1;
     private Pane2 pane2;
@@ -54,10 +54,6 @@ public class View {
 
         Font font = Font.font("YouYuan", FontWeight.BLACK, 16);
 
-        //BackgroundFill backgroundFill=new BackgroundFill(Paint.valueOf("#102b6a"),new CornerRadii(1),new Insets(1));
-        //Background background=new Background(backgroundFill);
-        // anchorPane1.setBackground(background);
-
         Label label = new Label("住院管理信息系统");
         Font font1 = Font.font("Microsoft YaHei", FontWeight.BLACK, 30);
         label.setFont(font1);
@@ -68,15 +64,15 @@ public class View {
         exit.setTextFill(Color.rgb(217, 217, 217));
         exit.setFont(font);
         exit.setPrefSize(120, 30);
-        exit.setOnAction(new EventHandler<ActionEvent>() {  // 入院出院登记
+        exit.setOnAction(new EventHandler<ActionEvent>() {  // 退出
             @Override
             public void handle(ActionEvent event) {
+                view.pane0.getAnchorPane0().setVisible(true);
                 view.pane1.getAnchorPane1().setVisible(false);
                 view.pane2.getAnchorPane2().setVisible(false);
                 view.pane3.getAnchorPane3().setVisible(false);
                 view.pane4.getAnchorPane4().setVisible(false);
                 view.pane5.getAnchorPane5().setVisible(false);
-                view.pane0.getAnchorPane0().setVisible(true);
                 view.getButton1().setDisable(true);
                 view.getButton2().setDisable(true);
                 view.getButton3().setDisable(true);
@@ -128,43 +124,33 @@ public class View {
         button1.setOnAction(new EventHandler<ActionEvent>() {  // 入院出院登记
             @Override
             public void handle(ActionEvent event) {
-                view.showPane(0, view);
+                view.showPane(1, view);
             }
         });
         button2.setOnAction(new EventHandler<ActionEvent>() {  // 查找住院记录
             @Override
             public void handle(ActionEvent event) {
-                view.showPane(1, view);
+                view.showPane(2, view);
             }
         });
         button3.setOnAction(new EventHandler<ActionEvent>() {  // 修改住院记录
             @Override
             public void handle(ActionEvent event) {
-                view.showPane(2, view);
+                view.showPane(3, view);
             }
         });
         button4.setOnAction(new EventHandler<ActionEvent>() {  // 药品与检查
             @Override
             public void handle(ActionEvent event) {
-                view.showPane(3, view);
+                view.showPane(4, view);
             }
         });
         button5.setOnAction(new EventHandler<ActionEvent>() {  // 患者信息
             @Override
             public void handle(ActionEvent event) {
-                view.showPane(4, view);
+                view.showPane(5, view);
             }
         });
-
-        //把4个button变成属性封装起来，等到pane5（登录首页）密码通过后，调用view的buttonEnable方法使得其他按钮可用
-//        button1.setDisable(true);
-//        button1.setDisable(true);
-//        button1.setDisable(true);
-//        button1.setDisable(true);
-//        button1.setDisable(false);
-//        button1.setDisable(false);
-//        button1.setDisable(false);
-//        button1.setDisable(false);
 
         VBox vBox = new VBox();
         vBox.setPrefSize(180, 895);
@@ -204,28 +190,28 @@ public class View {
         if (num == currentPane)
             return;
         else {
-            if (num == 0) {
+            if (num == 1) {//pane1
                 view.setUnVisiable(view);
                 View.currentPane = num;//当前的换人
                 view.pane1.getAnchorPane1().setVisible(true);//新的设置为可见
             }
-            if (num == 1) {
+            if (num == 2) {//pane2
                 view.setUnVisiable(view);
                 View.currentPane = num;//当前的换人
                 view.pane2.getAnchorPane2().setVisible(true);//新的设置为可见
                 view.pane2.update();
             }
-            if (num == 2) {
+            if (num == 3) {//pane3
                 view.setUnVisiable(view);
                 View.currentPane = num;//当前的换人
                 view.pane3.getAnchorPane3().setVisible(true);//新的设置为可见
             }
-            if (num == 3) {
+            if (num == 4) {//pane4
                 view.setUnVisiable(view);
                 View.currentPane = num;//当前的换人
                 view.pane4.getAnchorPane4().setVisible(true);//新的设置为可见
             }
-            if (num == 4) {
+            if (num == 5) {//pane5
                 view.setUnVisiable(view);
                 View.currentPane = num;//当前的换人
                 view.pane5.getAnchorPane5().setVisible(true);//新的设置为可见
@@ -236,28 +222,23 @@ public class View {
 
     public void setUnVisiable(View view) {
 
-        if (View.currentPane == 0) {
+        if (View.currentPane == 0) {//pane0
             view.pane0.getAnchorPane0().setVisible(false);
+        }
+        if (View.currentPane == 1) {//pane1
             view.pane1.getAnchorPane1().setVisible(false);
         }
-        if (View.currentPane == 1) {
-            view.pane0.getAnchorPane0().setVisible(false);
+        if (View.currentPane == 2) {//pane2
             view.pane2.getAnchorPane2().setVisible(false);
         }
-        if (View.currentPane == 2) {
-            view.pane0.getAnchorPane0().setVisible(false);
+        if (View.currentPane == 3) {//pane3
             view.pane3.getAnchorPane3().setVisible(false);
         }
-        if (View.currentPane == 3) {
-            view.pane0.getAnchorPane0().setVisible(false);
+        if (View.currentPane == 4) {//pane4
             view.pane4.getAnchorPane4().setVisible(false);
         }
-        if (View.currentPane == 4) {
-            view.pane0.getAnchorPane0().setVisible(false);
+        if (View.currentPane == 5) {//pane5
             view.pane5.getAnchorPane5().setVisible(false);
-        }
-        if (View.currentPane == 9) {
-            view.pane0.getAnchorPane0().setVisible(false);
         }
     }
 

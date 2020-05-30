@@ -45,7 +45,7 @@ public class Util {
         alert.show();
     }
 
-    public int isUsed_bed(String ward, String bed) {
+    public int isUsed_bed(int ward, int bed) {
 
         RoomService roomService = new RoomService();
         PatientService patientService = new PatientService();
@@ -56,8 +56,8 @@ public class Util {
 
         int isUsed = 0;//0表示该床位未被使用。1表示该床位已被使用。2表示该病房已满
 
-        boolean[] bed_state = new boolean[5];
-        for (int i = 0; i < 5; i++) {
+        boolean[] bed_state = new boolean[6];
+        for (int i = 0; i < 6; i++) {
             bed_state[i] = false;
         }
 
@@ -67,14 +67,14 @@ public class Util {
 
             Room room = roomService.get(list.get(i).getRoom_id());
 
-            if (room.getWard_id() == Integer.valueOf(ward) && room.getOut_time() == null) {//说明还在住院
+            if (room.getWard_id() == ward && room.getOut_time() == null) {//说明还在住院
                 bed_state[room.getBed_id()] = true;
             }
         }
 
         //首先判断该病房是否已满
         int a = 0;
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
             if (bed_state[i] == true) {
                 a++;
             }
@@ -84,7 +84,7 @@ public class Util {
         }
 
         //在没满的情况下，该床位是否被使用
-        if (bed_state[Integer.valueOf(bed)] == true) {
+        if (bed_state[bed] == true) {
             isUsed = 1;
         }
 

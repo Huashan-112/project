@@ -249,11 +249,12 @@ public class Pane2 {
                         @Override
                         public void handle(ActionEvent event) {
 
-                            table_del.getItems().removeAll(table_del.getItems());//删除界面的数据
+                            patientService.delete(Integer.valueOf(textField.getText()));//先从数据库中删除
+                            pane2.update();//更新总表
+
+                            table_del.getItems().removeAll(table_del.getItems());//再删除界面的数据
                             textField.setText("");
 
-                            patientService.delete(Integer.valueOf(textField.getText()));//从数据库中删除
-                            pane2.update();//更新总表
                             stage.close();
                         }
                     });

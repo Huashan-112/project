@@ -192,42 +192,58 @@ public class Pane4 {
 
         ComboBox<String> comboBox1 = new ComboBox<>();
         comboBox1.setPrefWidth(150);
-        comboBox1.setEditable(true);
+        comboBox1.setEditable(false);
+        comboBox1.setStyle("-fx-background-color: #F1F1F1");
+        comboBox1.setPromptText("请选择");
         comboBox1.getItems().addAll("头孢匹罗", "罗红霉素");
 
         ComboBox<String> comboBox2 = new ComboBox<>();
         comboBox2.setPrefWidth(150);
-        comboBox2.setEditable(true);
+        comboBox2.setEditable(false);
+        comboBox2.setStyle("-fx-background-color: #F1F1F1");
+        comboBox2.setPromptText("请选择");
         comboBox2.getItems().addAll("地塞米松", "泼尼松龙");
 
         ComboBox<String> comboBox3 = new ComboBox<>();
         comboBox3.setPrefWidth(150);
-        comboBox3.setEditable(true);
+        comboBox3.setEditable(false);
+        comboBox3.setStyle("-fx-background-color: #F1F1F1");
+        comboBox3.setPromptText("请选择");
         comboBox3.getItems().addAll("布洛芬", "他克莫司");
 
         ComboBox<String> comboBox4 = new ComboBox<>();
         comboBox4.setPrefWidth(150);
-        comboBox4.setEditable(true);
+        comboBox4.setEditable(false);
+        comboBox4.setStyle("-fx-background-color: #F1F1F1");
+        comboBox4.setPromptText("请选择");
         comboBox4.getItems().addAll("曲安奈德", "阿昔洛韦");
 
         ComboBox<String> comboBox5 = new ComboBox<>();
         comboBox5.setPrefWidth(150);
-        comboBox5.setEditable(true);
+        comboBox5.setEditable(false);
+        comboBox5.setStyle("-fx-background-color: #EEEEEE");
+        comboBox5.setPromptText("请选择");
         comboBox5.getItems().addAll("舒尼替尼", "利妥昔单抗");
 
         ComboBox<String> comboBox6 = new ComboBox<>();
         comboBox6.setPrefWidth(150);
-        comboBox6.setEditable(true);
+        comboBox6.setEditable(false);
+        comboBox6.setStyle("-fx-background-color: #EEEEEE");
+        comboBox6.setPromptText("请选择");
         comboBox6.getItems().addAll("氯雷他定", "左西替利");
 
         ComboBox<String> comboBox7 = new ComboBox<>();
         comboBox7.setPrefWidth(150);
-        comboBox7.setEditable(true);
+        comboBox7.setEditable(false);
+        comboBox7.setStyle("-fx-background-color: #EEEEEE");
+        comboBox7.setPromptText("请选择");
         comboBox7.getItems().addAll("利巴韦林", "氨甲环酸");
 
         ComboBox<String> comboBox8 = new ComboBox<>();
         comboBox8.setPrefWidth(150);
-        comboBox8.setEditable(true);
+        comboBox8.setEditable(false);
+        comboBox8.setStyle("-fx-background-color: #EEEEEE");
+        comboBox8.setPromptText("请选择");
         comboBox8.getItems().addAll("硝酸甘油", "卡托普利");
 
         GridPane gridPane1 = new GridPane();

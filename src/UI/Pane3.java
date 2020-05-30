@@ -112,8 +112,10 @@ public class Pane3 {
         sex.setTextFill(Color.rgb(120, 126, 131));
 
         ComboBox comboBox = new ComboBox();
-        comboBox.setPrefWidth(80);
-        comboBox.setEditable(true);
+        comboBox.setPrefWidth(100);
+        comboBox.setEditable(false);
+        comboBox.setStyle("-fx-background-color: #EEEEEE");
+        comboBox.setPromptText("请选择");
         comboBox.getItems().addAll("男", "女");
 
         Label age = new Label("年龄");
@@ -183,16 +185,6 @@ public class Pane3 {
         tf_outHospital_time.setPrefWidth(cell);
         tf_outHospital_time.setPromptText("例  2020-03-02");
 
-        Label department = new Label("科室");
-        department.setAlignment(Pos.CENTER_RIGHT);
-        department.setPrefSize(100, 20);
-        department.setFont(font3);
-        department.setTextFill(Color.rgb(120, 126, 131));
-        ComboBox comboBox1 = new ComboBox();
-        comboBox1.setPrefWidth(130);
-        comboBox1.setEditable(true);
-        comboBox1.getItems().addAll("内科", "五官科", "儿科", "口腔科", "妇科", "肿瘤科", "皮肤科", "外科", "神经科");
-
         Label ward = new Label("病房号");
         ward.setAlignment(Pos.CENTER_RIGHT);
         ward.setPrefSize(100, 20);
@@ -200,7 +192,9 @@ public class Pane3 {
         ward.setTextFill(Color.rgb(120, 126, 131));
         ComboBox comboBox2 = new ComboBox();
         comboBox2.setPrefWidth(130);
-        comboBox2.setEditable(true);
+        comboBox2.setEditable(false);
+        comboBox2.setStyle("-fx-background-color: #EEEEEE");
+        comboBox2.setPromptText("请选择");
         comboBox2.getItems().addAll(101, 102, 103, 104, 105);
 
         Label bed = new Label("床位号");
@@ -210,7 +204,9 @@ public class Pane3 {
         bed.setTextFill(Color.rgb(120, 126, 131));
         ComboBox comboBox3 = new ComboBox();
         comboBox3.setPrefWidth(130);
-        comboBox3.setEditable(true);
+        comboBox3.setEditable(false);
+        comboBox3.setStyle("-fx-background-color: #EEEEEE");
+        comboBox3.setPromptText("请选择");
         comboBox3.getItems().addAll(1, 2, 3, 4, 5);
 
         Label doctor = new Label("主治医师");
@@ -222,7 +218,7 @@ public class Pane3 {
         tf_doctor.setPrefWidth(cell);
 
         gridPane1.setHgap(12);
-        gridPane1.setVgap(25);//行距
+        gridPane1.setVgap(35);//行距
         gridPane1.setPrefSize(1050, 250);
 
         gridPane1.add(base_info, 0, 0);
@@ -244,14 +240,12 @@ public class Pane3 {
         gridPane1.add(tf_inHospital_time, 12, 4);
         gridPane1.add(outHospital_time, 22, 4);
         gridPane1.add(tf_outHospital_time, 23, 4);
-        gridPane1.add(department, 0, 5);
-        gridPane1.add(comboBox1, 1, 5);
         gridPane1.add(ward, 11, 5);
         gridPane1.add(comboBox2, 12, 5);
         gridPane1.add(bed, 22, 5);
         gridPane1.add(comboBox3, 23, 5);
-        gridPane1.add(doctor, 0, 6);
-        gridPane1.add(tf_doctor, 1, 6);
+        gridPane1.add(doctor, 0, 5);
+        gridPane1.add(tf_doctor, 1, 5);
 
         Button search = new Button("搜索");
         search.setPrefSize(100, 30);
@@ -282,7 +276,6 @@ public class Pane3 {
                         tf_ID.setText(patient.getIdentity_card());
                         tf_diagnosis.setText(patient.getDiagnose());
                         tf_inHospital_time.setText(patient.getIn_time().toString());
-                        comboBox1.setValue(patient.getDept_name());
                         comboBox2.setValue(patient.getWard_id());
                         comboBox3.setValue(patient.getBed_id());
                         tf_doctor.setText(patient.getDoc_name());
@@ -308,7 +301,7 @@ public class Pane3 {
             @Override
             public void handle(ActionEvent event) {
 
-                if (textField.getText().equals("") || tf_name.getText().equals("") || comboBox.getValue() == null || tf_age.getText().equals("") || tf_phone.getText().equals("") || tf_ID.getText().equals("") || tf_diagnosis.getText().equals("") || tf_inHospital_time.getText().equals("") || comboBox1.getValue() == null || comboBox2.getValue() == null || comboBox3.getValue() == null || tf_doctor.getText().equals("")) {
+                if (textField.getText().equals("") || tf_name.getText().equals("") || comboBox.getValue() == null || tf_age.getText().equals("") || tf_phone.getText().equals("") || tf_ID.getText().equals("") || tf_diagnosis.getText().equals("") || tf_inHospital_time.getText().equals("") || comboBox2.getValue() == null || comboBox3.getValue() == null || tf_doctor.getText().equals("")) {
                     util.tip("请完整填写信息！", "");
                 } else if (doctorDAO.get(tf_doctor.getText()) == null) {
                     util.tip("没有该医生！请核对后输入", "");
@@ -316,9 +309,9 @@ public class Pane3 {
                     util.tip("入院时间的格式不正确！", "");
                 } else if (!tf_outHospital_time.getText().equals("") && !util.isLegalDate(tf_outHospital_time.getText())) {//封装成patient
                     util.tip("出院时间格式不正确！", "");
-                } else if (util.isUsed_bed((String) comboBox2.getValue(), (String) comboBox3.getValue()) == 2) {
+                } else if (util.isUsed_bed((Integer) comboBox2.getValue(), (Integer) comboBox3.getValue()) == 2) {
                     util.tip("该病房已满！请换病房", "");
-                } else if (util.isUsed_bed((String) comboBox2.getValue(), (String) comboBox3.getValue()) == 1) {
+                } else if (util.isUsed_bed((Integer) comboBox2.getValue(), (Integer) comboBox3.getValue()) == 1) {
                     util.tip("该床位已经被使用！", "");
                 } else {
 
@@ -338,9 +331,9 @@ public class Pane3 {
                     String phone_number = tf_phone.getText();
                     String identity_card = tf_ID.getText();
                     String sex = comboBox.getValue().toString();
-                    String dept_name = comboBox1.getValue().toString();
                     int ward_id = Integer.parseInt(comboBox2.getValue().toString());
                     int bed_id = Integer.parseInt(comboBox3.getValue().toString());
+                    String dept_name = doctorService.get(doctorService.getId(tf_doctor.getText())).getDept_name();//根据医生名字获取医生所属的科室名，也是病人的科室名
 
                     Patient p1 = patientService.get(id);
                     int room_id = p1.getRoom_id();
@@ -396,9 +389,7 @@ public class Pane3 {
 
         //_____________________________________________________________________________________________
 
-        anchorPane3.getChildren().
-
-                addAll(divider1, hBox, line4, gridPane1, hBox2, line1, line2, line3);
+        anchorPane3.getChildren().addAll(divider1, hBox, line4, gridPane1, hBox2, line1, line2, line3);
 
         AnchorPane.setLeftAnchor(divider1, 15.0);
         AnchorPane.setTopAnchor(divider1, 20.0);
