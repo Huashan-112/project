@@ -303,15 +303,19 @@ public class Pane3 {
 
                 if (textField.getText().equals("") || tf_name.getText().equals("") || comboBox.getValue() == null || tf_age.getText().equals("") || tf_phone.getText().equals("") || tf_ID.getText().equals("") || tf_diagnosis.getText().equals("") || tf_inHospital_time.getText().equals("") || comboBox2.getValue() == null || comboBox3.getValue() == null || tf_doctor.getText().equals("")) {
                     util.tip("请完整填写信息！", "");
-                } else if (doctorDAO.get(tf_doctor.getText()) == null) {
-                    util.tip("没有该医生！请核对后输入", "");
                 } else if (!util.isLegalDate(tf_inHospital_time.getText())) {
                     util.tip("入院时间的格式不正确！", "");
-                } else if (!tf_outHospital_time.getText().equals("") && !util.isLegalDate(tf_outHospital_time.getText())) {//封装成patient
+                } else if (patientService.get(Integer.parseInt(textField.getText())).getOut_time() == null && !tf_outHospital_time.getText().equals("")) {
+                    util.tip("该患者住院中，禁止填写出院时间！", "");
+                } else if (patientService.get(Integer.parseInt(textField.getText())).getOut_time() != null && tf_outHospital_time.getText().equals("")) {
+                    util.tip("该患者已出院，出院时间不能为空！", "");
+                } else if (patientService.get(Integer.parseInt(textField.getText())).getOut_time() != null && !tf_outHospital_time.getText().equals("") && !util.isLegalDate(tf_outHospital_time.getText())) {
                     util.tip("出院时间格式不正确！", "");
-                } else if (util.isUsed_bed((Integer) comboBox2.getValue(), (Integer) comboBox3.getValue()) == 2) {
+                } else if (doctorDAO.get(tf_doctor.getText()) == null) {
+                    util.tip("没有该医生！请核对后输入", "");
+                } else if (util.isUsed_bed((Integer) comboBox2.getValue(), (Integer) comboBox3.getValue(), textField.getText()) == 2) {
                     util.tip("该病房已满！请换病房", "");
-                } else if (util.isUsed_bed((Integer) comboBox2.getValue(), (Integer) comboBox3.getValue()) == 1) {
+                } else if (util.isUsed_bed((Integer) comboBox2.getValue(), (Integer) comboBox3.getValue(), textField.getText()) == 1) {
                     util.tip("该床位已经被使用！", "");
                 } else {
 

@@ -233,9 +233,9 @@ public class Pane1 {
                     util.tip("请完整填写信息！", "入院");
                 } else if (!util.isLegalDate(tf_inHospital_time.getText())) {
                     util.tip("入院时间的格式不对！", "入院");
-                } else if (util.isUsed_bed((Integer) comboBox2.getValue(), (Integer) comboBox3.getValue()) == 2) {
+                } else if (util.isUsed_bed((Integer) comboBox2.getValue(), (Integer) comboBox3.getValue(), tf_card.getText()) == 2) {
                     util.tip("该病房已满！请换病房", "");
-                } else if (util.isUsed_bed((Integer) comboBox2.getValue(), (Integer) comboBox3.getValue()) == 1) {
+                } else if (util.isUsed_bed((Integer) comboBox2.getValue(), (Integer) comboBox3.getValue(), tf_card.getText()) == 1) {
                     util.tip("该床位已经被使用！", "");
                 } else if (doctorService.getId(tf_doctor.getText()) == 0) {
                     util.tip("没有该医生！请核查后输入", "");
