@@ -389,6 +389,7 @@ public class Pane1 {
                     Patient patient = patientService.get(Integer.valueOf(textField.getText()));
                     if (patient == null) {//根本没有记录
                         util.tip("没有该记录！请输入正确卡号", "");
+                        textField.setText("");
                     } else {//有住院记录
 
                         if (roomService.get(patientService.get(Integer.valueOf(textField.getText())).getRoom_id()).getOut_time() == null) {//住院中，可以办理出院
@@ -400,7 +401,8 @@ public class Pane1 {
                             table_outHospital.getItems().add(patient);
                             table_outHospital.refresh();
                         } else {
-                            util.tip("该患者已出院，勿重复办理出院！","");
+                            util.tip("该患者已出院，勿重复办理出院！", "");
+                            textField.setText("");
                         }
 
                     }
@@ -494,23 +496,22 @@ public class Pane1 {
             @Override
             public void handle(ActionEvent event) {
 
-                if (!table_outHospital.getItems().isEmpty() && !tf_outTime.getText().equals("") && !tf_outTime.getText().equals("")) {
+                if (table_outHospital.getItems().isEmpty() || textField.getText().equals("") || tf_outTime.getText().equals("")) {
+                    util.tip("请先搜索记录并填写！", "");//有3个地方不能空
+                } else if (!util.isLegalDate(tf_outTime.getText())) {
+                    util.tip("出院时间的格式不正确！", "");
+                } else if (!Date.valueOf(tf_outTime.getText()).after(roomService.get(patientService.get(Integer.valueOf(textField.getText())).getRoom_id()).getIn_time())) {
+                    util.tip("出院时间必须晚于入院时间！", "");
+                } else {
 
                     Patient patient = patientService.get(Integer.valueOf(textField.getText()));
                     Room room = roomService.get(patient.getRoom_id());
 
-                    if (!util.isLegalDate(tf_outTime.getText())) {
-                        util.tip("出院时间的格式不正确！", "");
-                    } else {
-
-                        room.setOut_time(Date.valueOf(tf_outTime.getText()));
-                        roomService.update(room);
-                        util.tip("保存成功！", "");
-                    }
-
-                } else {
-                    util.tip("请先搜索记录并填写！", "");
+                    room.setOut_time(Date.valueOf(tf_outTime.getText()));
+                    roomService.update(room);
+                    util.tip("保存成功！", "");
                 }
+
             }
         });
 
