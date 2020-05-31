@@ -119,7 +119,7 @@ public class Pane2 {
 
         //-------------------------------------------------------------  //分割线
 
-        Label divider2_note = new Label("查找个人记录");//分割线
+        Label divider2_note = new Label("快速查找记录");//分割线
         divider2_note.setPrefSize(400, 30);
         divider2_note.setTextFill(Color.rgb(90, 90, 90));
         divider2_note.setFont(font2);

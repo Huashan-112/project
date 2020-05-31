@@ -488,9 +488,7 @@ public class Pane1 {
         save1.setStyle("-fx-background-color: #2475C4");
         save1.setTextFill(Color.rgb(241, 241, 232));
         save1.setFont(font5);
-        save1.setOnAction(new EventHandler<ActionEvent>()
-
-        {  // 出院保存
+        save1.setOnAction(new EventHandler<ActionEvent>() {  // 出院保存
             @Override
             public void handle(ActionEvent event) {
 
@@ -502,9 +500,16 @@ public class Pane1 {
                     if (!util.isLegalDate(tf_outTime.getText())) {
                         util.tip("出院时间的格式不正确！", "");
                     } else {
+
+                        if (room.getOut_time() == null) {
+                            System.out.println("出院时间为空");
+                        }
                         room.setOut_time(Date.valueOf(tf_outTime.getText()));
                         roomService.update(room);
                         util.tip("保存成功！", "");
+                        if (room.getOut_time() != null) {
+                            System.out.println("出院时间不为空！！！！！！！");
+                        }
                     }
 
                 } else {

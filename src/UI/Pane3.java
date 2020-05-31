@@ -305,11 +305,11 @@ public class Pane3 {
                     util.tip("请完整填写信息！", "");
                 } else if (!util.isLegalDate(tf_inHospital_time.getText())) {
                     util.tip("入院时间的格式不正确！", "");
-                } else if (patientService.get(Integer.parseInt(textField.getText())).getOut_time() == null && !tf_outHospital_time.getText().equals("")) {
+                } else if (roomService.get(patientService.get(Integer.parseInt(textField.getText())).getRoom_id()).getOut_time() == null && !tf_outHospital_time.getText().equals("")) {
                     util.tip("该患者住院中，禁止填写出院时间！", "");
-                } else if (patientService.get(Integer.parseInt(textField.getText())).getOut_time() != null && tf_outHospital_time.getText().equals("")) {
+                } else if (roomService.get(patientService.get(Integer.parseInt(textField.getText())).getRoom_id()).getOut_time() != null && tf_outHospital_time.getText().equals("")) {
                     util.tip("该患者已出院，出院时间不能为空！", "");
-                } else if (patientService.get(Integer.parseInt(textField.getText())).getOut_time() != null && !tf_outHospital_time.getText().equals("") && !util.isLegalDate(tf_outHospital_time.getText())) {
+                } else if (roomService.get(patientService.get(Integer.parseInt(textField.getText())).getRoom_id()).getOut_time() != null && !tf_outHospital_time.getText().equals("") && !util.isLegalDate(tf_outHospital_time.getText())) {
                     util.tip("出院时间格式不正确！", "");
                 } else if (doctorDAO.get(tf_doctor.getText()) == null) {
                     util.tip("没有该医生！请核对后输入", "");
