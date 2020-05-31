@@ -277,53 +277,56 @@ public class Pane5 {
         button.setStyle("-fx-background-color: #2475C4");
         button.setTextFill(Color.rgb(241, 241, 232));
         button.setFont(font);
-        button.setOnAction(new EventHandler<ActionEvent>() {  // 查询患者个人信息
+        button.setOnAction(new EventHandler<ActionEvent>() {  //查询
             @Override
             public void handle(ActionEvent event) {
 
-                if (!textField.getText().equals("")) {
+                if (textField.getText().equals("")) {
+                } else if (patientService.get(Integer.valueOf(textField.getText())) == null) {
+                    util.tip("没有该记录！请输入正确的卡号", "");
+                    textField.setText("");
+                } else {
 
-                    if (patientService.get(Integer.valueOf(textField.getText())) == null) {
-                        util.tip("没有该记录！请输入正确的卡号", "");
-                    } else {
+                    String text = textField.getText();
+                    int id = Integer.valueOf(text);
+                    Patient patient = patientService.get(id);
+                    patient.setDoc_name(doctorService.get(patient.getDoc_id()));
 
-                        String text = textField.getText();
-                        int id = Integer.valueOf(text);
-                        Patient patient = patientService.get(id);
-                        patient.setDoc_name(doctorService.get(patient.getDoc_id()));
+                    name.setText("姓名：" + patient.getName());
+                    sex.setText("性别：" + patient.getSex());
+                    age.setText("年龄：" + patient.getAge());
+                    phone.setText("手机号：" + patient.getPhone_number());
+                    ID.setText("身份证号：" + patient.getIdentity_card());
+                    diagnosis.setText("诊断：" + patient.getDiagnose());
+                    doctor.setText("主治医师：" + patient.getDoc_name());
 
-                        name.setText("姓名：" + patient.getName());
-                        sex.setText("性别：" + patient.getSex());
-                        age.setText("年龄：" + patient.getAge());
-                        phone.setText("手机号：" + patient.getPhone_number());
-                        ID.setText("身份证号：" + patient.getIdentity_card());
-                        diagnosis.setText("诊断：" + patient.getDiagnose());
-                        doctor.setText("主治医师：" + patient.getDoc_name());
+                    //清空表的数据
+                    table.getItems().removeAll(table.getItems());
+                    table_medicine.getItems().removeAll(table_medicine.getItems());
+                    table_check.getItems().removeAll(table_check.getItems());
 
-                        //清空表的数据
-                        table.getItems().removeAll(table.getItems());
-                        table_medicine.getItems().removeAll(table_medicine.getItems());
-                        table_check.getItems().removeAll(table_check.getItems());
-
-                        //显示查询的数据
-                        table.getItems().addAll(roomService.get(patient.getRoom_id()));
-                        if (dragService.listByPatientId(id).size() != 0) {
-                            table_medicine.getItems().addAll(dragService.listByPatientId(id));
-                        }
-                        if (checkService.listByPatientId(id).size() != 0) {
-                            table_check.getItems().addAll(checkService.listByPatientId(id));
-                        }
+                    //显示查询的数据
+                    table.getItems().addAll(roomService.get(patient.getRoom_id()));
+                    if (dragService.listByPatientId(id).size() != 0) {
+                        table_medicine.getItems().addAll(dragService.listByPatientId(id));
+                    }
+                    if (checkService.listByPatientId(id).size() != 0) {
+                        table_check.getItems().addAll(checkService.listByPatientId(id));
                     }
                 }
             }
         });
 
         HBox hBox = new HBox();
-        hBox.getChildren().addAll(textField, button);
+        hBox.getChildren().
+
+                addAll(textField, button);
 
         //_____________________________________________________________________
 
-        anchorPane5.getChildren().addAll(hBox, line, label, hBox1, hBox2, divider2, table, divider3, table_medicine, divider4, table_check, reset, line1);
+        anchorPane5.getChildren().
+
+                addAll(hBox, line, label, hBox1, hBox2, divider2, table, divider3, table_medicine, divider4, table_check, reset, line1);
 
         AnchorPane.setLeftAnchor(hBox, 125.0);
         AnchorPane.setTopAnchor(hBox, 40.0);

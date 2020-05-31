@@ -90,4 +90,18 @@ public class Util {
 
         return isUsed;
     }
+
+    public int isExit_ID(String id) {
+
+        PatientService patientService = new PatientService();
+        int result;
+
+        if (patientService.get(Integer.parseInt(id)) == null) {
+            result = 0;//0表示数据库的patient表中没有该id的记录
+        } else {
+            result = 1;//有该id的记录
+        }
+
+        return result;
+    }
 }

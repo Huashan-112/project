@@ -231,6 +231,8 @@ public class Pane1 {
                 //textField的初始内容是"",comboBox只有2种情况，要么为null，要么选择了
                 if (tf_name.getText().equals("") || tf_age.getText().equals("") || tf_phone.getText().equals("") || tf_ID.getText().equals("") || tf_card.getText().equals("") || tf_diagnosis.getText().equals("") || tf_doctor.getText().equals("") || tf_inHospital_time.getText().equals("") || comboBox.getValue() == null || comboBox2.getValue() == null || comboBox3.getValue() == null) {
                     util.tip("请完整填写信息！", "入院");
+                } else if (util.isExit_ID(tf_card.getText()) == 1) {
+                    util.tip("已有该ID的记录，勿重复添加！", "");
                 } else if (!util.isLegalDate(tf_inHospital_time.getText())) {
                     util.tip("入院时间的格式不对！", "入院");
                 } else if (util.isUsed_bed((Integer) comboBox2.getValue(), (Integer) comboBox3.getValue(), tf_card.getText()) == 2) {
