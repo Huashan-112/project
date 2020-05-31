@@ -365,9 +365,7 @@ public class Pane1 {
         textField.requestFocus();
         textField.setPrefColumnCount(5);
         textField.setPromptText("请输入出院者的诊疗卡号");
-        textField.setTextFormatter(new TextFormatter<String>(new UnaryOperator<TextFormatter.Change>()
-
-        {
+        textField.setTextFormatter(new TextFormatter<String>(new UnaryOperator<TextFormatter.Change>() {
             @Override
             public TextFormatter.Change apply(TextFormatter.Change t) {
                 String value = t.getText();
@@ -383,24 +381,28 @@ public class Pane1 {
         query.setStyle("-fx-background-color: #2475C4");
         query.setTextFill(Color.rgb(241, 241, 232));
         query.setFont(font5);
-        query.setOnAction(new EventHandler<ActionEvent>()
-
-        {
+        query.setOnAction(new EventHandler<ActionEvent>() {//搜索
             @Override
             public void handle(ActionEvent event) {
 
                 if (!textField.getText().equals("")) {
                     Patient patient = patientService.get(Integer.valueOf(textField.getText()));
-                    if (patient == null) {//没找到
+                    if (patient == null) {//根本没有记录
                         util.tip("没有该记录！请输入正确卡号", "");
-                    } else {//找到了
+                    } else {//有住院记录
 
-                        table_outHospital.getItems().removeAll(table_outHospital.getItems());//先将表格和框内容清空
-                        patient.setDoc_name(doctorService.get(patient.getDoc_id()));//获取主治医师名字
-                        patient.setWard_id(roomService.get(patient.getRoom_id()).getWard_id());//获取病房号
-                        patient.setIn_time(roomService.get(patient.getRoom_id()).getIn_time());//获取入院时间
-                        table_outHospital.getItems().add(patient);
-                        table_outHospital.refresh();
+                        if (roomService.get(patientService.get(Integer.valueOf(textField.getText())).getRoom_id()).getOut_time() == null) {//住院中，可以办理出院
+
+                            table_outHospital.getItems().removeAll(table_outHospital.getItems());//先将表格和框内容清空
+                            patient.setDoc_name(doctorService.get(patient.getDoc_id()));//获取主治医师名字
+                            patient.setWard_id(roomService.get(patient.getRoom_id()).getWard_id());//获取病房号
+                            patient.setIn_time(roomService.get(patient.getRoom_id()).getIn_time());//获取入院时间
+                            table_outHospital.getItems().add(patient);
+                            table_outHospital.refresh();
+                        } else {
+                            util.tip("该患者已出院，勿重复办理出院！","");
+                        }
+
                     }
                 }
             }
@@ -501,15 +503,9 @@ public class Pane1 {
                         util.tip("出院时间的格式不正确！", "");
                     } else {
 
-                        if (room.getOut_time() == null) {
-                            System.out.println("出院时间为空");
-                        }
                         room.setOut_time(Date.valueOf(tf_outTime.getText()));
                         roomService.update(room);
                         util.tip("保存成功！", "");
-                        if (room.getOut_time() != null) {
-                            System.out.println("出院时间不为空！！！！！！！");
-                        }
                     }
 
                 } else {

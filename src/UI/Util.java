@@ -52,10 +52,8 @@ public class Util {
 
         int isUsed = 0;//0表示该床位未被使用。1表示该床位已被使用。2表示该病房已满
 
-        if (patientService.get(Integer.parseInt(id)).getOut_time() != null) {//该患者已出院
-            isUsed = 0;//则可以随意修改病房号和床位号
-        } else {//该患者还在住院中，要修改病房号和床位号，则要认真判断
-
+        //这个 if else 可以应付所有 使用病房和床位 的情况 （共3种情况：没有记录，有记录且住院中，有记录且出院了）
+        if (patientService.get(Integer.parseInt(id)) == null || roomService.get(patientService.get(Integer.parseInt(id)).getRoom_id()).getOut_time() == null) {//没有该人的住院记录 或者 有记录且还在住院中，则修改病房号和床位号时认真判断
             boolean[] bed_state = new boolean[6];
             for (int i = 0; i < 6; i++) {
                 bed_state[i] = false;
@@ -84,6 +82,10 @@ public class Util {
             } else if (bed_state[bed] == true) {//在没满的情况下，该床位是否被使用
                 isUsed = 1;
             }
+
+        } else if (roomService.get(patientService.get(Integer.parseInt(id)).getRoom_id()).getOut_time() != null) {//该患者已出院
+
+            isUsed = 0;//则可以随意修改病房号和床位号
         }
 
         return isUsed;
