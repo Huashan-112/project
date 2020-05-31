@@ -56,6 +56,8 @@ public class Pane0 {
         login.setOnAction(new EventHandler<ActionEvent>() {  // 登录
             @Override
             public void handle(ActionEvent event) {
+
+                Util util = new Util();
                 if (username.getText().equals("1") && password.getText().equals("1")) {
                     username.setText("");
                     password.setText("");
@@ -68,6 +70,8 @@ public class Pane0 {
                     anchorPane1.setVisible(true);
                     View.currentPane = 1;
                     exit.setVisible(true);
+                } else {
+                    util.tip("用户名或密码不正确！", "");
                 }
             }
         });

@@ -273,13 +273,10 @@ public class Pane1 {
         reset2.setStyle("-fx-background-color: #2475C4");
         reset2.setTextFill(Color.rgb(241, 241, 232));
         reset2.setFont(font5);
-        reset2.setOnAction(new EventHandler<ActionEvent>()
-
-        {  // 住院记录
+        reset2.setOnAction(new EventHandler<ActionEvent>() {  // 重置1
             @Override
             public void handle(ActionEvent event) {
 
-                //遍历gridpane
                 Object[] objects = gridPane1.getChildren().toArray();
                 for (Object o : objects) {
                     if (o instanceof TextField) {
@@ -292,9 +289,7 @@ public class Pane1 {
         });
 
         HBox hBox2 = new HBox();
-        hBox2.getChildren().
-
-                addAll(save2, reset2);
+        hBox2.getChildren().addAll(save2, reset2);
         hBox2.setSpacing(40);
 
         //-------------------------------------------------------------  //分割线
@@ -313,15 +308,11 @@ public class Pane1 {
         AnchorPane divider2 = new AnchorPane();
         divider2.setPrefSize(1050, 40);
         divider2.setStyle("-fx-background-color: #F4FEE5");
-        divider2.getChildren().
-
-                addAll(divider2_decoration, divider2_note);
+        divider2.getChildren().addAll(divider2_decoration, divider2_note);
         AnchorPane.setLeftAnchor(divider2_note, 35.0);
         AnchorPane.setTopAnchor(divider2_note, 5.0);
 
         //lable--------------------------------------------------------  //分割线
-
-        Font font6 = Font.font("YouYuan", FontWeight.BLACK, 16);
 
         TableView<Patient> table_outHospital = new TableView<>();
         table_outHospital.setEditable(true);
@@ -516,19 +507,18 @@ public class Pane1 {
         reset.setStyle("-fx-background-color: #2475C4");
         reset.setTextFill(Color.rgb(241, 241, 232));
         reset.setFont(font5);
-        reset.setOnAction(new EventHandler<ActionEvent>() {  // 出院重置
+        reset.setOnAction(new EventHandler<ActionEvent>() {  // 重置2
             @Override
             public void handle(ActionEvent event) {
 
-                //遍历所有框，设内容为空,将表中内容清空
                 textField.setText("");
                 table_outHospital.getItems().removeAll(table_outHospital.getItems());
+
                 Object[] objects = gridPane2.getChildren().toArray();
-                for (Object o : objects) {
-                    if (o instanceof TextField) {
-                        ((TextField) o).setText("");
-                    } else continue;
-                }
+                ((TextField) objects[2]).setText("");
+                ((ComboBox) objects[4]).setValue(null);
+                ((Label) objects[6]).setText("元");
+                ((Label) objects[8]).setText("%");
             }
         });
 

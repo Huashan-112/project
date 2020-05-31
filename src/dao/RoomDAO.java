@@ -1,8 +1,6 @@
 package dao;
 
-import entity.Doctor;
 import entity.Room;
-import service.DepartmentService;
 import util.DBUtil;
 
 import java.sql.*;

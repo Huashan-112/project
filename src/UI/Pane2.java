@@ -200,7 +200,7 @@ public class Pane2 {
         query.setStyle("-fx-background-color: #2475C4");
         query.setTextFill(Color.rgb(241, 241, 232));
         query.setFont(font1);
-        query.setOnAction(new EventHandler<ActionEvent>() {
+        query.setOnAction(new EventHandler<ActionEvent>() {//快速查找记录
             @Override
             public void handle(ActionEvent event) {
 
@@ -248,6 +248,11 @@ public class Pane2 {
                     yes.setOnAction(new EventHandler<ActionEvent>() {  // 确认删除
                         @Override
                         public void handle(ActionEvent event) {
+
+                            //drag和check有patient的主键，patient有room的主键。
+                            //删除时，要先删除 包含别人的主键的 的。
+                            //先删除drag和check表的记录，再删除patient表的记录，最后删除room表的记录
+                            //xxxxxxxxx
 
                             patientService.delete(Integer.valueOf(textField.getText()));//先从数据库中删除
                             pane2.update();//更新总表
