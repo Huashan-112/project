@@ -91,7 +91,7 @@ public class Pane2 {
         t6.setPrefWidth(130);
         t7.setPrefWidth(100);
         t8.setPrefWidth(160);
-        t9.setPrefWidth(149);
+        t9.setPrefWidth(133);
         t1.setCellValueFactory(new PropertyValueFactory<>("id"));
         t2.setCellValueFactory(new PropertyValueFactory<>("name"));
         t3.setCellValueFactory(new PropertyValueFactory<>("sex"));

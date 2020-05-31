@@ -12,8 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DragDAO {
-    public List<Drag> findByPatient(int pt_id){
+
+    public List<Drag> findByPatient(int pt_id) {
+
         List<Drag> drags = new ArrayList<Drag>();
+
         try (Connection c = DBUtil.getConnection(); Statement s = c.createStatement();) {
 
             String sql = "select * from drag where pt_id=" + pt_id;
@@ -26,7 +29,7 @@ public class DragDAO {
                 String category = rs.getString("category");
                 Float price = rs.getFloat("price");
                 int count = rs.getInt("count");
-                Drag drag = new Drag(id,name,category,price,count,pt_id);
+                Drag drag = new Drag(id, name, category, price, count, pt_id);
                 drags.add(drag);
             }
 
@@ -34,6 +37,7 @@ public class DragDAO {
 
             e.printStackTrace();
         }
+
         return drags;
     }
 

@@ -46,7 +46,7 @@ public class Pane1 {
 
         //-------------------------------------------------------------  //分割线
 
-        Label divider1_note = new Label("入院");//分割线
+        Label divider1_note = new Label("办理入院");//分割线
         divider1_note.setPrefSize(400, 30);
         divider1_note.setTextFill(Color.rgb(90, 90, 90));
         Font font2 = Font.font("Microsoft YaHei", FontWeight.BLACK, 17);
@@ -299,7 +299,7 @@ public class Pane1 {
 
         //-------------------------------------------------------------  //分割线
 
-        Label divider2_note = new Label("出院");//分割线
+        Label divider2_note = new Label("办理出院");//分割线
         divider2_note.setPrefSize(400, 30);
         divider2_note.setTextFill(Color.rgb(90, 90, 90));
         divider2_note.setFont(font2);
@@ -378,45 +378,6 @@ public class Pane1 {
             }
         }));
 
-        Button query = new Button("搜索");
-        query.setPrefSize(100, 30);
-        query.setStyle("-fx-background-color: #2475C4");
-        query.setTextFill(Color.rgb(241, 241, 232));
-        query.setFont(font5);
-        query.setOnAction(new EventHandler<ActionEvent>() {//搜索
-            @Override
-            public void handle(ActionEvent event) {
-
-                if (!textField.getText().equals("")) {
-                    Patient patient = patientService.get(Integer.valueOf(textField.getText()));
-                    if (patient == null) {//根本没有记录
-                        util.tip("没有该记录！请输入正确卡号", "");
-                        textField.setText("");
-                    } else {//有住院记录
-
-                        if (roomService.get(patientService.get(Integer.valueOf(textField.getText())).getRoom_id()).getOut_time() == null) {//住院中，可以办理出院
-
-                            table_outHospital.getItems().removeAll(table_outHospital.getItems());//先将表格和框内容清空
-                            patient.setDoc_name(doctorService.get(patient.getDoc_id()));//获取主治医师名字
-                            patient.setWard_id(roomService.get(patient.getRoom_id()).getWard_id());//获取病房号
-                            patient.setIn_time(roomService.get(patient.getRoom_id()).getIn_time());//获取入院时间
-                            table_outHospital.getItems().add(patient);
-                            table_outHospital.refresh();
-                        } else {
-                            util.tip("该患者已出院，勿重复办理出院！", "");
-                            textField.setText("");
-                        }
-
-                    }
-                }
-            }
-        });
-
-        HBox hBox = new HBox();
-        hBox.getChildren().
-
-                addAll(textField, query);
-
         Label label = new Label("· 出院信息");
         label.setPrefSize(100, 20);
         label.setAlignment(Pos.CENTER_RIGHT);
@@ -449,9 +410,6 @@ public class Pane1 {
         cost.setPrefSize(100, 20);
         cost.setFont(font3);
         cost.setTextFill(Color.rgb(120, 126, 131));
-        TextField tf_cost = new TextField();
-        tf_cost.setPrefWidth(cell);
-        tf_cost.setPromptText("例    500");
         Label yuan = new Label("元");
         yuan.setAlignment(Pos.CENTER_LEFT);
         yuan.setPrefSize(100, 20);
@@ -463,9 +421,6 @@ public class Pane1 {
         reimbursement.setPrefSize(100, 20);
         reimbursement.setFont(font3);
         reimbursement.setTextFill(Color.rgb(120, 126, 131));
-        TextField tf_reimbursement = new TextField();
-        tf_reimbursement.setPrefWidth(cell);
-        tf_reimbursement.setPromptText("例     10");
         Label proportion = new Label("%");
         proportion.setAlignment(Pos.CENTER_LEFT);
         proportion.setPrefSize(100, 20);
@@ -483,11 +438,50 @@ public class Pane1 {
         gridPane2.add(recovery, 11, 1);
         gridPane2.add(comboBox4, 12, 1);
         gridPane2.add(cost, 0, 2);
-        gridPane2.add(tf_cost, 1, 2);
-        gridPane2.add(yuan, 2, 2);
+        gridPane2.add(yuan, 1, 2);
         gridPane2.add(reimbursement, 11, 2);
-        gridPane2.add(tf_reimbursement, 12, 2);
-        gridPane2.add(proportion, 13, 2);
+        gridPane2.add(proportion, 12, 2);
+
+        Button query = new Button("搜索");
+        query.setPrefSize(100, 30);
+        query.setStyle("-fx-background-color: #2475C4");
+        query.setTextFill(Color.rgb(241, 241, 232));
+        query.setFont(font5);
+        query.setOnAction(new EventHandler<ActionEvent>() {//搜索
+            @Override
+            public void handle(ActionEvent event) {
+
+                if (!textField.getText().equals("")) {
+                    Patient patient = patientService.get(Integer.valueOf(textField.getText()));
+                    if (patient == null) {//根本没有记录
+                        util.tip("没有该记录！请输入正确卡号", "");
+                        textField.setText("");
+                    } else {//有住院记录
+
+                        if (roomService.get(patientService.get(Integer.valueOf(textField.getText())).getRoom_id()).getOut_time() == null) {//住院中，可以办理出院
+
+                            table_outHospital.getItems().removeAll(table_outHospital.getItems());//先将表格和框内容清空
+                            patient.setDoc_name(doctorService.get(patient.getDoc_id()));//获取主治医师名字
+                            patient.setWard_id(roomService.get(patient.getRoom_id()).getWard_id());//获取病房号
+                            patient.setIn_time(roomService.get(patient.getRoom_id()).getIn_time());//获取入院时间
+                            table_outHospital.getItems().add(patient);
+                            table_outHospital.refresh();
+
+                            yuan.setText(util.calCost(textField.getText()) + "  元");//计算花费总额
+                            proportion.setText(util.calProportion(util.calCost(textField.getText())) + "  %");//显示报销比例
+
+                        } else {
+                            util.tip("该患者已出院，勿重复办理出院！", "");
+                            textField.setText("");
+                        }
+
+                    }
+                }
+            }
+        });
+
+        HBox hBox = new HBox();
+        hBox.getChildren().addAll(textField, query);
 
         Button save1 = new Button("保存");
         save1.setPrefSize(100, 30);
@@ -499,7 +493,7 @@ public class Pane1 {
             public void handle(ActionEvent event) {
 
                 if (table_outHospital.getItems().isEmpty() || textField.getText().equals("") || tf_outTime.getText().equals("")) {
-                    util.tip("请先搜索记录并填写！", "");//有3个地方不能空
+                    util.tip("请先搜索记录并填写下方信息！", "");//有3个地方不能空
                 } else if (!util.isLegalDate(tf_outTime.getText())) {
                     util.tip("出院时间的格式不正确！", "");
                 } else if (!Date.valueOf(tf_outTime.getText()).after(roomService.get(patientService.get(Integer.valueOf(textField.getText())).getRoom_id()).getIn_time())) {
@@ -522,9 +516,7 @@ public class Pane1 {
         reset.setStyle("-fx-background-color: #2475C4");
         reset.setTextFill(Color.rgb(241, 241, 232));
         reset.setFont(font5);
-        reset.setOnAction(new EventHandler<ActionEvent>()
-
-        {  // 出院重置
+        reset.setOnAction(new EventHandler<ActionEvent>() {  // 出院重置
             @Override
             public void handle(ActionEvent event) {
 

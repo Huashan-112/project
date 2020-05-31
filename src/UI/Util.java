@@ -1,5 +1,7 @@
 package UI;
 
+import entity.Check;
+import entity.Drag;
 import entity.Patient;
 import entity.Room;
 import javafx.scene.control.Alert;
@@ -104,4 +106,42 @@ public class Util {
 
         return result;
     }
+
+    public float calCost(String id) {
+
+        CheckService checkService = new CheckService();
+        DragService dragService = new DragService();
+
+        float cost = 0;
+
+        List<Drag> drags = dragService.listByPatientId(Integer.parseInt(id));
+        if (drags.size() != 0) {
+            for (Drag d : drags) {
+                cost = cost + d.getTotal_price();
+            }
+        }
+
+        List<Check> checks = checkService.listByPatientId(Integer.parseInt(id));
+        if (checks.size() != 0) {
+            for (Check c : checks) {
+                cost = cost + c.getTotal_price();
+            }
+        }
+
+        return cost;
+    }
+
+    public int calProportion(float cost) {
+
+        int proportion;
+
+        if (cost == 0.0) {
+            proportion = 0;
+        } else {
+            proportion = 30;
+        }
+
+        return proportion;
+    }
+
 }
