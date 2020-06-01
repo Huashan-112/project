@@ -1,5 +1,6 @@
 package UI;
 
+import entity.Drag;
 import entity.Patient;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,6 +15,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import service.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 public class Pane4 {
@@ -191,89 +194,145 @@ public class Pane4 {
         label8.setTextFill(Color.rgb(120, 126, 131));
 
         ComboBox<String> comboBox1 = new ComboBox<>();
-        comboBox1.setPrefWidth(150);
+        comboBox1.setPrefWidth(120);
         comboBox1.setEditable(false);
         comboBox1.setStyle("-fx-background-color: #F1F1F1");
         comboBox1.setPromptText("请选择");
         comboBox1.getItems().addAll("头孢匹罗", "罗红霉素");
+        ComboBox<Integer> comboBox1_num = new ComboBox<>();
+        comboBox1_num.setPrefWidth(70);
+        comboBox1_num.setEditable(false);
+        comboBox1_num.setStyle("-fx-background-color: #F1F1F1");
+        comboBox1_num.setPromptText("份");
+        comboBox1_num.getItems().addAll(1, 2, 3, 4, 5);
 
         ComboBox<String> comboBox2 = new ComboBox<>();
-        comboBox2.setPrefWidth(150);
+        comboBox2.setPrefWidth(120);
         comboBox2.setEditable(false);
         comboBox2.setStyle("-fx-background-color: #F1F1F1");
         comboBox2.setPromptText("请选择");
         comboBox2.getItems().addAll("地塞米松", "泼尼松龙");
+        ComboBox<Integer> comboBox2_num = new ComboBox<>();
+        comboBox2_num.setPrefWidth(70);
+        comboBox2_num.setEditable(false);
+        comboBox2_num.setStyle("-fx-background-color: #F1F1F1");
+        comboBox2_num.setPromptText("份");
+        comboBox2_num.getItems().addAll(1, 2, 3, 4, 5);
 
         ComboBox<String> comboBox3 = new ComboBox<>();
-        comboBox3.setPrefWidth(150);
+        comboBox3.setPrefWidth(120);
         comboBox3.setEditable(false);
         comboBox3.setStyle("-fx-background-color: #F1F1F1");
         comboBox3.setPromptText("请选择");
         comboBox3.getItems().addAll("布洛芬", "他克莫司");
+        ComboBox<Integer> comboBox3_num = new ComboBox<>();
+        comboBox3_num.setPrefWidth(70);
+        comboBox3_num.setEditable(false);
+        comboBox3_num.setStyle("-fx-background-color: #F1F1F1");
+        comboBox3_num.setPromptText("份");
+        comboBox3_num.getItems().addAll(1, 2, 3, 4, 5);
 
         ComboBox<String> comboBox4 = new ComboBox<>();
-        comboBox4.setPrefWidth(150);
+        comboBox4.setPrefWidth(120);
         comboBox4.setEditable(false);
         comboBox4.setStyle("-fx-background-color: #F1F1F1");
         comboBox4.setPromptText("请选择");
         comboBox4.getItems().addAll("曲安奈德", "阿昔洛韦");
+        ComboBox<Integer> comboBox4_num = new ComboBox<>();
+        comboBox4_num.setPrefWidth(70);
+        comboBox4_num.setEditable(false);
+        comboBox4_num.setStyle("-fx-background-color: #F1F1F1");
+        comboBox4_num.setPromptText("份");
+        comboBox4_num.getItems().addAll(1, 2, 3, 4, 5);
 
         ComboBox<String> comboBox5 = new ComboBox<>();
-        comboBox5.setPrefWidth(150);
+        comboBox5.setPrefWidth(120);
         comboBox5.setEditable(false);
         comboBox5.setStyle("-fx-background-color: #EEEEEE");
         comboBox5.setPromptText("请选择");
-        comboBox5.getItems().addAll("舒尼替尼", "利妥昔单抗");
+        comboBox5.getItems().addAll("舒尼替尼", "利妥昔");
+        ComboBox<Integer> comboBox5_num = new ComboBox<>();
+        comboBox5_num.setPrefWidth(70);
+        comboBox5_num.setEditable(false);
+        comboBox5_num.setStyle("-fx-background-color: #F1F1F1");
+        comboBox5_num.setPromptText("份");
+        comboBox5_num.getItems().addAll(1, 2, 3, 4, 5);
 
         ComboBox<String> comboBox6 = new ComboBox<>();
-        comboBox6.setPrefWidth(150);
+        comboBox6.setPrefWidth(120);
         comboBox6.setEditable(false);
         comboBox6.setStyle("-fx-background-color: #EEEEEE");
         comboBox6.setPromptText("请选择");
         comboBox6.getItems().addAll("氯雷他定", "左西替利");
+        ComboBox<Integer> comboBox6_num = new ComboBox<>();
+        comboBox6_num.setPrefWidth(70);
+        comboBox6_num.setEditable(false);
+        comboBox6_num.setStyle("-fx-background-color: #F1F1F1");
+        comboBox6_num.setPromptText("份");
+        comboBox6_num.getItems().addAll(1, 2, 3, 4, 5);
 
         ComboBox<String> comboBox7 = new ComboBox<>();
-        comboBox7.setPrefWidth(150);
+        comboBox7.setPrefWidth(120);
         comboBox7.setEditable(false);
         comboBox7.setStyle("-fx-background-color: #EEEEEE");
         comboBox7.setPromptText("请选择");
         comboBox7.getItems().addAll("利巴韦林", "氨甲环酸");
+        ComboBox<Integer> comboBox7_num = new ComboBox<>();
+        comboBox7_num.setPrefWidth(70);
+        comboBox7_num.setEditable(false);
+        comboBox7_num.setStyle("-fx-background-color: #F1F1F1");
+        comboBox7_num.setPromptText("份");
+        comboBox7_num.getItems().addAll(1, 2, 3, 4, 5);
 
         ComboBox<String> comboBox8 = new ComboBox<>();
-        comboBox8.setPrefWidth(150);
+        comboBox8.setPrefWidth(120);
         comboBox8.setEditable(false);
         comboBox8.setStyle("-fx-background-color: #EEEEEE");
         comboBox8.setPromptText("请选择");
         comboBox8.getItems().addAll("硝酸甘油", "卡托普利");
+        ComboBox<Integer> comboBox8_num = new ComboBox<>();
+        comboBox8_num.setPrefWidth(70);
+        comboBox8_num.setEditable(false);
+        comboBox8_num.setStyle("-fx-background-color: #F1F1F1");
+        comboBox8_num.setPromptText("份");
+        comboBox8_num.getItems().addAll(1, 2, 3, 4, 5);
 
         GridPane gridPane1 = new GridPane();
-        gridPane1.setHgap(12);
+        gridPane1.setHgap(10);
         gridPane1.setVgap(24);//行距
         gridPane1.setPrefSize(1050, 250);
 
         gridPane1.add(label1, 0, 1);
         gridPane1.add(comboBox1, 1, 1);
+        gridPane1.add(comboBox1_num, 2, 1);
 
-        gridPane1.add(label2, 9, 1);
-        gridPane1.add(comboBox2, 10, 1);
+        gridPane1.add(label2, 6, 1);
+        gridPane1.add(comboBox2, 7, 1);
+        gridPane1.add(comboBox2_num, 8, 1);
 
-        gridPane1.add(label3, 18, 1);
-        gridPane1.add(comboBox3, 19, 1);
+        gridPane1.add(label3, 12, 1);
+        gridPane1.add(comboBox3, 13, 1);
+        gridPane1.add(comboBox3_num, 14, 1);
 
         gridPane1.add(label4, 0, 2);
         gridPane1.add(comboBox4, 1, 2);
+        gridPane1.add(comboBox4_num, 2, 2);
 
-        gridPane1.add(label5, 9, 2);
-        gridPane1.add(comboBox5, 10, 2);
+        gridPane1.add(label5, 6, 2);
+        gridPane1.add(comboBox5, 7, 2);
+        gridPane1.add(comboBox5_num, 8, 2);
 
-        gridPane1.add(label6, 18, 2);
-        gridPane1.add(comboBox6, 19, 2);
+        gridPane1.add(label6, 12, 2);
+        gridPane1.add(comboBox6, 13, 2);
+        gridPane1.add(comboBox6_num, 14, 2);
 
         gridPane1.add(label7, 0, 3);
         gridPane1.add(comboBox7, 1, 3);
+        gridPane1.add(comboBox7_num, 2, 3);
 
-        gridPane1.add(label8, 9, 3);
-        gridPane1.add(comboBox8, 10, 3);
+        gridPane1.add(label8, 6, 3);
+        gridPane1.add(comboBox8, 7, 3);
+        gridPane1.add(comboBox8_num, 8, 3);
 
         Button save1 = new Button("保存");
         save1.setPrefSize(100, 30);
@@ -285,23 +344,34 @@ public class Pane4 {
             public void handle(ActionEvent event) {
 
                 if (!name.getText().equals("姓名：") && !textField.getText().equals("")) {
-                    //获取诊疗卡号和所开的药物，调用胡的方法传递给胡
-                    StringBuilder stringBuilder = new StringBuilder();
+
                     Object[] objects = gridPane1.getChildren().toArray();
 
-                    for (Object o : objects) {
+                    if (util.has_Medicine(objects) == true) {//判断有无开药，true表示有开药
 
-                        if (o instanceof ComboBox) {
-                            if (((ComboBox) o).getValue() != null) {
-                                stringBuilder.append((String) ((ComboBox) o).getValue());
-                                stringBuilder.append(" ");
+                        if (util.has_Num(objects) == false) {//判断开的药有无选择数量，false表示有药品没有选择数量
+                            util.tip("请为药品选择数量！", "");
+                        } else {//选择了数量
+
+                            List<Drag> drags = new ArrayList<>();
+                            for (int i = 1; i < objects.length; i = i + 3) {
+                                if (((ComboBox) objects[i]).getValue() != null) {
+                                    int id = 31;//id怎么获取？？？？
+                                    String name = (String) ((ComboBox) objects[i]).getValue();
+                                    String category = "处方药";
+                                    Float price = 50.0f;//价格怎么获取？？？
+                                    int count = (int) ((ComboBox) objects[i + 1]).getValue();
+                                    int pt_id = Integer.parseInt(textField.getText());
+                                    Drag drag = new Drag(id, name, category, price, count, pt_id);
+                                    drags.add(drag);
+                                }
                             }
+
+                            //在这里调用胡的方法，传递drags集合给他
+                            util.tip("开药成功！", "");
+
                         }
                     }
-//                    System.out.println(textField.getText());
-//                    System.out.println(stringBuilder.toString());
-
-                    util.tip("开药成功！", "");
                 }
             }
         });
@@ -311,10 +381,12 @@ public class Pane4 {
         reset.setStyle("-fx-background-color: #2475C4");
         reset.setTextFill(Color.rgb(241, 241, 232));
         reset.setFont(font1);
-        reset.setOnAction(new EventHandler<ActionEvent>() {  // 重置开药
+        reset.setOnAction(new EventHandler<ActionEvent>()
+
+        {  // 重置开药
             @Override
             public void handle(ActionEvent event) {
-                //遍历所有Combobox，将框内容设为null
+
                 Object[] objects = gridPane1.getChildren().toArray();
                 for (Object o : objects) {
                     if (o instanceof ComboBox) {
@@ -325,7 +397,9 @@ public class Pane4 {
         });
 
         HBox hBox2 = new HBox();
-        hBox2.getChildren().addAll(save1, reset);
+        hBox2.getChildren().
+
+                addAll(save1, reset);
         hBox2.setSpacing(40);
 
         //-------------------------------------------------------------  //分割线
@@ -344,7 +418,9 @@ public class Pane4 {
         AnchorPane divider2 = new AnchorPane();
         divider2.setPrefSize(1050, 40);
         divider2.setStyle("-fx-background-color: #F4FEE5");
-        divider2.getChildren().addAll(divider2_decoration, divider2_note);
+        divider2.getChildren().
+
+                addAll(divider2_decoration, divider2_note);
         AnchorPane.setLeftAnchor(divider2_note, 35.0);
         AnchorPane.setTopAnchor(divider2_note, 5.0);
 
@@ -413,7 +489,9 @@ public class Pane4 {
         save2.setStyle("-fx-background-color: #2475C4");
         save2.setTextFill(Color.rgb(241, 241, 232));
         save2.setFont(font1);
-        save2.setOnAction(new EventHandler<ActionEvent>() {  // 保存检查
+        save2.setOnAction(new EventHandler<ActionEvent>()
+
+        {  // 保存检查
             @Override
             public void handle(ActionEvent event) {
 
@@ -442,7 +520,9 @@ public class Pane4 {
         reset2.setStyle("-fx-background-color: #2475C4");
         reset2.setTextFill(Color.rgb(241, 241, 232));
         reset2.setFont(font1);
-        reset2.setOnAction(new EventHandler<ActionEvent>() {  // 重置检查
+        reset2.setOnAction(new EventHandler<ActionEvent>()
+
+        {  // 重置检查
             @Override
             public void handle(ActionEvent event) {
                 //遍历所有checkbox，将选择状态设为未选择
@@ -456,7 +536,9 @@ public class Pane4 {
         });
 
         HBox hBox3 = new HBox();
-        hBox3.getChildren().addAll(save2, reset2);
+        hBox3.getChildren().
+
+                addAll(save2, reset2);
         hBox3.setSpacing(40);
 
         Line line1 = new Line(15, 845, 1065, 845);
@@ -464,7 +546,9 @@ public class Pane4 {
 
         //_____________________________________________________________________________________________
 
-        anchorPane4.getChildren().addAll(hBox, line, hBox1, divider1, gridPane1, hBox2, divider2, gridPane2, hBox3, line1);
+        anchorPane4.getChildren().
+
+                addAll(hBox, line, hBox1, divider1, gridPane1, hBox2, divider2, gridPane2, hBox3, line1);
 
         AnchorPane.setLeftAnchor(hBox, 15.0);
         AnchorPane.setTopAnchor(hBox, 20.0);

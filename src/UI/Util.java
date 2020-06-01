@@ -5,6 +5,7 @@ import entity.Drag;
 import entity.Patient;
 import entity.Room;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class Util {
 
-    public boolean isLegalDate(String sDate) {
+    public boolean isLegalDate(String sDate) {//判断日期格式是否合法
         int legalLen = 10;
         if ((sDate == null) || (sDate.length() != legalLen)) {
             return false;
@@ -93,7 +94,7 @@ public class Util {
         return isUsed;
     }
 
-    public int isExit_ID(String id) {
+    public int isExit_ID(String id) {//判断数据库的patient表中有没有该id的记录
 
         PatientService patientService = new PatientService();
         int result;
@@ -107,7 +108,7 @@ public class Util {
         return result;
     }
 
-    public float calCost(String id) {
+    public float calCost(String id) {//计算总花费
 
         CheckService checkService = new CheckService();
         DragService dragService = new DragService();
@@ -131,7 +132,7 @@ public class Util {
         return cost;
     }
 
-    public int calProportion(float cost) {
+    public int calProportion(float cost) {//计算报销比例
 
         int proportion;
 
@@ -142,6 +143,32 @@ public class Util {
         }
 
         return proportion;
+    }
+
+    public boolean has_Medicine(Object[] objects) {//判断有无开药
+
+        boolean has_Medicine = false;
+        for (int i = 1; i < objects.length; i = i + 3) {//判断是否有开药
+            if (((ComboBox) objects[i]).getValue() != null) {
+                has_Medicine = true;
+                break;
+            }
+        }
+        return has_Medicine;
+    }
+
+    public boolean has_Num(Object[] objects) {//判断开的药是否选择了数量
+
+        boolean flag = true;
+        for (int i = 1; i < objects.length; i = i + 3) {//判断开的药是否选择了数量
+            if (((ComboBox) objects[i]).getValue() != null) {
+                if (((ComboBox) objects[i + 1]).getValue() == null) {
+                    flag = false;
+                    break;
+                }
+            }
+        }
+        return flag;
     }
 
 }
