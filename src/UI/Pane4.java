@@ -1,5 +1,6 @@
 package UI;
 
+import entity.Check;
 import entity.Drag;
 import entity.Patient;
 import javafx.event.ActionEvent;
@@ -489,28 +490,32 @@ public class Pane4 {
         save2.setStyle("-fx-background-color: #2475C4");
         save2.setTextFill(Color.rgb(241, 241, 232));
         save2.setFont(font1);
-        save2.setOnAction(new EventHandler<ActionEvent>()
-
-        {  // 保存检查
+        save2.setOnAction(new EventHandler<ActionEvent>() {  //开立检查
             @Override
             public void handle(ActionEvent event) {
 
                 if (!name.getText().equals("姓名：") && !textField.getText().equals("")) {
-                    //获取诊疗卡号和所开的检查项目，调用胡的方法传递给胡
-                    StringBuilder stringBuilder = new StringBuilder("");
+
                     Object[] objects = gridPane2.getChildren().toArray();
-                    for (Object o : objects) {
-                        if (o instanceof CheckBox) {
-                            if (((CheckBox) o).isSelected()) {         //被选中
-                                stringBuilder.append(((CheckBox) o).getText());
-                                stringBuilder.append(" ");
+
+                    if (util.has_Check(objects) == true) {//判断有无检查，true表示开了
+
+                        List<Check> checks = new ArrayList<>();
+                        for (int i = 3; i < objects.length; i++) {
+                            if (((CheckBox) objects[i]).isSelected() == true) {
+                                int id = 31;//id怎么获取？？？？
+                                String name = ((CheckBox) objects[i]).getText();
+                                String category = "检查";
+                                Float price = 150.0f;//价格怎么获取？？？
+                                int count = 1;//检查的数量1份就够了
+                                int pt_id = Integer.parseInt(textField.getText());
+                                Check check = new Check(id, name, category, price, count, pt_id);
+                                checks.add(check);
                             }
                         }
+                        //在这里调用胡的方法，传递checks集合给他
+                        util.tip("开立检查成功！", "");
                     }
-                    System.out.println(textField.getText());
-                    System.out.println(stringBuilder.toString());
-
-                    util.tip("开立检查成功！", "");
                 }
             }
         });
@@ -520,9 +525,7 @@ public class Pane4 {
         reset2.setStyle("-fx-background-color: #2475C4");
         reset2.setTextFill(Color.rgb(241, 241, 232));
         reset2.setFont(font1);
-        reset2.setOnAction(new EventHandler<ActionEvent>()
-
-        {  // 重置检查
+        reset2.setOnAction(new EventHandler<ActionEvent>() {  // 重置2
             @Override
             public void handle(ActionEvent event) {
                 //遍历所有checkbox，将选择状态设为未选择
@@ -536,9 +539,7 @@ public class Pane4 {
         });
 
         HBox hBox3 = new HBox();
-        hBox3.getChildren().
-
-                addAll(save2, reset2);
+        hBox3.getChildren().addAll(save2, reset2);
         hBox3.setSpacing(40);
 
         Line line1 = new Line(15, 845, 1065, 845);
@@ -546,9 +547,7 @@ public class Pane4 {
 
         //_____________________________________________________________________________________________
 
-        anchorPane4.getChildren().
-
-                addAll(hBox, line, hBox1, divider1, gridPane1, hBox2, divider2, gridPane2, hBox3, line1);
+        anchorPane4.getChildren().addAll(hBox, line, hBox1, divider1, gridPane1, hBox2, divider2, gridPane2, hBox3, line1);
 
         AnchorPane.setLeftAnchor(hBox, 15.0);
         AnchorPane.setTopAnchor(hBox, 20.0);

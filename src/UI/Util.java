@@ -5,6 +5,7 @@ import entity.Drag;
 import entity.Patient;
 import entity.Room;
 import javafx.scene.control.Alert;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
@@ -169,6 +170,22 @@ public class Util {
             }
         }
         return flag;
+    }
+
+    public boolean has_Check(Object[] objects) {//判断有无开立检查
+
+        boolean has_Check = false;//false表示没开检查
+
+        for (int i = 3; i < objects.length; i++) {//判断是否有开药
+
+            if (((CheckBox) objects[i]).isSelected() == true) {
+                has_Check = true;
+                break;
+            }
+
+        }
+
+        return has_Check;
     }
 
 }
