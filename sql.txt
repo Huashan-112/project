@@ -73,4 +73,4 @@ insert into room values(1,101,1,"内科","2020-4-6","2020-4-20");
 insert into patient values(1,"小五","男",26,"1234","12345","发烧",1,1);
 insert into check1 values(1,"血常规","检验",50,1,1);
 insert into check1 values(2,"尿常规","检验",100,1,1);
-insert into drag values(1,"阿昔洛韦","皮肤类",50,1,1);
+insert into drag values(1,"阿昔洛韦","皮肤类",50,1,1);1

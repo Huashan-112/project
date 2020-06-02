@@ -24,4 +24,6 @@ public class RoomService {
     public void update(Room room){
         roomDAO.update(room);
     }
+
+    public void delete(int id){ roomDAO.delete(id); }
 }

@@ -11,4 +11,8 @@ public class DragService {
     public List<Drag> listByPatientId(int pt_id){
         return  dragDAO.findByPatient(pt_id);
     }
+
+    public void deleteByPatient(int pt_id){
+        dragDAO.deleteByPatient(pt_id);
+    }
 }

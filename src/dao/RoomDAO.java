@@ -74,4 +74,14 @@ public class RoomDAO {
             e.printStackTrace();
         }
     }
+
+    public void delete(int id) {
+        String sql = "delete from room where id=?";
+        try (Connection c = DBUtil.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

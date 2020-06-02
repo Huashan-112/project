@@ -11,4 +11,8 @@ public class CheckService {
     public List<Check> listByPatientId(int pt_id){
         return checkDAO.findByPatient(pt_id);
     }
+
+    public void deleteByPatient(int pt_id){
+        checkDAO.deleteByPatient(pt_id);
+    }
 }

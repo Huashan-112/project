@@ -7,6 +7,9 @@ import java.util.List;
 
 public class PatientService {
     PatientDAO patientDAO = new PatientDAO();
+    CheckService checkService = new CheckService();
+    DragService dragService = new DragService();
+    RoomService roomService = new RoomService();
 
     public Patient get(int id){
         return patientDAO.get(id);
@@ -21,7 +24,12 @@ public class PatientService {
     }
 
     public void delete(int id){
+        Patient patient = get(id);
+        checkService.deleteByPatient(id);
+        dragService.deleteByPatient(id);
         patientDAO.delete(id);
+        roomService.delete(patient.getRoom_id());
+
     }
 
     public void update(Patient patient){

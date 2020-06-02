@@ -4,10 +4,7 @@ import entity.Drag;
 import entity.Patient;
 import util.DBUtil;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +36,16 @@ public class DragDAO {
         }
 
         return drags;
+    }
+
+    public void deleteByPatient(int pt_id){
+        String sql = "delete from drag where pt_id=?";
+        try (Connection c = DBUtil.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, pt_id);
+            ps.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }
