@@ -29,7 +29,6 @@ public class PatientService {
         dragService.deleteByPatient(id);
         patientDAO.delete(id);
         roomService.delete(patient.getRoom_id());
-
     }
 
     public void update(Patient patient){

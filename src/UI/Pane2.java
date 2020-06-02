@@ -250,10 +250,8 @@ public class Pane2 {
                         public void handle(ActionEvent event) {
 
                             //drag和check有patient的主键，patient有room的主键。
-                            //删除时，要先删除 包含别人的主键的 的。
+                            //删除时，要先删除 包含别人主键 的。
                             //先删除drag和check表的记录，再删除patient表的记录，最后删除room表的记录
-                            //xxxxxxxxx
-
                             patientService.delete(Integer.valueOf(textField.getText()));//先从数据库中删除
                             pane2.update();//更新总表
 
