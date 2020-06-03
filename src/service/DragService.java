@@ -15,4 +15,6 @@ public class DragService {
     public void deleteByPatient(int pt_id){
         dragDAO.deleteByPatient(pt_id);
     }
+
+    public void add(Drag drag){dragDAO.add(drag);}
 }

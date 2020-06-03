@@ -2,6 +2,7 @@ package dao;
 
 import entity.Drag;
 import entity.Patient;
+import entity.Room;
 import util.DBUtil;
 
 import java.sql.*;
@@ -46,6 +47,30 @@ public class DragDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public int add(Drag drag) {
+        int id = 0;
+        String sql = "insert into drag values(null,?,?,?,?,?)";
+        try (Connection c = DBUtil.getConnection(); PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
+            ps.setString(1, drag.getName());
+            ps.setString(2, drag.getCategory());
+            ps.setFloat(3, drag.getPrice());
+            ps.setInt(4, drag.getCount());
+            ps.setInt(5, drag.getPt_id());
+
+            ps.execute();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                id = rs.getInt(1);
+                drag.setId(id);
+            }
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
+        return id;
     }
 
 }

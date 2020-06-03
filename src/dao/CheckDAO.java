@@ -42,4 +42,28 @@ public class CheckDAO {
             e.printStackTrace();
         }
     }
+
+    public int add(Check check) {
+        int id = 0;
+        String sql = "insert into check1 values(null,?,?,?,?,?)";
+        try (Connection c = DBUtil.getConnection(); PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
+            ps.setString(1, check.getName());
+            ps.setString(2, check.getCategory());
+            ps.setFloat(3, check.getPrice());
+            ps.setInt(4, check.getCount());
+            ps.setInt(5, check.getPt_id());
+
+            ps.execute();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                id = rs.getInt(1);
+                check.setId(id);
+            }
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
+        return id;
+    }
 }

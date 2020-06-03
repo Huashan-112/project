@@ -15,4 +15,5 @@ public class CheckService {
     public void deleteByPatient(int pt_id){
         checkDAO.deleteByPatient(pt_id);
     }
+    public void add(Check check){checkDAO.add(check);}
 }
