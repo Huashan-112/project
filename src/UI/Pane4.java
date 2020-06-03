@@ -403,32 +403,39 @@ public class Pane4 {
 
                 if (!name.getText().equals("姓名：") && !textField.getText().equals("")) {
 
-                    Object[] objects = gridPane1.getChildren().toArray();
+                    if (patientService.get(Integer.valueOf(textField.getText())) == null) {
+                        util.tip("不存在该病人！", "");
+                    } else if (roomService.get(patientService.get(Integer.valueOf(textField.getText())).getRoom_id()).getOut_time() != null) {
+                        util.tip("请勿为已出院患者开药！", "");
+                    } else {
 
-                    if (util.has_Medicine(objects) == true) {//判断有无开药，true表示有开药
+                        Object[] objects = gridPane1.getChildren().toArray();
 
-                        if (util.has_Num(objects) == false) {//判断开的药有无选择数量，false表示有药品没有选择数量
-                            util.tip("请为药品选择数量！", "");
-                        } else {//选择了数量
+                        if (util.has_Medicine(objects) == true) {//判断有无开药，true表示有开药
 
-                            List<Drag> drags = new ArrayList<>();
-                            for (int i = 1; i < objects.length; i = i + 3) {
-                                if (((ComboBox) objects[i]).getValue() != null) {
-                                    int id = 1;
-                                    String name = (String) ((ComboBox) objects[i]).getValue();
-                                    String category = ((Label) objects[i - 1]).getText();
-                                    Float price = dragMap.get(name);//价格获取
-                                    int count = (int) ((ComboBox) objects[i + 1]).getValue();
-                                    int pt_id = Integer.parseInt(textField.getText());
-                                    Drag drag = new Drag(id, name, category, price, count, pt_id);
-                                    drags.add(drag);
+                            if (util.has_Num(objects) == false) {//判断开的药有无选择数量，false表示有药品没有选择数量
+                                util.tip("请为药品选择数量！", "");
+                            } else {//选择了数量
+
+                                List<Drag> drags = new ArrayList<>();
+                                for (int i = 1; i < objects.length; i = i + 3) {
+                                    if (((ComboBox) objects[i]).getValue() != null) {
+                                        int id = 1;
+                                        String name = (String) ((ComboBox) objects[i]).getValue();
+                                        String category = ((Label) objects[i - 1]).getText();
+                                        Float price = dragMap.get(name);//价格获取
+                                        int count = (int) ((ComboBox) objects[i + 1]).getValue();
+                                        int pt_id = Integer.parseInt(textField.getText());
+                                        Drag drag = new Drag(id, name, category, price, count, pt_id);
+                                        drags.add(drag);
+                                    }
                                 }
-                            }
-                            for (Drag drag : drags) {
-                                dragService.add(drag);
-                            }
-                            util.tip("开药成功！", "");
+                                for (Drag drag : drags) {
+                                    dragService.add(drag);
+                                }
+                                util.tip("开药成功！", "");
 
+                            }
                         }
                     }
                 }
@@ -548,36 +555,43 @@ public class Pane4 {
 
                 if (!name.getText().equals("姓名：") && !textField.getText().equals("")) {
 
-                    Object[] objects = gridPane2.getChildren().toArray();
+                    if (patientService.get(Integer.valueOf(textField.getText())) == null) {
+                        util.tip("不存在该病人！", "");
+                    } else if (roomService.get(patientService.get(Integer.valueOf(textField.getText())).getRoom_id()).getOut_time() != null) {
+                        util.tip("请勿为已出院患者开立检查！", "");
+                    } else {
 
-                    if (util.has_Check(objects) == true) {//判断有无检查，true表示开了
+                        Object[] objects = gridPane2.getChildren().toArray();
 
-                        List<Check> checks = new ArrayList<>();
-                        for (int i = 3; i < objects.length; i++) {
-                            if (((CheckBox) objects[i]).isSelected() == true) {
-                                int id = 31;
-                                String name = ((CheckBox) objects[i]).getText();
+                        if (util.has_Check(objects) == true) {//判断有无检查，true表示开了
 
-                                String category;
-                                if (i <= 8) {
-                                    category = "检验";
-                                } else if (i <= 13) {
-                                    category = "影像";
-                                } else {
-                                    category = "腔镜";
+                            List<Check> checks = new ArrayList<>();
+                            for (int i = 3; i < objects.length; i++) {
+                                if (((CheckBox) objects[i]).isSelected() == true) {
+                                    int id = 31;
+                                    String name = ((CheckBox) objects[i]).getText();
+
+                                    String category;
+                                    if (i <= 8) {
+                                        category = "检验";
+                                    } else if (i <= 13) {
+                                        category = "影像";
+                                    } else {
+                                        category = "腔镜";
+                                    }
+
+                                    Float price = checkMap.get(name);//价格获取
+                                    int count = 1;//检查的数量1份就够了
+                                    int pt_id = Integer.parseInt(textField.getText());
+                                    Check check = new Check(id, name, category, price, count, pt_id);
+                                    checks.add(check);
                                 }
-
-                                Float price = checkMap.get(name);//价格获取
-                                int count = 1;//检查的数量1份就够了
-                                int pt_id = Integer.parseInt(textField.getText());
-                                Check check = new Check(id, name, category, price, count, pt_id);
-                                checks.add(check);
                             }
+                            for (Check check : checks) {
+                                checkService.add(check);
+                            }
+                            util.tip("开立检查成功！", "");
                         }
-                        for (Check check : checks) {
-                            checkService.add(check);
-                        }
-                        util.tip("开立检查成功！", "");
                     }
                 }
             }

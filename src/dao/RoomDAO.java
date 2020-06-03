@@ -68,7 +68,6 @@ public class RoomDAO {
 
             ps.execute();
 
-
         } catch (SQLException e) {
 
             e.printStackTrace();

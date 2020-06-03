@@ -237,53 +237,58 @@ public class Pane2 {
 
                 if (!table_del.getItems().isEmpty() && !textField.getText().equals("")) {
 
-                    Stage stage = new Stage();
-                    Label tip = new Label("确认删除该条记录？");
-                    tip.setPrefSize(400, 40);
-                    tip.setTextFill(Color.rgb(113, 114, 112));
-                    tip.setFont(font);
+                    if (patientService.get(Integer.parseInt(textField.getText())) == null) {
+                        util.tip("无此记录！请输入正确的卡号", "");
+                    } else {
 
-                    Button yes = new Button("确认");
-                    yes.setPrefWidth(80);
-                    yes.setOnAction(new EventHandler<ActionEvent>() {  // 确认删除
-                        @Override
-                        public void handle(ActionEvent event) {
+                        Stage stage = new Stage();
+                        Label tip = new Label("确认删除该条记录？");
+                        tip.setPrefSize(400, 40);
+                        tip.setTextFill(Color.rgb(113, 114, 112));
+                        tip.setFont(font);
 
-                            //drag和check有patient的主键，patient有room的主键。
-                            //删除时，要先删除 包含别人主键 的。
-                            //先删除drag和check表的记录，再删除patient表的记录，最后删除room表的记录
-                            patientService.delete(Integer.valueOf(textField.getText()));//先从数据库中删除
-                            pane2.update();//更新总表
+                        Button yes = new Button("确认");
+                        yes.setPrefWidth(80);
+                        yes.setOnAction(new EventHandler<ActionEvent>() {  // 确认删除
+                            @Override
+                            public void handle(ActionEvent event) {
 
-                            table_del.getItems().removeAll(table_del.getItems());//再删除界面的数据
-                            textField.setText("");
+                                //drag和check有patient的主键，patient有room的主键。
+                                //删除时，要先删除 包含别人主键 的。
+                                //先删除drag和check表的记录，再删除patient表的记录，最后删除room表的记录
+                                patientService.delete(Integer.valueOf(textField.getText()));//先从数据库中删除
+                                pane2.update();//更新总表
 
-                            stage.close();
-                        }
-                    });
+                                table_del.getItems().removeAll(table_del.getItems());//再删除界面的数据
+                                textField.setText("");
 
-                    Button no = new Button("取消");
-                    no.setPrefWidth(80);
-                    no.setOnAction(new EventHandler<ActionEvent>() {  // 取消删除
-                        @Override
-                        public void handle(ActionEvent event) {
-                            stage.close();
-                        }
-                    });
+                                stage.close();
+                            }
+                        });
 
-                    AnchorPane anchorPane = new AnchorPane();
-                    anchorPane.getChildren().addAll(tip, yes, no);
-                    AnchorPane.setLeftAnchor(tip, 30.0);
-                    AnchorPane.setTopAnchor(tip, 30.0);
-                    AnchorPane.setLeftAnchor(yes, 250.0);
-                    AnchorPane.setTopAnchor(yes, 100.0);
-                    AnchorPane.setLeftAnchor(no, 350.0);
-                    AnchorPane.setTopAnchor(no, 100.0);
-                    Scene scene = new Scene(anchorPane, 460, 160);
-                    stage.setScene(scene);
-                    stage.initStyle(StageStyle.UTILITY);
-                    stage.initModality(Modality.APPLICATION_MODAL);
-                    stage.show();
+                        Button no = new Button("取消");
+                        no.setPrefWidth(80);
+                        no.setOnAction(new EventHandler<ActionEvent>() {  // 取消删除
+                            @Override
+                            public void handle(ActionEvent event) {
+                                stage.close();
+                            }
+                        });
+
+                        AnchorPane anchorPane = new AnchorPane();
+                        anchorPane.getChildren().addAll(tip, yes, no);
+                        AnchorPane.setLeftAnchor(tip, 30.0);
+                        AnchorPane.setTopAnchor(tip, 30.0);
+                        AnchorPane.setLeftAnchor(yes, 250.0);
+                        AnchorPane.setTopAnchor(yes, 100.0);
+                        AnchorPane.setLeftAnchor(no, 350.0);
+                        AnchorPane.setTopAnchor(no, 100.0);
+                        Scene scene = new Scene(anchorPane, 460, 160);
+                        stage.setScene(scene);
+                        stage.initStyle(StageStyle.UTILITY);
+                        stage.initModality(Modality.APPLICATION_MODAL);
+                        stage.show();
+                    }
                 }
             }
         });

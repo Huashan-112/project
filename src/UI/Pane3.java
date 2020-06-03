@@ -303,6 +303,8 @@ public class Pane3 {
 
                 if (textField.getText().equals("") || tf_name.getText().equals("") || comboBox.getValue() == null || tf_age.getText().equals("") || tf_phone.getText().equals("") || tf_ID.getText().equals("") || tf_diagnosis.getText().equals("") || tf_inHospital_time.getText().equals("") || comboBox2.getValue() == null || comboBox3.getValue() == null || tf_doctor.getText().equals("")) {
                     util.tip("请完整填写信息！", "");
+                } else if (patientService.get(Integer.parseInt(textField.getText())) == null) {
+                    util.tip("没有该病人！", "");
                 } else if (!util.isLegalDate(tf_inHospital_time.getText())) {
                     util.tip("入院时间的格式不正确！", "");
                 } else if (roomService.get(patientService.get(Integer.parseInt(textField.getText())).getRoom_id()).getOut_time() == null && !tf_outHospital_time.getText().equals("")) {
@@ -311,6 +313,8 @@ public class Pane3 {
                     util.tip("该患者已出院，出院时间不能为空！", "");
                 } else if (roomService.get(patientService.get(Integer.parseInt(textField.getText())).getRoom_id()).getOut_time() != null && !tf_outHospital_time.getText().equals("") && !util.isLegalDate(tf_outHospital_time.getText())) {
                     util.tip("出院时间格式不正确！", "");
+                } else if (roomService.get(patientService.get(Integer.parseInt(textField.getText())).getRoom_id()).getOut_time() != null && !tf_outHospital_time.getText().equals("") && util.isLegalDate(tf_outHospital_time.getText()) && !Date.valueOf(tf_outHospital_time.getText()).after(Date.valueOf(tf_inHospital_time.getText()))) {
+                    util.tip("出院时间必须晚于入院时间！", "");
                 } else if (doctorDAO.get(tf_doctor.getText()) == null) {
                     util.tip("没有该医生！请核对后输入", "");
                 } else if (util.isUsed_bed((Integer) comboBox2.getValue(), (Integer) comboBox3.getValue(), textField.getText()) == 2) {
@@ -408,12 +412,7 @@ public class Pane3 {
         AnchorPane.setTopAnchor(hBox2, 650.0);
     }
 
-
     public AnchorPane getAnchorPane3() {
         return anchorPane3;
-    }
-
-    public void setAnchorPane3(AnchorPane anchorPane3) {
-        this.anchorPane3 = anchorPane3;
     }
 }

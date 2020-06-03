@@ -22,7 +22,7 @@ public class Pane0 {
         anchorPane0.setVisible(true);
     }
 
-    public void load(AnchorPane anchorPane0, Button button1, Button button2, Button button3, Button button4, Button button5, AnchorPane anchorPane1, Button exit) {
+    public void load(AnchorPane anchorPane0, Button button1, AnchorPane anchorPane1, Button exit) {
 
         Font font1 = Font.font("YouYuan", FontWeight.BLACK, 23);
 

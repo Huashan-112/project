@@ -50,7 +50,7 @@ public class View {
         pane5 = new Pane5();
         pane5.load(pane5.getAnchorPane5());
         pane0 = new Pane0();
-        pane0.load(pane0.getAnchorPane0(), button1, button2, button3, button4, button5, pane1.getAnchorPane1(), exit);
+        pane0.load(pane0.getAnchorPane0(), button1, pane1.getAnchorPane1(), exit);
     }
 
     public AnchorPane load_base() {//该方法只从数据库加载数据到首页基础的pane，然后把所有pane加进根节点里。（其他pane先不用，等到用时会刷新他们的页面）

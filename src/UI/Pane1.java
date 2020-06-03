@@ -233,14 +233,14 @@ public class Pane1 {
                     util.tip("请完整填写信息！", "入院");
                 } else if (util.isExit_ID(tf_card.getText()) == 1) {
                     util.tip("已有该ID的记录，勿重复添加！", "");
+                } else if (doctorService.getId(tf_doctor.getText()) == 0) {
+                    util.tip("没有该医生！请核查后输入", "");
                 } else if (!util.isLegalDate(tf_inHospital_time.getText())) {
                     util.tip("入院时间的格式不对！", "入院");
                 } else if (util.isUsed_bed((Integer) comboBox2.getValue(), (Integer) comboBox3.getValue(), tf_card.getText()) == 2) {
                     util.tip("该病房已满！请换病房", "");
                 } else if (util.isUsed_bed((Integer) comboBox2.getValue(), (Integer) comboBox3.getValue(), tf_card.getText()) == 1) {
                     util.tip("该床位已经被使用！", "");
-                } else if (doctorService.getId(tf_doctor.getText()) == 0) {
-                    util.tip("没有该医生！请核查后输入", "");
                 } else {
 
                     String sex = (String) comboBox.getValue();
@@ -341,12 +341,8 @@ public class Pane1 {
         td6.setPrefWidth(150);
         td7.setPrefWidth(145);
         td8.setPrefWidth(160);
-        table_outHospital.getColumns().
-
-                addAll(td1, td2, td3, td4, td5, td6, td7, td8);
-        table_outHospital.setColumnResizePolicy(new Callback<TableView.ResizeFeatures, Boolean>()
-
-        {
+        table_outHospital.getColumns().addAll(td1, td2, td3, td4, td5, td6, td7, td8);
+        table_outHospital.setColumnResizePolicy(new Callback<TableView.ResizeFeatures, Boolean>() {
             @Override
             public Boolean call(TableView.ResizeFeatures param) {
                 return true;
@@ -485,6 +481,10 @@ public class Pane1 {
 
                 if (table_outHospital.getItems().isEmpty() || textField.getText().equals("") || tf_outTime.getText().equals("")) {
                     util.tip("请先搜索记录并填写下方信息！", "");//有3个地方不能空
+                } else if (patientService.get(Integer.valueOf(textField.getText())) == null) {
+                    util.tip("没有该记录！请输入正确卡号", "");
+                } else if (roomService.get(patientService.get(Integer.valueOf(textField.getText())).getRoom_id()).getOut_time() != null) {
+                    util.tip("该患者已出院，勿重复办理出院！", "");
                 } else if (!util.isLegalDate(tf_outTime.getText())) {
                     util.tip("出院时间的格式不正确！", "");
                 } else if (!Date.valueOf(tf_outTime.getText()).after(roomService.get(patientService.get(Integer.valueOf(textField.getText())).getRoom_id()).getIn_time())) {
@@ -523,9 +523,7 @@ public class Pane1 {
         });
 
         HBox hBox1 = new HBox();
-        hBox1.getChildren().
-
-                addAll(save1, reset);
+        hBox1.getChildren().addAll(save1, reset);
         hBox1.setSpacing(40);
 
         Line line1 = new Line(15, 845, 1065, 845);
@@ -533,9 +531,7 @@ public class Pane1 {
 
         //_____________________________________________________________________________________________
 
-        anchorPane1.getChildren().
-
-                addAll(divider1, gridPane1, hBox2, divider2, hBox, table_outHospital, gridPane2, hBox1, line1);
+        anchorPane1.getChildren().addAll(divider1, gridPane1, hBox2, divider2, hBox, table_outHospital, gridPane2, hBox1, line1);
 
         AnchorPane.setLeftAnchor(divider1, 15.0);
         AnchorPane.setTopAnchor(divider1, 15.0);
