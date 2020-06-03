@@ -187,8 +187,8 @@ public class Pane5 {
         TableView table_medicine = new TableView();
         table_medicine.setEditable(true);
         table_medicine.setPrefSize(1050, 115);
-        TableColumn tc1 = new TableColumn("药品编码");
-        TableColumn tc2 = new TableColumn("药品名称");
+        TableColumn tc1 = new TableColumn("药品名称");
+        TableColumn tc2 = new TableColumn("药品类目");
         TableColumn tc3 = new TableColumn("数量");
         TableColumn tc4 = new TableColumn("单价");
         TableColumn tc5 = new TableColumn("总金额");
@@ -197,8 +197,8 @@ public class Pane5 {
         tc3.setPrefWidth(160);
         tc4.setPrefWidth(160);
         tc5.setPrefWidth(240);
-        tc1.setCellValueFactory(new PropertyValueFactory<>("id"));
-        tc2.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tc1.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tc2.setCellValueFactory(new PropertyValueFactory<>("category"));
         tc3.setCellValueFactory(new PropertyValueFactory<>("count"));
         tc4.setCellValueFactory(new PropertyValueFactory<>("price"));
         tc5.setCellValueFactory(new PropertyValueFactory<>("total_price"));
@@ -229,8 +229,8 @@ public class Pane5 {
         TableView table_check = new TableView();
         table_check.setEditable(true);
         table_check.setPrefSize(1050, 115);
-        TableColumn check1 = new TableColumn("项目编码");
-        TableColumn check2 = new TableColumn("项目名称");
+        TableColumn check1 = new TableColumn("项目名称");
+        TableColumn check2 = new TableColumn("项目类别");
         TableColumn check3 = new TableColumn("数量");
         TableColumn check4 = new TableColumn("单价");
         TableColumn check5 = new TableColumn("总金额");
@@ -239,8 +239,8 @@ public class Pane5 {
         check3.setPrefWidth(160);
         check4.setPrefWidth(160);
         check5.setPrefWidth(240);
-        check1.setCellValueFactory(new PropertyValueFactory<>("id"));
-        check2.setCellValueFactory(new PropertyValueFactory<>("name"));
+        check1.setCellValueFactory(new PropertyValueFactory<>("name"));
+        check2.setCellValueFactory(new PropertyValueFactory<>("category"));
         check3.setCellValueFactory(new PropertyValueFactory<>("count"));
         check4.setCellValueFactory(new PropertyValueFactory<>("price"));
         check5.setCellValueFactory(new PropertyValueFactory<>("total_price"));

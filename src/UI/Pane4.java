@@ -24,59 +24,61 @@ import java.util.function.UnaryOperator;
 public class Pane4 {
 
     private AnchorPane anchorPane4;
-    private HashMap<String,Float> dragMap = new HashMap<>();
-    private HashMap<String,Float> checkMap = new HashMap<>();
+    private HashMap<String, Float> dragMap;
+    private HashMap<String, Float> checkMap;
 
     public Pane4() {
         anchorPane4 = new AnchorPane();
         anchorPane4.setVisible(false);
         anchorPane4.setPrefSize(1080, 855);
         anchorPane4.setStyle("-fx-background-color:#ffffff");
+        dragMap = new HashMap<>();
+        checkMap = new HashMap<>();
     }
 
-    public void setDragMap(){
+    public void setDragMap() {
         //抗生素
-        dragMap.put("罗红霉素",50.0f);
-        dragMap.put("头孢匹罗",60.0f);
+        dragMap.put("罗红霉素", 50.0f);
+        dragMap.put("头孢匹罗", 60.0f);
         //激素
-        dragMap.put("地塞米松",70.0f);
-        dragMap.put("泼尼松龙",80.0f);
+        dragMap.put("地塞米松", 70.0f);
+        dragMap.put("泼尼松龙", 80.0f);
         //抗风湿
-        dragMap.put("布洛芬",90.0f);
-        dragMap.put("他克莫司",100.0f);
+        dragMap.put("布洛芬", 90.0f);
+        dragMap.put("他克莫司", 100.0f);
         //皮肤
-        dragMap.put("曲安奈德",110.0f);
-        dragMap.put("阿昔洛韦",120.0f);
+        dragMap.put("曲安奈德", 110.0f);
+        dragMap.put("阿昔洛韦", 120.0f);
         //抗肿瘤
-        dragMap.put("舒尼替尼",130.0f);
-        dragMap.put("利妥昔",140.0f);
+        dragMap.put("舒尼替尼", 130.0f);
+        dragMap.put("利妥昔", 140.0f);
         //抗过敏
-        dragMap.put("氯雷他定",150.0f);
-        dragMap.put("左西替利",160.0f);
+        dragMap.put("氯雷他定", 150.0f);
+        dragMap.put("左西替利", 160.0f);
         //注射剂类
-        dragMap.put("利巴韦林",170.0f);
-        dragMap.put("氨甲环酸",180.0f);
+        dragMap.put("利巴韦林", 170.0f);
+        dragMap.put("氨甲环酸", 180.0f);
         //心脑血管类
-        dragMap.put("硝酸甘油",190.0f);
-        dragMap.put("卡托普利",200.0f);
+        dragMap.put("硝酸甘油", 190.0f);
+        dragMap.put("卡托普利", 200.0f);
     }
 
-    public void setCheckMap(){
-        checkMap.put("血常规",220.0f);
-        checkMap.put("肝功能",230.0f);
-        checkMap.put("血脂",240.0f);
-        checkMap.put("肾功能",250.0f);
-        checkMap.put("尿常规",260.0f);
-        checkMap.put("肿瘤标志物",270.0f);
-        checkMap.put("CT",280.0f);
-        checkMap.put("核磁共振",290.0f);
-        checkMap.put("B超",300.0f);
-        checkMap.put("X光",310.0f);
-        checkMap.put("胸片",320.0f);
-        checkMap.put("胃镜",330.0f);
-        checkMap.put("肠镜",340.0f);
-        checkMap.put("腹腔镜",350.0f);
-        checkMap.put("宫腔镜",360.0f);
+    public void setCheckMap() {
+        checkMap.put("血常规", 220.0f);
+        checkMap.put("肝功能", 230.0f);
+        checkMap.put("血脂", 240.0f);
+        checkMap.put("肾功能", 250.0f);
+        checkMap.put("尿常规", 260.0f);
+        checkMap.put("肿瘤标志物", 270.0f);
+        checkMap.put("CT", 280.0f);
+        checkMap.put("核磁共振", 290.0f);
+        checkMap.put("B超", 300.0f);
+        checkMap.put("X光", 310.0f);
+        checkMap.put("胸片", 320.0f);
+        checkMap.put("胃镜", 330.0f);
+        checkMap.put("肠镜", 340.0f);
+        checkMap.put("腹腔镜", 350.0f);
+        checkMap.put("宫腔镜", 360.0f);
 
     }
 
@@ -156,17 +158,20 @@ public class Pane4 {
             @Override
             public void handle(ActionEvent event) {
 
-                if (!textField.getText().equals("")) {
+                if (textField.getText().equals("")) {
+                    //不作为
+                } else if (patientService.get(Integer.valueOf(textField.getText())) == null) {
+                    util.tip("未找到该卡号的病人!", "");
+                    textField.setText("");
+                } else if (roomService.get(patientService.get(Integer.valueOf(textField.getText())).getRoom_id()).getOut_time() != null) {
+                    util.tip("请勿为已出院患者开药！", "");
+                    textField.setText("");
+                } else {
                     Patient patient = patientService.get(Integer.valueOf(textField.getText()));
-                    if (patient != null) {
-                        name.setText("姓名：" + patient.getName());
-                        sex.setText("性别：" + patient.getSex());
-                        age.setText("年龄：" + patient.getAge());
-                        diagnosis.setText("诊断：" + patient.getDiagnose());
-                    } else {
-                        util.tip("未找到该卡号的病人!", "");
-                        textField.setText("");
-                    }
+                    name.setText("姓名：" + patient.getName());
+                    sex.setText("性别：" + patient.getSex());
+                    age.setText("年龄：" + patient.getAge());
+                    diagnosis.setText("诊断：" + patient.getDiagnose());
                 }
             }
         });
@@ -409,20 +414,17 @@ public class Pane4 {
                             List<Drag> drags = new ArrayList<>();
                             for (int i = 1; i < objects.length; i = i + 3) {
                                 if (((ComboBox) objects[i]).getValue() != null) {
-                                    int id = 31;//id怎么获取？？？？
+                                    int id = 1;
                                     String name = (String) ((ComboBox) objects[i]).getValue();
-                                    String category = ((Label) objects[i-1]).getText();
-                                    Float price = dragMap.get(name);//价格怎么获取？？？
+                                    String category = ((Label) objects[i - 1]).getText();
+                                    Float price = dragMap.get(name);//价格获取
                                     int count = (int) ((ComboBox) objects[i + 1]).getValue();
-                                    //System.out.println(name+" "+category+" "+count+" "+price);
                                     int pt_id = Integer.parseInt(textField.getText());
                                     Drag drag = new Drag(id, name, category, price, count, pt_id);
                                     drags.add(drag);
                                 }
                             }
-
-                            //在这里调用胡的方法，传递drags集合给他
-                            for(Drag drag : drags){
+                            for (Drag drag : drags) {
                                 dragService.add(drag);
                             }
                             util.tip("开药成功！", "");
@@ -438,9 +440,7 @@ public class Pane4 {
         reset.setStyle("-fx-background-color: #2475C4");
         reset.setTextFill(Color.rgb(241, 241, 232));
         reset.setFont(font1);
-        reset.setOnAction(new EventHandler<ActionEvent>()
-
-        {  // 重置开药
+        reset.setOnAction(new EventHandler<ActionEvent>() {  // 重置开药
             @Override
             public void handle(ActionEvent event) {
 
@@ -454,9 +454,7 @@ public class Pane4 {
         });
 
         HBox hBox2 = new HBox();
-        hBox2.getChildren().
-
-                addAll(save1, reset);
+        hBox2.getChildren().addAll(save1, reset);
         hBox2.setSpacing(40);
 
         //-------------------------------------------------------------  //分割线
@@ -475,9 +473,7 @@ public class Pane4 {
         AnchorPane divider2 = new AnchorPane();
         divider2.setPrefSize(1050, 40);
         divider2.setStyle("-fx-background-color: #F4FEE5");
-        divider2.getChildren().
-
-                addAll(divider2_decoration, divider2_note);
+        divider2.getChildren().addAll(divider2_decoration, divider2_note);
         AnchorPane.setLeftAnchor(divider2_note, 35.0);
         AnchorPane.setTopAnchor(divider2_note, 5.0);
 
@@ -559,28 +555,26 @@ public class Pane4 {
                         List<Check> checks = new ArrayList<>();
                         for (int i = 3; i < objects.length; i++) {
                             if (((CheckBox) objects[i]).isSelected() == true) {
-                                int id = 31;//id怎么获取？？？？
+                                int id = 31;
                                 String name = ((CheckBox) objects[i]).getText();
 
                                 String category;
-                                if(i<=8){
+                                if (i <= 8) {
                                     category = "检验";
-                                }else if(i<=13){
+                                } else if (i <= 13) {
                                     category = "影像";
-                                }else {
+                                } else {
                                     category = "腔镜";
                                 }
 
-                                Float price = checkMap.get(name);//价格怎么获取？？？
+                                Float price = checkMap.get(name);//价格获取
                                 int count = 1;//检查的数量1份就够了
                                 int pt_id = Integer.parseInt(textField.getText());
-                                //System.out.println(i+" "+name+" "+category+" "+price);
                                 Check check = new Check(id, name, category, price, count, pt_id);
                                 checks.add(check);
                             }
                         }
-                        //在这里调用胡的方法，传递checks集合给他
-                        for(Check check : checks){
+                        for (Check check : checks) {
                             checkService.add(check);
                         }
                         util.tip("开立检查成功！", "");

@@ -11,12 +11,11 @@ public class Main extends Application {
 
         View view = new View();
 
-        Scene scene = new Scene(view.load_base(view), 1285, 955);
+        Scene scene = new Scene(view.load_base(), 1285, 955);
         primaryStage.setTitle("hospital");
         primaryStage.setScene(scene);
         primaryStage.show();
         primaryStage.setResizable(false);
-        //退出程序前可以先 pane.getChildren().removeAll();  也可以java自己回收
     }
 
     public static void main(String[] args) {

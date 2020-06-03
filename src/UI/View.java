@@ -3,8 +3,10 @@ package UI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -12,6 +14,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class View {
+
     public static int currentPane = 0;
     private Pane0 pane0;
     private Pane1 pane1;
@@ -50,7 +53,7 @@ public class View {
         pane0.load(pane0.getAnchorPane0(), button1, button2, button3, button4, button5, pane1.getAnchorPane1(), exit);
     }
 
-    public AnchorPane load_base(View view) {//该方法只从数据库加载数据到首页基础的pane，然后把所有pane加进根节点里。（其他pane先不用，等到用时会刷新他们的页面）
+    public AnchorPane load_base() {//该方法只从数据库加载数据到首页基础的pane，然后把所有pane加进根节点里。（其他pane先不用，等到用时会刷新他们的页面）
 
         Font font = Font.font("YouYuan", FontWeight.BLACK, 16);
 
@@ -67,17 +70,18 @@ public class View {
         exit.setOnAction(new EventHandler<ActionEvent>() {  // 退出
             @Override
             public void handle(ActionEvent event) {
-                view.pane0.getAnchorPane0().setVisible(true);
-                view.pane1.getAnchorPane1().setVisible(false);
-                view.pane2.getAnchorPane2().setVisible(false);
-                view.pane3.getAnchorPane3().setVisible(false);
-                view.pane4.getAnchorPane4().setVisible(false);
-                view.pane5.getAnchorPane5().setVisible(false);
-                view.getButton1().setDisable(true);
-                view.getButton2().setDisable(true);
-                view.getButton3().setDisable(true);
-                view.getButton4().setDisable(true);
-                view.getButton5().setDisable(true);
+                pane0.getAnchorPane0().setVisible(true);
+                pane1.getAnchorPane1().setVisible(false);
+                pane2.getAnchorPane2().setVisible(false);
+                pane3.getAnchorPane3().setVisible(false);
+                pane4.getAnchorPane4().setVisible(false);
+                pane5.getAnchorPane5().setVisible(false);
+                button1.setStyle("-fx-background-color: #143352");
+                button2.setStyle("-fx-background-color: #143352");
+                button3.setStyle("-fx-background-color: #143352");
+                button4.setStyle("-fx-background-color: #143352");
+                button5.setStyle("-fx-background-color: #143352");
+
                 exit.setVisible(false);
             }
         });
@@ -91,11 +95,7 @@ public class View {
         AnchorPane.setLeftAnchor(exit, 1150.0);
         AnchorPane.setTopAnchor(exit, 30.0);
 
-        button1.setDisable(true);
-        button2.setDisable(true);
-        button3.setDisable(true);
-        button4.setDisable(true);
-        button5.setDisable(true);
+        //button初始化
         button1.setAlignment(Pos.CENTER_LEFT);
         button2.setAlignment(Pos.CENTER_LEFT);
         button3.setAlignment(Pos.CENTER_LEFT);
@@ -121,36 +121,67 @@ public class View {
         button3.setPrefSize(180, 68);
         button4.setPrefSize(180, 68);
         button5.setPrefSize(180, 68);
+        /////////////////
         button1.setOnAction(new EventHandler<ActionEvent>() {  // 入院出院登记
             @Override
             public void handle(ActionEvent event) {
-                view.showPane(1, view);
+                button1.setStyle("-fx-background-color: #813151");//自己改颜色
+                button2.setStyle("-fx-background-color: #143352");//其他的恢复颜色
+                button3.setStyle("-fx-background-color: #143352");
+                button4.setStyle("-fx-background-color: #143352");
+                button5.setStyle("-fx-background-color: #143352");
+                showPane(1);
             }
         });
+        /////////////////////
         button2.setOnAction(new EventHandler<ActionEvent>() {  // 查找住院记录
             @Override
             public void handle(ActionEvent event) {
-                view.showPane(2, view);
+                button2.setStyle("-fx-background-color: #813151");//自己改颜色
+                button1.setStyle("-fx-background-color: #143352");//其他的恢复颜色
+                button3.setStyle("-fx-background-color: #143352");
+                button4.setStyle("-fx-background-color: #143352");
+                button5.setStyle("-fx-background-color: #143352");
+                showPane(2);
             }
         });
+        //////////////////////
         button3.setOnAction(new EventHandler<ActionEvent>() {  // 修改住院记录
             @Override
             public void handle(ActionEvent event) {
-                view.showPane(3, view);
+                button3.setStyle("-fx-background-color: #813151");//自己改颜色
+                button1.setStyle("-fx-background-color: #143352");//其他的恢复颜色
+                button2.setStyle("-fx-background-color: #143352");
+                button4.setStyle("-fx-background-color: #143352");
+                button5.setStyle("-fx-background-color: #143352");
+                showPane(3);
             }
         });
+        /////////////////////
         button4.setOnAction(new EventHandler<ActionEvent>() {  // 药品与检查
             @Override
             public void handle(ActionEvent event) {
-                view.showPane(4, view);
+                button4.setStyle("-fx-background-color: #813151");//自己改颜色
+                button1.setStyle("-fx-background-color: #143352");//其他的恢复颜色
+                button2.setStyle("-fx-background-color: #143352");
+                button3.setStyle("-fx-background-color: #143352");
+                button5.setStyle("-fx-background-color: #143352");
+                showPane(4);
             }
         });
+        //////////////////
         button5.setOnAction(new EventHandler<ActionEvent>() {  // 患者信息
             @Override
             public void handle(ActionEvent event) {
-                view.showPane(5, view);
+                button5.setStyle("-fx-background-color: #813151");//自己改颜色
+                button1.setStyle("-fx-background-color: #143352");//其他的恢复颜色
+                button2.setStyle("-fx-background-color: #143352");
+                button3.setStyle("-fx-background-color: #143352");
+                button4.setStyle("-fx-background-color: #143352");
+                showPane(5);
             }
         });
+        //////////////////
 
         VBox vBox = new VBox();
         vBox.setPrefSize(180, 895);
@@ -170,7 +201,7 @@ public class View {
         anchorPane.getChildren().add(pane3.getAnchorPane3());
         anchorPane.getChildren().add(pane4.getAnchorPane4());
         anchorPane.getChildren().add(pane5.getAnchorPane5());
-        AnchorPane.setLeftAnchor(pane0.getAnchorPane0(), 180.0);
+        AnchorPane.setLeftAnchor(pane0.getAnchorPane0(), 1.0);
         AnchorPane.setTopAnchor(pane0.getAnchorPane0(), 85.0);
         AnchorPane.setLeftAnchor(pane1.getAnchorPane1(), 200.0);
         AnchorPane.setTopAnchor(pane1.getAnchorPane1(), 105.0);
@@ -186,108 +217,60 @@ public class View {
         return anchorPane;
     }
 
-    public void showPane(int num, View view) {
+    public void showPane(int num) {
         if (num == currentPane)
             return;
         else {
             if (num == 1) {//pane1
-                view.setUnVisiable(view);
+                setUnVisible();
                 View.currentPane = num;//当前的换人
-                view.pane1.getAnchorPane1().setVisible(true);//新的设置为可见
+                pane1.getAnchorPane1().setVisible(true);//新的设置为可见
             }
             if (num == 2) {//pane2
-                view.setUnVisiable(view);
+                setUnVisible();
                 View.currentPane = num;//当前的换人
-                view.pane2.getAnchorPane2().setVisible(true);//新的设置为可见
-                view.pane2.update();
+                pane2.getAnchorPane2().setVisible(true);//新的设置为可见
+                pane2.update();
             }
             if (num == 3) {//pane3
-                view.setUnVisiable(view);
+                setUnVisible();
                 View.currentPane = num;//当前的换人
-                view.pane3.getAnchorPane3().setVisible(true);//新的设置为可见
+                pane3.getAnchorPane3().setVisible(true);//新的设置为可见
             }
             if (num == 4) {//pane4
-                view.setUnVisiable(view);
+                setUnVisible();
                 View.currentPane = num;//当前的换人
-                view.pane4.getAnchorPane4().setVisible(true);//新的设置为可见
+                pane4.getAnchorPane4().setVisible(true);//新的设置为可见
             }
             if (num == 5) {//pane5
-                view.setUnVisiable(view);
+                setUnVisible();
                 View.currentPane = num;//当前的换人
-                view.pane5.getAnchorPane5().setVisible(true);//新的设置为可见
+                pane5.getAnchorPane5().setVisible(true);//新的设置为可见
             }
         }
     }
 
 
-    public void setUnVisiable(View view) {
+    public void setUnVisible() {
 
         if (View.currentPane == 0) {//pane0
-            view.pane0.getAnchorPane0().setVisible(false);
+            pane0.getAnchorPane0().setVisible(false);
         }
         if (View.currentPane == 1) {//pane1
-            view.pane1.getAnchorPane1().setVisible(false);
+            pane1.getAnchorPane1().setVisible(false);
         }
         if (View.currentPane == 2) {//pane2
-            view.pane2.getAnchorPane2().setVisible(false);
+            pane2.getAnchorPane2().setVisible(false);
         }
         if (View.currentPane == 3) {//pane3
-            view.pane3.getAnchorPane3().setVisible(false);
+            pane3.getAnchorPane3().setVisible(false);
         }
         if (View.currentPane == 4) {//pane4
-            view.pane4.getAnchorPane4().setVisible(false);
+            pane4.getAnchorPane4().setVisible(false);
         }
         if (View.currentPane == 5) {//pane5
-            view.pane5.getAnchorPane5().setVisible(false);
+            pane5.getAnchorPane5().setVisible(false);
         }
-    }
-
-    public static int getCurrentPane() {
-        return currentPane;
-    }
-
-    public static void setCurrentPane(int currentPane) {
-        View.currentPane = currentPane;
-    }
-
-    public Button getButton1() {
-        return button1;
-    }
-
-    public void setButton1(Button button1) {
-        this.button1 = button1;
-    }
-
-    public Button getButton2() {
-        return button2;
-    }
-
-    public void setButton2(Button button2) {
-        this.button2 = button2;
-    }
-
-    public Button getButton3() {
-        return button3;
-    }
-
-    public void setButton3(Button button3) {
-        this.button3 = button3;
-    }
-
-    public Button getButton4() {
-        return button4;
-    }
-
-    public void setButton4(Button button4) {
-        this.button4 = button4;
-    }
-
-    public Button getButton5() {
-        return button5;
-    }
-
-    public void setButton5(Button button5) {
-        this.button5 = button5;
     }
 }
 
